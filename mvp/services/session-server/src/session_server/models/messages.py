@@ -52,6 +52,17 @@ class UiGoalItem(BaseModel):
     struck_reason: Literal['on_hand', 'in_cart'] | None = None
 
 
+class UiAddress(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    id: str
+    label: str
+    text: str = Field(
+        ..., description='One-line address: house/street, area, city, pincode.'
+    )
+
+
 class UiDelivery(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -183,6 +194,14 @@ class CartMsg(BaseModel):
     cart: UiCart
 
 
+class AddressesMsg(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    type: Literal['addresses']
+    addresses: list[UiAddress]
+
+
 class ReadbackMsg(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -192,6 +211,7 @@ class ReadbackMsg(BaseModel):
     item_count: int
     total: int
     delivery: UiDelivery
+    address_text: str | None = None
     text_hi: str
     text_en: str
 
@@ -206,6 +226,7 @@ class PaymentRequestMsg(BaseModel):
     total: int
     currency: Literal['INR']
     delivery: UiDelivery
+    address_text: str | None = None
 
 
 class OrderMsg(BaseModel):
@@ -278,6 +299,7 @@ class WidgetMessages(BaseModel):
         | CardsMsg
         | GoalListMsg
         | CartMsg
+        | AddressesMsg
         | ReadbackMsg
         | PaymentRequestMsg
         | OrderMsg

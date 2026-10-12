@@ -2,6 +2,7 @@ import { LitElement, css, html } from "lit";
 import { property, state } from "lit/decorators.js";
 import { base } from "../styles/tokens";
 import { define } from "../define";
+import { tr, type Lang } from "../i18n";
 
 /**
  * Typed alternative to speech (FR-003). Emits `ttb-text` with `{text}`; the main element sends
@@ -39,6 +40,7 @@ export class TtbTextInput extends LitElement {
   ];
 
   @property({ type: Boolean }) disabled = false;
+  @property() language: Lang = "hi";
   @state() private value = "";
 
   private submit(e: Event) {
@@ -53,19 +55,19 @@ export class TtbTextInput extends LitElement {
     return html`
       <form @submit=${this.submit}>
         <label>
-          <span class="sr-only">लिखकर बताइए / Type your message</span>
+          <span class="sr-only">${tr(this.language, "लिखकर बताइए", "Type your message")}</span>
           <input
             type="text"
-            lang="hi"
+            lang=${this.language}
             maxlength="500"
             autocomplete="off"
-            placeholder="लिखकर बताइए… / Type here…"
+            placeholder=${tr(this.language, "लिखकर बताइए…", "Type here…")}
             .value=${this.value}
             ?disabled=${this.disabled}
             @input=${(e: Event) => (this.value = (e.target as HTMLInputElement).value)}
           />
         </label>
-        <button class="primary" type="submit" ?disabled=${this.disabled || !this.value.trim()}>भेजें / Send</button>
+        <button class="primary" type="submit" ?disabled=${this.disabled || !this.value.trim()}>${tr(this.language, "भेजें", "Send")}</button>
       </form>
     `;
   }

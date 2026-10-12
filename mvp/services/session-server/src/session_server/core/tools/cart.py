@@ -21,7 +21,8 @@ async def show_products(rt: Runtime, args: dict[str, Any]) -> dict[str, Any]:
             {"product_id": pid, "name": rt.products[pid].name}
             for pid in current_lines(rt) if pid not in listed and pid in rt.products
         ]
-        result = {"ok": True, **goal.model_goal(g, rt.goal_problems.get(g.goal_id)),
+        result = {"ok": True, **goal.model_goal(g, rt.goal_problems.get(g.goal_id),
+                                        rt.goal_removed.get(g.goal_id)),
                   "instruction": "Read it out, say what was left out and why, ask once; on yes "
                                  "add_to_cart(goal_id)."}
         if in_cart_not_listed:

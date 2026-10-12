@@ -12,6 +12,7 @@ from session_server.core.runtime import Runtime
 from session_server.models.domain import FamilyContact, Listing, Product, Session, Shopper, Usage
 from session_server.ports import live as L
 from session_server.ports.commerce import (
+    Address,
     CartLineView,
     CheckoutView,
     CommerceError,
@@ -49,6 +50,11 @@ DEMO_PRODUCTS = [
     product("p-0998", "Fresh Paneer 200 g", "ताज़ा पनीर", "200 g", 200, "g", 9500, "dairy", ["paneer", "पनीर"]),
 ]
 
+ADDRESSES = [
+    Address("addr-home", "Home", "Ghanshyam Sharma", "Flat 12, Shanti Apartments", "Kothrud", "Pune", "411038", "9876543210"),
+    Address("addr-rohit", "Rohit's place", "Rohit Sharma", "B-204, Green Park", "Baner", "Pune", "411045", "9876501234"),
+]
+
 SLOT = Slot(id="slot-1800", label_hi="शाम 6 से 7 बजे", label_en="6–7 pm")
 
 
@@ -61,13 +67,15 @@ class FakeCommerce:
         self.notifications: list[str] = []
         self.family_contact: FamilyContact | None = FamilyContact(id="f-1", name="Rohit (son)", channel="in_app")
         self.usual = UsualOrder("ord-seed", [(self.products["p-0201"], 1)])
+        self.saved_addresses: list[Address] = list(ADDRESSES)
 
     def _view(self, cid: str) -> CheckoutView:
         cart = self.carts[cid]
         lines = tuple(CartLineView(pid, qty, self.products[pid].price_minor * qty) for pid, qty in cart["lines"].items())
         return CheckoutView(id=cid, status=cart["status"], lines=lines, item_count=len(lines),
                             total_minor=sum(line.line_total_minor for line in lines),
-                            slot=SLOT if cart["slot"] else None, order_id=cart.get("order_id"))
+                            slot=SLOT if cart["slot"] else None, order_id=cart.get("order_id"),
+                            address=cart.get("address"))
 
     async def search(self, query: str, *, categories=None, max_price_minor=None, limit=10) -> SearchResult:
         self.calls.append(("search", query))
@@ -89,7 +97,7 @@ class FakeCommerce:
     async def get_cart(self, cart_id):
         return self._view(cart_id)
 
-    async def put_cart(self, cart_id, lines, slot_id=None):
+    async def put_cart(self, cart_id, lines, slot_id=None, address_id=None, shopper_id=None):
         cart = self.carts[cart_id]
         if cart["status"] in ("completed", "canceled"):
             raise CommerceError("CHECKOUT_NOT_MODIFIABLE", "terminal", 409)
@@ -97,6 +105,8 @@ class FakeCommerce:
         if new_lines != cart["lines"]:
             cart["slot"] = None
         cart["lines"] = new_lines
+        if address_id:
+            cart["address"] = next(a for a in self.saved_addresses if a.id == address_id)
         if slot_id:
             oos = [self.products[p].name for p in new_lines if not self.products[p].in_stock]
             if oos:
@@ -125,6 +135,18 @@ class FakeCommerce:
 
     async def shopper(self, shopper_id):
         return Shopper(id=shopper_id, display_name="Ghanshyam ji", language="hi", address_form="respectful_male")
+
+    async def addresses(self, shopper_id):
+        return list(self.saved_addresses)
+
+    async def add_address(self, shopper_id, fields):
+        if not str(fields.get("pincode", "")).isdigit() or len(str(fields["pincode"])) != 6:
+            raise CommerceError("INVALID_REQUEST", "pincode must be 6 digits")
+        a = Address(f"addr-new{len(self.saved_addresses)}", fields.get("label") or "New address",
+                    fields["name"], fields["line1"], fields["area"], fields["city"], fields["pincode"],
+                    fields["phone"])
+        self.saved_addresses.append(a)
+        return a
 
     async def last_order(self, shopper_id):
         return self.usual

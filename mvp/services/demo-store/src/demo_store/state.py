@@ -27,6 +27,7 @@ class State:
     checkouts: dict[str, dict[str, Any]] = field(default_factory=dict)
     orders: list[dict[str, Any]] = field(default_factory=list)
     notifications: list[dict[str, Any]] = field(default_factory=list)
+    addresses: dict[str, list[dict[str, Any]]] = field(default_factory=dict)  # shopper_id -> added
     idempotency: dict[str, CachedResponse] = field(default_factory=dict)
     webauthn_challenges: dict[str, bytes] = field(default_factory=dict)
     credentials: dict[str, list[dict[str, Any]]] | None = None
@@ -36,6 +37,7 @@ class State:
             self.checkouts.clear()
             self.orders.clear()
             self.notifications.clear()
+            self.addresses.clear()
             self.idempotency.clear()
             self.webauthn_challenges.clear()
 

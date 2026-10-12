@@ -18,11 +18,11 @@ async function say(page: Page, text: string) {
   const input = page.getByPlaceholder(/लिखकर बताइए/);
   await expect(input).toBeEnabled({ timeout: TURN_TIMEOUT });
   await input.fill(text);
-  await page.getByRole("button", { name: /भेजें \/ Send/ }).click();
+  await page.getByRole("button", { name: /भेजें/ }).click();
 }
 
 async function cartLines(page: Page): Promise<number> {
-  return page.locator("ttb-cart-view ul.grid[aria-label*='Cart'] ttb-product-card").count();
+  return page.locator("ttb-cart-view ul.grid[aria-label*='कार्ट का सामान'] ttb-product-card").count();
 }
 
 test("scripted text session places a test-mode order", async ({ page }) => {
@@ -54,11 +54,11 @@ test("scripted text session places a test-mode order", async ({ page }) => {
 
   await page.goto("/");
   await page.getByRole("button", { name: /दुकानदार से बात करें/ }).click();
-  await expect(page.getByText("AI सहायक / AI assistant")).toBeVisible();
+  await expect(page.getByText("AI सहायक")).toBeVisible();
 
   // Opening question: pace (quickstart row 0).
   await say(page, "धीरे-धीरे, एक-एक करके");
-  await expect(page.getByText(/धीरे-धीरे \/ Step by step/)).toBeVisible({ timeout: TURN_TIMEOUT });
+  await expect(page.getByText(/धीरे-धीरे/)).toBeVisible({ timeout: TURN_TIMEOUT });
 
   // Row 1 (typed, row 9): milk and tomatoes are added; the usual atta is asked about first.
   await say(page, "दो लीटर दूध, पाव किलो टमाटर, और मेरा हमेशा वाला आटा");
@@ -77,19 +77,23 @@ test("scripted text session places a test-mode order", async ({ page }) => {
 
   // Row 5: read-back.
   await say(page, "बस, ऑर्डर कर दो");
+  // The assistant asks for the delivery address first; tap the saved "Home" address.
+  const picker = page.locator("ttb-address-picker");
+  await expect(picker).toBeVisible({ timeout: TURN_TIMEOUT });
+  await picker.getByRole("button", { name: /यहाँ भेजें/ }).first().click();
   const readback = page.locator("ttb-readback");
   await expect(readback).toBeVisible({ timeout: TURN_TIMEOUT });
   await expect(readback).toContainText(`₹${cart.total.toLocaleString("en-IN")}`);
 
   // Row 6: yes → the shop's own payment step → fingerprint.
   await say(page, "हाँ");
-  const dialog = page.getByRole("dialog", { name: /Payment/ });
+  const dialog = page.getByRole("dialog", { name: /भुगतान/ });
   await expect(dialog).toBeVisible({ timeout: TURN_TIMEOUT });
-  await expect(dialog).toContainText("Test mode");
-  await dialog.getByRole("button", { name: /Pay with fingerprint/ }).click();
+  await expect(dialog).toContainText("टेस्ट मोड");
+  await dialog.getByRole("button", { name: /फ़िंगरप्रिंट से/ }).click();
   await expect(dialog).toBeHidden({ timeout: TURN_TIMEOUT });
 
-  await expect(page.getByText(/Order placed/)).toBeVisible({ timeout: TURN_TIMEOUT });
+  await expect(page.getByText(/ऑर्डर हो गया/)).toBeVisible({ timeout: TURN_TIMEOUT });
   const orders = await page.evaluate(() => (window as unknown as { __ttb: { orders: unknown[] } }).__ttb.orders);
   expect(orders.length).toBe(1);
 });

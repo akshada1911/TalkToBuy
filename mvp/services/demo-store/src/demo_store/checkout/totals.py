@@ -53,6 +53,18 @@ def unsigned(record: Record) -> dict:
             "totals": [{"type": "subtotal", "amount": amount}, {"type": "total", "amount": amount}],
         })
     sub = sum(li["totals"][0]["amount"] for li in line_items)
+    fulfillment_ucp = fulfillment.to_ucp(
+        record["options"], record["selected_option_id"], [li["id"] for li in line_items]
+    )
+    address = record.get("address")
+    if address:  # part of the signed checkout, so the shopper approves this exact address
+        method = fulfillment_ucp["methods"][0]
+        method["destinations"] = [{
+            "id": address["id"],
+            "name": address["name"],
+            "address": {k: address[k] for k in ("label", "line1", "area", "city", "pincode", "phone")},
+        }]
+        method["selected_destination_id"] = address["id"]
     return {
         "ucp": {"version": UCP_VERSION},
         "id": record["id"],
@@ -64,9 +76,7 @@ def unsigned(record: Record) -> dict:
             {"type": "fulfillment", "amount": 0},
             {"type": "total", "amount": sub},
         ],
-        "fulfillment": fulfillment.to_ucp(
-            record["options"], record["selected_option_id"], [li["id"] for li in line_items]
-        ),
+        "fulfillment": fulfillment_ucp,
         "links": [],
         "order": record.get("order"),
         "metadata": {

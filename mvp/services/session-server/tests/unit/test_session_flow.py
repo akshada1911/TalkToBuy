@@ -67,7 +67,7 @@ async def test_media_is_relayed_and_interruption_flushes() -> None:
     assert rt.ui.of("interrupted")
 
 
-async def test_warning_sign_in_partial_transcript_arms_hold_before_tool_call() -> None:
+async def test_warning_sign_in_partial_transcript_does_not_block_tool_calls() -> None:
     rt, _, convo = _setup()
     rt.live.emit(
         L.InputTranscript("मैं कल गिर गया और पैर सुन्न", False),
@@ -78,10 +78,12 @@ async def test_warning_sign_in_partial_transcript_arms_hold_before_tool_call() -
         await asyncio.sleep(0)
         if rt.live.response_for("1"):
             break
-    assert rt.live.response_for("1")["status"] == "refused"
+    assert rt.live.response_for("1")["status"] == "ok"
     rt.live.emit(None)
     await asyncio.wait_for(run, timeout=5)
-    assert not rt.ui.of("cards")
+    assert rt.ui.of("cards")  # shopping carries on
+    notes = [t for role, t in rt.live.texts if role == "system_note"]
+    assert any("doctor" in t for t in notes)
 
 
 async def test_no_speech_markers_are_not_captions() -> None:
@@ -90,6 +92,16 @@ async def test_no_speech_markers_are_not_captions() -> None:
     await _drain(convo, rt)
     texts = [c["text_hi"] for c in rt.ui.of("caption")]
     assert "नमस्ते" in texts and not any("no speech" in t for t in texts)
+
+
+async def test_no_speech_markers_split_across_chunks_are_not_captions() -> None:
+    rt, _, convo = _setup()
+    rt.live.emit(L.OutputTranscript("<no", False), L.OutputTranscript(" speech>", False),
+                 L.OutputTranscript("{pause}", True), L.OutputTranscript("नमस्ते", True))
+    await _drain(convo, rt)
+    texts = [c["text_hi"] for c in rt.ui.of("caption")]
+    assert "नमस्ते" in texts
+    assert not any("speech" in t or "pause" in t or "<no" in t for t in texts)
 
 
 async def test_new_shopper_turn_resets_duplicate_guard() -> None:
@@ -111,6 +123,13 @@ async def test_low_bandwidth_switches_to_audio_only() -> None:
     await convo.on_client_json({"type": "net_quality", "downlink_kbps": 400, "underruns": 0})
     assert rt.session.media_mode == "audio_only" and rt.live.reconnects == ["audio_only"]
     assert rt.ui.of("state")[-1]["media_mode"] == "audio_only"
+
+
+async def test_video_mode_is_never_switched_on() -> None:
+    rt, _, convo = _setup()
+    rt.session.media_mode = "audio_only"
+    await convo.on_client_json({"type": "set_media_mode", "mode": "avatar"})
+    assert rt.session.media_mode == "audio_only" and rt.live.reconnects == []
 
 
 async def test_camera_frames_only_forwarded_while_active() -> None:

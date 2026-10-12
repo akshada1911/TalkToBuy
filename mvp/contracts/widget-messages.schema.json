@@ -56,6 +56,7 @@
       "required": ["need", "struck"],
       "additionalProperties": false
     },
+    "UiAddress": { "type": "object", "properties": { "id": { "type": "string" }, "label": { "type": "string" }, "text": { "type": "string", "description": "One-line address: house/street, area, city, pincode." } }, "required": ["id", "label", "text"], "additionalProperties": false },
     "UiDelivery": {
       "type": "object",
       "properties": {
@@ -88,8 +89,9 @@
     "CardsMsg": { "type": "object", "properties": { "type": { "const": "cards" }, "mode": { "type": "string", "enum": ["suggest", "added"] }, "products": { "type": "array", "items": { "$ref": "#/$defs/UiProduct" } } }, "required": ["type", "mode", "products"], "additionalProperties": false },
     "GoalListMsg": { "type": "object", "properties": { "type": { "const": "goal_list" }, "goal_id": { "type": "string" }, "goal_text": { "type": "string" }, "items": { "type": "array", "items": { "$ref": "#/$defs/UiGoalItem" } } }, "required": ["type", "goal_id", "goal_text", "items"], "additionalProperties": false },
     "CartMsg": { "type": "object", "properties": { "type": { "const": "cart" }, "cart": { "$ref": "#/$defs/UiCart" } }, "required": ["type", "cart"], "additionalProperties": false },
-    "ReadbackMsg": { "type": "object", "properties": { "type": { "const": "readback" }, "checkout_id": { "type": "string" }, "item_count": { "type": "integer" }, "total": { "type": "integer" }, "delivery": { "$ref": "#/$defs/UiDelivery" }, "text_hi": { "type": "string" }, "text_en": { "type": "string" } }, "required": ["type", "checkout_id", "item_count", "total", "delivery", "text_hi", "text_en"], "additionalProperties": false },
-    "PaymentRequestMsg": { "type": "object", "properties": { "type": { "const": "payment_request" }, "checkout_id": { "type": "string" }, "item_count": { "type": "integer" }, "total": { "type": "integer" }, "currency": { "const": "INR" }, "delivery": { "$ref": "#/$defs/UiDelivery" } }, "required": ["type", "checkout_id", "item_count", "total", "currency", "delivery"], "additionalProperties": false },
+    "AddressesMsg": { "type": "object", "properties": { "type": { "const": "addresses" }, "addresses": { "type": "array", "items": { "$ref": "#/$defs/UiAddress" } } }, "required": ["type", "addresses"], "additionalProperties": false },
+    "ReadbackMsg": { "type": "object", "properties": { "type": { "const": "readback" }, "checkout_id": { "type": "string" }, "item_count": { "type": "integer" }, "total": { "type": "integer" }, "delivery": { "$ref": "#/$defs/UiDelivery" }, "address_text": { "type": "string" }, "text_hi": { "type": "string" }, "text_en": { "type": "string" } }, "required": ["type", "checkout_id", "item_count", "total", "delivery", "text_hi", "text_en"], "additionalProperties": false },
+    "PaymentRequestMsg": { "type": "object", "properties": { "type": { "const": "payment_request" }, "checkout_id": { "type": "string" }, "item_count": { "type": "integer" }, "total": { "type": "integer" }, "currency": { "const": "INR" }, "delivery": { "$ref": "#/$defs/UiDelivery" }, "address_text": { "type": "string" } }, "required": ["type", "checkout_id", "item_count", "total", "currency", "delivery"], "additionalProperties": false },
     "OrderMsg": { "type": "object", "properties": { "type": { "const": "order" }, "order_id": { "type": "string" }, "delivery": { "$ref": "#/$defs/UiDelivery" } }, "required": ["type", "order_id", "delivery"], "additionalProperties": false },
     "FamilyNotifiedMsg": { "type": "object", "properties": { "type": { "const": "family_notified" }, "contact_name": { "type": "string" } }, "required": ["type", "contact_name"], "additionalProperties": false },
     "StateMsg": { "type": "object", "properties": { "type": { "const": "state" }, "pace": { "type": "string", "enum": ["guided", "quick"] }, "media_mode": { "type": "string", "enum": ["avatar", "audio_only"] }, "safety_hold": { "type": "boolean" }, "remaining_s": { "type": "integer", "minimum": 0 } }, "required": ["type", "pace", "media_mode", "safety_hold", "remaining_s"], "additionalProperties": false },
@@ -98,7 +100,7 @@
     "ServerMessage": {
       "oneOf": [
         { "$ref": "#/$defs/CaptionMsg" }, { "$ref": "#/$defs/InterruptedMsg" }, { "$ref": "#/$defs/CardsMsg" },
-        { "$ref": "#/$defs/GoalListMsg" }, { "$ref": "#/$defs/CartMsg" }, { "$ref": "#/$defs/ReadbackMsg" },
+        { "$ref": "#/$defs/GoalListMsg" }, { "$ref": "#/$defs/CartMsg" }, { "$ref": "#/$defs/AddressesMsg" }, { "$ref": "#/$defs/ReadbackMsg" },
         { "$ref": "#/$defs/PaymentRequestMsg" }, { "$ref": "#/$defs/OrderMsg" }, { "$ref": "#/$defs/FamilyNotifiedMsg" },
         { "$ref": "#/$defs/StateMsg" }, { "$ref": "#/$defs/WorkingMsg" }, { "$ref": "#/$defs/ErrorMsg" }
       ]

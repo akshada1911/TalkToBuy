@@ -14,6 +14,7 @@ const SERVER_TYPES: ReadonlySet<string> = new Set<ServerType>([
   "cards",
   "goal_list",
   "cart",
+  "addresses",
   "readback",
   "payment_request",
   "order",

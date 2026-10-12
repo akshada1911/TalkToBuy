@@ -41,11 +41,21 @@ class FulfillmentIn(BaseModel):
     selected_option_id: str | None = None
 
 
+class DestinationIn(BaseModel):
+    """Where to deliver: one of the shopper's saved addresses."""
+
+    model_config = ConfigDict(extra="allow")
+    shopper_id: str
+    address_id: str
+
+
 class CheckoutIn(BaseModel):
     model_config = ConfigDict(extra="allow")
     currency: str = "INR"
     line_items: list[LineItemIn] = Field(default_factory=list)
     fulfillment: FulfillmentIn | None = None
+    # Omitted: keep the current address. null: clear it. Object: deliver to that saved address.
+    destination: DestinationIn | None = None
 
 
 def _merge_lines(items: list[LineItemIn]) -> list[tuple[str, int]]:
@@ -59,6 +69,17 @@ def _merge_lines(items: list[LineItemIn]) -> list[tuple[str, int]]:
     if any(q > MAX_QUANTITY for q in merged.values()):
         raise InvalidRequestError(f"quantity above {MAX_QUANTITY}")
     return [(pid, q) for pid, q in merged.items() if q > 0]
+
+
+def _resolve_address(dest: DestinationIn | None) -> dict | None:
+    if dest is None:
+        return None
+    from demo_store.demo.routes import get_address  # late import: demo routes import this package
+
+    try:
+        return get_address(dest.shopper_id, dest.address_id)
+    except ResourceNotFoundError:
+        raise InvalidRequestError(f"unknown address {dest.address_id}", code="INVALID_ADDRESS") from None
 
 
 def _apply(record: totals.Record, body: CheckoutIn) -> None:
@@ -92,6 +113,9 @@ def _apply(record: totals.Record, body: CheckoutIn) -> None:
             names = ", ".join(f"{p.name} ({p.id})" for p in missing)
             raise OutOfStockError(f"out of stock: {names}")
 
+    if "destination" in body.model_fields_set:
+        record["address"] = _resolve_address(body.destination)
+
     record["lines"] = new_lines
     record["options"] = options
     # Changing line_items always clears the selection, returning the session to incomplete.
@@ -116,6 +140,7 @@ def create_checkout(body: CheckoutIn) -> dict[str, Any]:
         "line_seq": 0,
         "options": [],
         "selected_option_id": None,
+        "address": None,
         "order": None,
     }
     with STATE.lock:

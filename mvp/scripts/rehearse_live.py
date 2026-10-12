@@ -140,7 +140,8 @@ async def main() -> int:
 
             run.approve_payments = False
             run.readback = None  # ignore any earlier read-back the model offered
-            await run.say("बस, ऑर्डर कर दो", wait_s=40, until=lambda r: r.readback is not None)
+            await run.say("बस, ऑर्डर कर दो", wait_s=25)
+            await run.say("घर वाले पते पर भेज दो", wait_s=40, until=lambda r: r.readback is not None)
             rb = run.readback
             checks.append(("row 5: read-back matches cart total + count",
                            bool(rb and run.cart and rb["total"] == run.cart["total"] and rb["item_count"] == run.cart["item_count"])))

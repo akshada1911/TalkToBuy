@@ -3,6 +3,7 @@ import { property, state } from "lit/decorators.js";
 import type { CardsMsg, UiCart, UiProduct } from "../types/messages.generated";
 import { base, rupees } from "../styles/tokens";
 import { define } from "../define";
+import { tr, type Lang } from "../i18n";
 import "./product-card";
 
 export type Pace = "guided" | "quick";
@@ -84,6 +85,7 @@ export class TtbCartView extends LitElement {
 
   @property({ attribute: false }) cart: UiCart | null = null;
   @property() pace: Pace = "guided";
+  @property() language: Lang = "hi";
   @state() private suggestions: UiProduct[] = [];
   @state() private spotlight: UiProduct | null = null;
   private spotlightTimer: ReturnType<typeof setTimeout> | null = null;
@@ -150,32 +152,33 @@ export class TtbCartView extends LitElement {
     const count = cart?.item_count ?? 0;
     const qtyOf = (id: string) => cart?.lines.find((l) => l.product.id === id)?.qty ?? 1;
     return html`
-      <section aria-label="आपका कार्ट / Your cart">
+      <section aria-label=${tr(this.language, "आपका कार्ट", "Your cart")}>
         <p class="summary" aria-live="polite">
-          <span>कार्ट में ${count} सामान / ${count} ${count === 1 ? "item" : "items"}</span>
-          <span class="total">कुल ${rupees(cart?.total ?? 0)}</span>
+          <span>${this.language === "en" ? `${count} ${count === 1 ? "item" : "items"} in cart` : `कार्ट में ${count} सामान`}</span>
+          <span class="total">${tr(this.language, "कुल", "Total")} ${rupees(cart?.total ?? 0)}</span>
         </p>
         ${this.spotlight
           ? html`<div class="spotlight" role="status">
-              <p class="added">✓ कार्ट में जोड़ा / Added</p>
+              <p class="added">✓ ${tr(this.language, "कार्ट में जोड़ा", "Added to cart")}</p>
               <ttb-product-card
                 variant="spotlight"
                 .product=${this.spotlight}
                 .qty=${qtyOf(this.spotlight.id)}
+                .language=${this.language}
               ></ttb-product-card>
             </div>`
           : count === 0
-            ? html`<p class="empty">अभी कार्ट खाली है। / Your cart is empty.</p>`
-            : html`<ul class="grid" aria-label="कार्ट का सामान / Cart items">
+            ? html`<p class="empty">${tr(this.language, "अभी कार्ट खाली है।", "Your cart is empty.")}</p>`
+            : html`<ul class="grid" aria-label=${tr(this.language, "कार्ट का सामान", "Cart items")}>
                 ${cart!.lines.map(
-                  (l) => html`<li><ttb-product-card .product=${l.product} .qty=${l.qty}></ttb-product-card></li>`,
+                  (l) => html`<li><ttb-product-card .product=${l.product} .qty=${l.qty} .language=${this.language}></ttb-product-card></li>`,
                 )}
               </ul>`}
         ${this.suggestions.length
-          ? html`<h3>सुझाव (अभी कार्ट में नहीं) / Suggestions</h3>
-              <ul class="grid" aria-label="सुझाव / Suggestions">
+          ? html`<h3>${tr(this.language, "सुझाव (अभी कार्ट में नहीं)", "Suggestions (not in cart yet)")}</h3>
+              <ul class="grid" aria-label=${tr(this.language, "सुझाव", "Suggestions")}>
                 ${this.suggestions.map(
-                  (p) => html`<li><ttb-product-card variant="suggest" .product=${p}></ttb-product-card></li>`,
+                  (p) => html`<li><ttb-product-card variant="suggest" .product=${p} .language=${this.language}></ttb-product-card></li>`,
                 )}
               </ul>`
           : nothing}

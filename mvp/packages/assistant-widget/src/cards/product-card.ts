@@ -3,6 +3,7 @@ import { property } from "lit/decorators.js";
 import type { UiProduct } from "../types/messages.generated";
 import { base, rupees } from "../styles/tokens";
 import { define } from "../define";
+import { tr, type Lang } from "../i18n";
 
 export type CardVariant = "grid" | "spotlight" | "suggest";
 
@@ -101,11 +102,13 @@ export class TtbProductCard extends LitElement {
   @property({ attribute: false }) product?: UiProduct;
   @property({ type: Number }) qty = 0;
   @property({ reflect: true }) variant: CardVariant = "grid";
+  @property() language: Lang = "hi";
 
   render() {
     const p = this.product;
     if (!p) return nothing;
-    const label = `${p.local_name}, ${p.name}, ${p.size}, ${rupees(p.price)} (demo price)${this.qty ? `, quantity ${this.qty}` : ""}`;
+    const en = this.language === "en";
+    const label = `${en ? "" : `${p.local_name}, `}${p.name}, ${p.size}, ${rupees(p.price)} (demo price)${this.qty ? `, quantity ${this.qty}` : ""}`;
     return html`
       <article aria-label=${label}>
         <div class="pic">
@@ -114,15 +117,17 @@ export class TtbProductCard extends LitElement {
             : nothing}
         </div>
         <div class="body">
-          <p class="local" lang="hi">${p.local_name}</p>
-          <p class="name" lang="en">${p.name}</p>
+          ${en
+            ? html`<p class="local" lang="en">${p.name}</p>`
+            : html`<p class="local" lang="hi">${p.local_name}</p>
+                <p class="name" lang="en">${p.name}</p>`}
           <p class="size">${p.size}</p>
           <div class="price-row">
             <span class="price">${rupees(p.price)}</span>
-            <span class="tag">डेमो दाम / demo price</span>
-            ${this.qty > 0 ? html`<span class="qty" aria-label=${`मात्रा ${this.qty}`}>× ${this.qty}</span>` : nothing}
+            <span class="tag">${tr(this.language, "डेमो दाम", "demo price")}</span>
+            ${this.qty > 0 ? html`<span class="qty" aria-label=${`${tr(this.language, "मात्रा", "quantity")} ${this.qty}`}>× ${this.qty}</span>` : nothing}
           </div>
-          ${p.in_stock ? nothing : html`<p class="oos">अभी उपलब्ध नहीं / Out of stock</p>`}
+          ${p.in_stock ? nothing : html`<p class="oos">${tr(this.language, "अभी उपलब्ध नहीं", "Out of stock")}</p>`}
         </div>
       </article>
     `;

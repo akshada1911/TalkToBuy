@@ -3,6 +3,7 @@ import { property } from "lit/decorators.js";
 import type { ReadbackMsg } from "../types/messages.generated";
 import { base, rupees } from "../styles/tokens";
 import { define } from "../define";
+import { tr, type Lang } from "../i18n";
 
 /**
  * Read-back panel (FR-018, T069): large item count, total and delivery window, the same numbers
@@ -66,32 +67,35 @@ export class TtbReadback extends LitElement {
   @property({ attribute: false }) readback: ReadbackMsg | null = null;
   @property({ type: Boolean }) awaitingPayment = false;
   @property({ type: Boolean }) showTranslation = true;
+  @property() language: Lang = "hi";
 
   render() {
     const r = this.readback;
     if (!r) return nothing;
     return html`
-      <section role="region" aria-label="ऑर्डर की जाँच / Order summary" aria-live="polite">
-        <h3>ऑर्डर की जाँच कीजिए / Please check your order</h3>
+      <section role="region" aria-label=${tr(this.language, "ऑर्डर की जाँच", "Order summary")} aria-live="polite">
+        <h3>${tr(this.language, "ऑर्डर की जाँच कीजिए", "Please check your order")}</h3>
         <dl>
-          <dt>सामान / Items</dt>
+          <dt>${tr(this.language, "सामान", "Items")}</dt>
           <dd class="big">${r.item_count}</dd>
-          <dt>कुल / Total</dt>
+          <dt>${tr(this.language, "कुल", "Total")}</dt>
           <dd class="big">${rupees(r.total)}</dd>
-          <dt>डिलीवरी / Delivery</dt>
+          <dt>${tr(this.language, "डिलीवरी", "Delivery")}</dt>
           <dd>
-            <span lang="hi">${r.delivery.label_hi}</span>
-            <span class="en" lang="en">${r.delivery.label_en}</span>
+            <span lang=${this.language}>${tr(this.language, r.delivery.label_hi, r.delivery.label_en)}</span>
           </dd>
+          ${r.address_text
+            ? html`<dt>${tr(this.language, 'पता', 'Address')}</dt>
+                <dd>${r.address_text}</dd>`
+            : nothing}
         </dl>
-        <p class="say" lang="hi">${r.text_hi}</p>
-        ${this.showTranslation && r.text_en
+        <p class="say" lang=${this.language}>${this.language === "en" ? r.text_en || r.text_hi : r.text_hi}</p>
+        ${this.language !== "en" && this.showTranslation && r.text_en
           ? html`<p class="say en" lang="en" aria-label=${`English translation: ${r.text_en}`}>EN (translation): ${r.text_en}</p>`
           : nothing}
         ${this.awaitingPayment
           ? html`<p class="pay" role="status">
-              भुगतान ऐप की अपनी भुगतान स्क्रीन पर फ़िंगरप्रिंट से होगा — बोलकर नहीं।<br />
-              <span class="en" lang="en">Approve on the app's own payment screen with your fingerprint — never by voice.</span>
+              ${tr(this.language, "भुगतान ऐप की अपनी भुगतान स्क्रीन पर फ़िंगरप्रिंट से होगा — बोलकर नहीं।", "Approve on the app's own payment screen with your fingerprint — never by voice.")}
             </p>`
           : nothing}
       </section>

@@ -14,7 +14,7 @@ from pydantic import BaseModel
 
 from session_server.config import Settings
 from session_server.models.domain import GoalList, Product, Session, Shopper
-from session_server.ports.commerce import CheckoutView, CommercePort, UsualOrder
+from session_server.ports.commerce import Address, CheckoutView, CommercePort, UsualOrder
 from session_server.ports.live import LivePort
 
 
@@ -40,12 +40,15 @@ class Runtime:
     goals: dict[str, GoalList] = field(default_factory=dict)
     usual: UsualOrder | None = None
     goal_problems: dict[str, list[str]] = field(default_factory=dict)
+    goal_removed: dict[str, list[str]] = field(default_factory=dict)
     # add_to_cart calls already applied for the current shopper request (cleared on each new one);
     # stops the model double-adding when it repeats a tool call (seen in live rehearsal).
     turn_adds: set[tuple] = field(default_factory=set)
     camera_active: bool = False
     doctor_suggested: bool = False
+    health_noted: bool = False  # a warning sign was already handled this session
     payment_future: asyncio.Future | None = None
+    address: Address | None = None  # delivery address chosen for the current checkout
     shopper_turn_text: str = ""
     background: set[asyncio.Task] = field(default_factory=set)
 

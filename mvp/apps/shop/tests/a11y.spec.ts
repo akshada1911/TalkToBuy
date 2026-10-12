@@ -49,15 +49,15 @@ test("key controls are at least 48×48 px", async ({ page }) => {
   await open(page);
   // Playwright locators pierce the widget's shadow DOM.
   await expectTapTarget(page.getByRole("button", { name: /दुकानदार से बात करें/ }), "start button");
-  await expectTapTarget(page.getByRole("link", { name: /Family view/ }), "family link");
+  await expectTapTarget(page.getByRole("link", { name: /परिवार/ }), "family link");
   await expectTapTarget(page.locator(".brand"), "brand link");
 });
 
 test("AI assistant label and footer notices are visible", async ({ page }) => {
   await open(page);
-  await expect(page.getByText("AI सहायक / AI assistant")).toBeVisible();
+  await expect(page.getByText("AI सहायक")).toBeVisible();
   await expect(page.getByText(/Open Food Facts contributors, ODbL/)).toBeVisible();
-  await expect(page.getByText("Prices are demo prices")).toBeVisible();
+  await expect(page.getByText("दाम सिर्फ़ डेमो के लिए हैं")).toBeVisible();
 });
 
 test("the start button is reachable by keyboard and shows a focus ring", async ({ page }) => {
@@ -71,6 +71,6 @@ test("the start button is reachable by keyboard and shows a focus ring", async (
 test("family view renders without a backend", async ({ page }) => {
   await page.route("**/demo/family/notifications**", (r) => r.fulfill({ status: 200, contentType: "application/json", body: "[]" }));
   await page.goto("/family");
-  await expect(page.getByText(/Alerts for Rohit \(son\)/)).toBeVisible();
-  await expectTapTarget(page.getByRole("link", { name: /Back to shop/ }), "back link");
+  await expect(page.getByText(/परिवार के लिए सूचनाएँ/)).toBeVisible();
+  await expectTapTarget(page.getByRole("link", { name: /दुकान पर वापस/ }), "back link");
 });

@@ -64,6 +64,10 @@ It accepts an empty `line_items` and returns 201 with a Checkout.
 `PUT /ucp/v1/checkout-sessions/{id}` is a full replacement:
 `{"currency":"INR","line_items":[…],"fulfillment":{"selected_option_id":"slot-1800"}|null}`
 
+- `destination` (optional) is `{"shopper_id":"u-ghanshyam","address_id":"addr-home"}`: deliver to one
+  of the shopper's saved addresses. Omitted keeps the current address; `null` clears it; an
+  unknown address → 400 `INVALID_ADDRESS`. The address appears in
+  `fulfillment.methods[0].destinations` and is part of the signed checkout, so the mandate covers it.
 - **Changing `line_items` always clears the fulfillment selection**, which returns the session
   to `incomplete`.
 - Selecting an option with a non-empty cart sets the status to `ready_for_complete`.
@@ -136,6 +140,8 @@ without an order.
 | Method and path | Response |
 |---|---|
 | `GET /demo/shoppers/{id}` | `Shopper` (domain schema): `{id:"u-ghanshyam", display_name:"Ghanshyam ji", language:"hi", address_form:"respectful_male"}` |
+| `GET /demo/shoppers/{id}/addresses` | `[{id, label, name, line1, area, city, pincode, phone}]`: saved addresses (seeded: "Home", "Rohit's place") plus any added |
+| `POST /demo/shoppers/{id}/addresses` | `{label?, name, line1, area, city, pincode (6 digits), phone (10-digit mobile)}` → 201 with the saved address and its `id`; 400 if invalid |
 | `GET /demo/shoppers/{id}/last-order` | `{"order_id":"…","lines":[{"product":Product,"qty":1}…]}` (seeded until a real order exists) |
 | `GET /demo/shoppers/{id}/family` | `FamilyContact` `{id, name:"Rohit (son)", channel:"in_app"}` or 404 |
 | `POST /demo/family/notifications` | `{shopper_id, message}` (≤ 280 chars) → `{delivered:true, contact_name}` |

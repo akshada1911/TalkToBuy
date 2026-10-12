@@ -22,13 +22,13 @@ async def _cart(rt):
 async def test_start_checkout_refuses_empty_cart() -> None:
     rt = make_runtime()
     with pytest.raises(ToolError, match="empty"):
-        await start_checkout(rt, {"delivery_slot": "earliest"})
+        await start_checkout(rt, {"delivery_slot": "earliest", "address_id": "addr-home"})
 
 
 async def test_readback_uses_store_numbers_exactly() -> None:
     rt = make_runtime()
     await _cart(rt)
-    result = await start_checkout(rt, {"delivery_slot": "earliest"})
+    result = await start_checkout(rt, {"delivery_slot": "earliest", "address_id": "addr-home"})
     # 2 × ₹54 + ₹10 = ₹118, 2 distinct products, slot from the store
     assert result["item_count"] == 2 and result["total"] == 118
     assert "कुल 2 सामान" in result["readback_hi"] and "₹118" in result["readback_hi"]
@@ -47,7 +47,7 @@ async def test_confirm_requires_start_checkout_first() -> None:
 async def test_spoken_yes_alone_never_completes() -> None:
     rt = make_runtime()
     await _cart(rt)
-    rb = await start_checkout(rt, {"delivery_slot": "earliest"})
+    rb = await start_checkout(rt, {"delivery_slot": "earliest", "address_id": "addr-home"})
     deferred = await confirm_checkout(rt, {"checkout_id": rb["checkout_id"]})
     assert rt.ui.of("payment_request")
     # The shopper says "haan, pay karo" but never approves in the payment step: times out.
@@ -60,7 +60,7 @@ async def test_spoken_yes_alone_never_completes() -> None:
 async def test_completes_only_with_approved_mandate() -> None:
     rt = make_runtime()
     await _cart(rt)
-    rb = await start_checkout(rt, {"delivery_slot": "earliest"})
+    rb = await start_checkout(rt, {"delivery_slot": "earliest", "address_id": "addr-home"})
     deferred = await confirm_checkout(rt, {"checkout_id": rb["checkout_id"]})
     rt.payment_future.set_result({"approved": True, "mandate": MANDATE})
     result = await deferred.awaitable
@@ -72,7 +72,7 @@ async def test_completes_only_with_approved_mandate() -> None:
 async def test_declined_payment_keeps_cart() -> None:
     rt = make_runtime()
     await _cart(rt)
-    rb = await start_checkout(rt, {"delivery_slot": "earliest"})
+    rb = await start_checkout(rt, {"delivery_slot": "earliest", "address_id": "addr-home"})
     cart_id = rb["checkout_id"]
     deferred = await confirm_checkout(rt, {"checkout_id": cart_id})
     rt.payment_future.set_result({"approved": False, "mandate": None})
@@ -84,7 +84,7 @@ async def test_declined_payment_keeps_cart() -> None:
 async def test_cart_edit_during_payment_returns_cart_changed_and_keeps_lines() -> None:
     rt = make_runtime()
     await _cart(rt)
-    rb = await start_checkout(rt, {"delivery_slot": "earliest"})
+    rb = await start_checkout(rt, {"delivery_slot": "earliest", "address_id": "addr-home"})
     deferred = await confirm_checkout(rt, {"checkout_id": rb["checkout_id"]})
     await update_cart(rt, {"product_id": "p-0007", "qty": 2})
     assert (await deferred.awaitable)["status"] == "cart_changed"
@@ -97,7 +97,7 @@ async def test_cart_edit_during_payment_returns_cart_changed_and_keeps_lines() -
 async def test_no_to_readback_leaves_cart_intact() -> None:
     rt = make_runtime()
     await _cart(rt)
-    rb = await start_checkout(rt, {"delivery_slot": "earliest"})
+    rb = await start_checkout(rt, {"delivery_slot": "earliest", "address_id": "addr-home"})
     # Shopper says "nahi, ek aur cheez" → model edits the cart instead of confirming.
     await add_to_cart(rt, {"product_id": "p-0201", "qty": 1})
     cart = rt.commerce.carts[rb["checkout_id"]]
@@ -108,7 +108,7 @@ async def test_speech_during_payment_does_not_duplicate_confirm() -> None:
     rt = make_runtime()
     router = ToolRouter(rt, HANDLERS)
     await _cart(rt)
-    rb = await start_checkout(rt, {"delivery_slot": "earliest"})
+    rb = await start_checkout(rt, {"delivery_slot": "earliest", "address_id": "addr-home"})
     await router.handle(ToolCall("c1", "confirm_checkout", {"checkout_id": rb["checkout_id"]}))
     assert rt.live.response_for("c1") is None  # still open (non-blocking)
     await router.handle(ToolCall("c2", "confirm_checkout", {"checkout_id": rb["checkout_id"]}))
@@ -130,15 +130,111 @@ async def test_out_of_stock_at_checkout_is_reported() -> None:
     await _cart(rt)
     rt.commerce.products["p-0007"] = rt.commerce.products["p-0007"].model_copy(update={"in_stock": False})
     with pytest.raises(ToolError, match="out of stock"):
-        await start_checkout(rt, {"delivery_slot": "earliest"})
+        await start_checkout(rt, {"delivery_slot": "earliest", "address_id": "addr-home"})
 
 
 async def test_readback_is_in_the_session_language() -> None:
     rt = make_runtime()
     await _cart(rt)
-    assert (await start_checkout(rt, {"delivery_slot": "earliest"}))["readback"].startswith("आपके कार्ट")
+    assert (await start_checkout(rt, {"delivery_slot": "earliest", "address_id": "addr-home"}))["readback"].startswith("आपके कार्ट")
     rt = make_runtime()
     rt.session.language = "en"
     await _cart(rt)
-    rb = await start_checkout(rt, {"delivery_slot": "earliest"})
+    rb = await start_checkout(rt, {"delivery_slot": "earliest", "address_id": "addr-home"})
     assert rb["readback"] == rb["readback_en"] and rb["readback"].startswith("2 items, ₹118")
+
+
+async def test_checkout_asks_for_an_address_before_anything_else() -> None:
+    rt = make_runtime()
+    await _cart(rt)
+    result = await start_checkout(rt, {"delivery_slot": "earliest"})
+    assert result["needs_address"] is True
+    assert [a["address_id"] for a in result["addresses"]] == ["addr-home", "addr-rohit"]
+    assert [a["label"] for a in rt.ui.of("addresses")[-1]["addresses"]] == ["Home", "Rohit's place"]
+    # No checkout was opened, so payment cannot start.
+    assert not rt.ui.of("readback") and rt.session.checkout_ready is False
+    with pytest.raises(ToolError, match="start_checkout"):
+        await confirm_checkout(rt, {"checkout_id": rt.session.cart_ref})
+    assert not rt.ui.of("payment_request")
+
+
+async def test_saved_address_is_in_readback_and_payment_request() -> None:
+    rt = make_runtime()
+    await _cart(rt)
+    rb = await start_checkout(rt, {"delivery_slot": "earliest", "address_id": "addr-rohit"})
+    assert rb["address"]["label"] == "Rohit's place"
+    assert "Baner" in rb["readback_hi"] and "Baner" in rb["readback_en"]
+    assert "Baner" in rt.ui.of("readback")[-1]["address_text"]
+    pending = await confirm_checkout(rt, {"checkout_id": rb["checkout_id"]})
+    pending.awaitable.close()
+    assert "Baner" in rt.ui.of("payment_request")[-1]["address_text"]
+
+
+async def test_new_address_is_saved_and_used() -> None:
+    rt = make_runtime()
+    await _cart(rt)
+    new = {"label": "Office", "name": "Ghanshyam Sharma", "line1": "Shop 4, FC Road", "area": "Deccan",
+           "city": "Pune", "pincode": "411004", "phone": "9876543210"}
+    rb = await start_checkout(rt, {"delivery_slot": "earliest", "new_address": new})
+    assert rb["address"]["label"] == "Office"
+    assert any(a.label == "Office" for a in await rt.commerce.addresses("u-ghanshyam"))
+
+
+async def test_incomplete_or_invalid_new_address_is_refused() -> None:
+    rt = make_runtime()
+    await _cart(rt)
+    base = {"name": "A", "line1": "1 Road", "area": "X", "city": "Pune", "pincode": "411004", "phone": "9876543210"}
+    with pytest.raises(ToolError, match="pincode"):
+        await start_checkout(rt, {"delivery_slot": "earliest", "new_address": {**base, "pincode": ""}})
+    with pytest.raises(ToolError, match="not accepted"):
+        await start_checkout(rt, {"delivery_slot": "earliest", "new_address": {**base, "pincode": "41"}})
+    with pytest.raises(ToolError, match="Unknown address_id"):
+        await start_checkout(rt, {"delivery_slot": "earliest", "address_id": "addr-nope"})
+    assert rt.session.checkout_ready is False
+
+
+async def test_address_is_kept_when_checkout_is_restarted_after_a_cart_change() -> None:
+    rt = make_runtime()
+    await _cart(rt)
+    await start_checkout(rt, {"delivery_slot": "earliest", "address_id": "addr-rohit"})
+    await update_cart(rt, {"product_id": "p-0007", "qty": 0})
+    again = await start_checkout(rt, {"delivery_slot": "earliest"})
+    assert again["address"]["address_id"] == "addr-rohit"
+
+
+async def test_cancel_order_empties_the_cart_and_cancels_the_checkout() -> None:
+    from session_server.core.tools.cancel import cancel_order
+
+    rt = make_runtime()
+    await _cart(rt)
+    cart_ref = rt.session.cart_ref
+    await start_checkout(rt, {"delivery_slot": "earliest", "address_id": "addr-home"})
+    result = await cancel_order(rt, {})
+    assert result["status"] == "cancelled" and result["removed_items"] == 2
+    assert rt.commerce.carts[cart_ref]["status"] == "canceled"
+    assert rt.session.cart_ref is None and rt.cart is None and rt.address is None
+    assert rt.session.checkout_ready is False
+    assert rt.ui.of("cart")[-1]["cart"]["item_count"] == 0
+    # A new request starts a fresh cart.
+    await add_to_cart(rt, {"product_id": "p-0112", "qty": 1})
+    assert rt.session.cart_ref != cart_ref
+
+
+async def test_cancel_order_closes_an_open_payment_step() -> None:
+    from session_server.core.tools.cancel import cancel_order
+
+    rt = make_runtime()
+    await _cart(rt)
+    rb = await start_checkout(rt, {"delivery_slot": "earliest", "address_id": "addr-home"})
+    pending = await confirm_checkout(rt, {"checkout_id": rb["checkout_id"]})
+    await cancel_order(rt, {})
+    result = await pending.awaitable
+    assert result["status"] == "cancelled"
+    assert not [c for c in rt.commerce.calls if c[0] == "complete"]
+
+
+async def test_cancel_with_nothing_open_says_so() -> None:
+    from session_server.core.tools.cancel import cancel_order
+
+    rt = make_runtime()
+    assert (await cancel_order(rt, {}))["status"] == "nothing_to_cancel"

@@ -2,6 +2,7 @@ import { LitElement, css, html, nothing } from "lit";
 import { property, state } from "lit/decorators.js";
 import { base } from "../styles/tokens";
 import { define } from "../define";
+import { tr, type Lang } from "../i18n";
 
 export const FRAME_SIZE = 768;
 /** ≤ 1 fps: every frame enters model context (T080). */
@@ -67,6 +68,7 @@ export class TtbCamera extends LitElement {
 
   /** Disable while the session is not connected. */
   @property({ type: Boolean }) disabled = false;
+  @property() language: Lang = "hi";
   @state() private cam: CamState = "off";
   private stream: MediaStream | null = null;
   private timer: ReturnType<typeof setInterval> | null = null;
@@ -162,8 +164,8 @@ export class TtbCamera extends LitElement {
 
   render() {
     if (this.cam === "denied" || this.cam === "unavailable") {
-      return html`<p class="note" role="status" lang="hi">
-        बोलकर बताइए — कौन-सा सामान चाहिए।<br /><span class="en" lang="en">Camera not available: please describe the item by voice.</span>
+      return html`<p class="note" role="status" lang=${this.language}>
+        ${tr(this.language, "बोलकर बताइए — कौन-सा सामान चाहिए।", "Camera not available: please describe the item by voice.")}
       </p>`;
     }
     const on = this.cam === "on" || this.cam === "starting";
@@ -177,11 +179,11 @@ export class TtbCamera extends LitElement {
           @click=${() => void this.toggle()}
         >
           <span aria-hidden="true">📷</span>
-          ${on ? "कैमरा बंद करें / Stop showing" : "दिखाइए / Show item"}
+          ${on ? tr(this.language, "कैमरा बंद करें", "Stop showing") : tr(this.language, "दिखाइए", "Show item")}
         </button>
         ${on
-          ? html`<video muted playsinline autoplay aria-label="कैमरा का दृश्य / Camera preview"></video>
-              <p class="note" lang="hi">सामान कैमरे के सामने रखिए। <span class="en" lang="en">Hold the item up to the camera.</span></p>`
+          ? html`<video muted playsinline autoplay aria-label=${tr(this.language, "कैमरा का दृश्य", "Camera preview")}></video>
+              <p class="note" lang=${this.language}>${tr(this.language, "सामान कैमरे के सामने रखिए।", "Hold the item up to the camera.")}</p>`
           : nothing}
       </div>
     `;

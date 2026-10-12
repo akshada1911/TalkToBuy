@@ -8,6 +8,7 @@ import httpx
 from session_server.config import Settings
 from session_server.models.domain import FamilyContact, Product, Shopper
 from session_server.ports.commerce import (
+    Address,
     CartLineView,
     CheckoutView,
     CommerceError,
@@ -19,6 +20,12 @@ from session_server.ports.commerce import (
 
 def _product(raw: dict[str, Any]) -> Product:
     return Product.model_validate(raw["metadata"]["talktobuy"])
+
+
+def _address(raw: dict[str, Any]) -> Address:
+    return Address(id=raw["id"], label=raw.get("label", ""), name=raw.get("name", ""),
+                   line1=raw.get("line1", ""), area=raw.get("area", ""), city=raw.get("city", ""),
+                   pincode=raw.get("pincode", ""), phone=raw.get("phone", ""))
 
 
 def _checkout(raw: dict[str, Any]) -> CheckoutView:
@@ -41,6 +48,11 @@ def _checkout(raw: dict[str, Any]) -> CheckoutView:
                     m = opt.get("metadata") or {}
                     slot = Slot(id=opt["id"], label_hi=m.get("label_hi", opt.get("title", "")),
                                 label_en=m.get("label_en", opt.get("title", "")))
+    address = None
+    for method in (raw.get("fulfillment") or {}).get("methods", []):
+        for dest in method.get("destinations", []):
+            if dest["id"] == method.get("selected_destination_id"):
+                address = _address({"id": dest["id"], "name": dest.get("name", ""), **dest.get("address", {})})
     order = raw.get("order") or {}
     return CheckoutView(
         id=raw["id"],
@@ -51,6 +63,7 @@ def _checkout(raw: dict[str, Any]) -> CheckoutView:
         slot=slot,
         order_id=order.get("id"),
         out_of_stock=tuple(meta.get("out_of_stock", [])),
+        address=address,
     )
 
 
@@ -102,10 +115,12 @@ class UcpCommerce:
     async def get_cart(self, cart_id: str) -> CheckoutView:
         return _checkout(await self._call("GET", f"/ucp/v1/checkout-sessions/{cart_id}"))
 
-    async def put_cart(self, cart_id: str, lines: list[tuple[str, int]],
-                       slot_id: str | None = None) -> CheckoutView:
-        body = {"currency": "INR", "line_items": self._lines(lines),
-                "fulfillment": {"selected_option_id": slot_id} if slot_id else None}
+    async def put_cart(self, cart_id: str, lines: list[tuple[str, int]], slot_id: str | None = None,
+                       address_id: str | None = None, shopper_id: str | None = None) -> CheckoutView:
+        body: dict[str, Any] = {"currency": "INR", "line_items": self._lines(lines),
+                                "fulfillment": {"selected_option_id": slot_id} if slot_id else None}
+        if address_id:  # omitted otherwise, so the store keeps the address already chosen
+            body["destination"] = {"shopper_id": shopper_id, "address_id": address_id}
         return _checkout(await self._call("PUT", f"/ucp/v1/checkout-sessions/{cart_id}", body))
 
     async def complete(self, cart_id: str, mandate: dict[str, Any]) -> CheckoutView:
@@ -121,6 +136,13 @@ class UcpCommerce:
 
     async def shopper(self, shopper_id: str) -> Shopper:
         return Shopper.model_validate(await self._call("GET", f"/demo/shoppers/{shopper_id}"))
+
+    async def addresses(self, shopper_id: str) -> list[Address]:
+        raw = await self._call("GET", f"/demo/shoppers/{shopper_id}/addresses")
+        return [_address(a) for a in raw]
+
+    async def add_address(self, shopper_id: str, fields: dict[str, Any]) -> Address:
+        return _address(await self._call("POST", f"/demo/shoppers/{shopper_id}/addresses", fields))
 
     async def last_order(self, shopper_id: str) -> UsualOrder | None:
         try:

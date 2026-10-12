@@ -30,6 +30,8 @@ log = get_logger(__name__)
 
 FRAME_MIC, FRAME_JPEG, FRAME_PCM_OUT, FRAME_MP4_OUT = 0x01, 0x02, 0x11, 0x12
 NO_SPEECH = re.compile(r"^\s*<\s*no[ _-]?speech", re.IGNORECASE)
+# Transcription markers the model emits for silence ("<no speech>{pause}"); never real speech.
+MARKERS = re.compile(r"<\s*no[ _-]?speech\s*>|\{\s*pause\s*\}", re.IGNORECASE)
 LOW_DOWNLINK_KBPS = 1000
 UNDERRUNS_LIMIT = 3
 
@@ -198,8 +200,8 @@ class ConversationSession:
             await self.end("shopper_closed")
 
     async def _switch_media(self, mode: str) -> None:
-        if mode not in ("avatar", "audio_only") or mode == self.rt.session.media_mode:
-            return
+        if mode != "audio_only" or mode == self.rt.session.media_mode:
+            return  # voice only: video (avatar) mode is never switched on
         self.rt.session.media_mode = mode
         await self.rt.live.reconnect(mode)  # same conversation via session resumption (R12)
         await self.rt.ui.send_json(state_msg(self.rt))
@@ -262,13 +264,19 @@ class ConversationSession:
         if final:
             await self._finish_turn("assistant")  # sends the single final caption
             return
+        shown = MARKERS.sub("", self._text["assistant"]).strip()
+        if not shown or "<no speech>{pause}".startswith(shown.lower().replace("< ", "<")):
+            return  # nothing real yet: a marker still arriving in pieces
         await self.rt.ui.send_json(CaptionMsg(type="caption", who="assistant",
                                               turn_id=self._turn_id("assistant"),
-                                              text_hi=self._text["assistant"], text_en=None, final=False))
+                                              text_hi=shown, text_en=None, final=False))
 
     async def _finish_turn(self, who: str) -> None:
-        text = self._text[who].strip()
+        raw = self._text[who].strip()
+        # Markers can arrive in pieces ("<no", " speech>", "{pause}"), so clean the whole turn.
+        text = MARKERS.sub("", raw).strip() if who == "assistant" else raw
         if not text:
+            self._text[who] = ""
             return
         turn_id = self._turn_id(who)
         self._text[who] = ""

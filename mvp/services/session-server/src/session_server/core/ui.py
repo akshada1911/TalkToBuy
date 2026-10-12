@@ -9,10 +9,12 @@ from session_server.models.messages import (
     StateMsg,
     UiCart,
     UiCartLine,
+    AddressesMsg,
+    UiAddress,
     UiDelivery,
     UiProduct,
 )
-from session_server.ports.commerce import CheckoutView, Slot
+from session_server.ports.commerce import Address, CheckoutView, Slot
 
 
 def rupees(minor: int) -> int:
@@ -28,6 +30,14 @@ def ui_product(p: Product) -> UiProduct:
 
 def ui_delivery(slot: Slot) -> UiDelivery:
     return UiDelivery(id=slot.id, label_hi=slot.label_hi, label_en=slot.label_en)
+
+
+def ui_address(a: Address) -> UiAddress:
+    return UiAddress(id=a.id, label=a.label, text=a.text)
+
+
+def addresses_msg(addresses: list[Address]) -> AddressesMsg:
+    return AddressesMsg(type="addresses", addresses=[ui_address(a) for a in addresses])
 
 
 def ui_cart(view: CheckoutView, products: dict[str, Product]) -> UiCart:

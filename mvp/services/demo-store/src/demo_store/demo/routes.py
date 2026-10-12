@@ -10,6 +10,7 @@ from fastapi import APIRouter, Header, Query
 from pydantic import BaseModel, Field
 
 from demo_store.catalog.store import get_catalog, to_ucp
+from demo_store.demo import addresses
 from demo_store.config import get_settings
 from demo_store.models.domain import FamilyContact, Order, Shopper
 from demo_store.state import STATE
@@ -27,6 +28,7 @@ def seed() -> dict:
         "shoppers": {s["id"]: Shopper.model_validate(s) for s in raw["shoppers"]},
         "family": {k: FamilyContact.model_validate(v) for k, v in raw["family"].items()},
         "orders": [Order.model_validate(o) for o in raw["orders"]],
+        "addresses": raw.get("addresses", {}),
     }
 
 
@@ -77,6 +79,28 @@ def _family(shopper_id: str) -> FamilyContact:
 @router.get("/shoppers/{shopper_id}/family")
 def family(shopper_id: str) -> dict:
     return _family(shopper_id).model_dump(mode="json")
+
+
+def seeded_addresses(shopper_id: str) -> list[dict]:
+    return list(seed()["addresses"].get(shopper_id, []))
+
+
+def get_address(shopper_id: str, address_id: str) -> dict:
+    """One saved address of this shopper (seeded or added); 404 if unknown."""
+    _shopper(shopper_id)
+    return addresses.find(shopper_id, address_id, seeded_addresses(shopper_id))
+
+
+@router.get("/shoppers/{shopper_id}/addresses")
+def list_addresses(shopper_id: str) -> list[dict]:
+    _shopper(shopper_id)
+    return addresses.saved(shopper_id, seeded_addresses(shopper_id))
+
+
+@router.post("/shoppers/{shopper_id}/addresses", status_code=201)
+def add_address(shopper_id: str, body: addresses.AddressIn) -> dict:
+    _shopper(shopper_id)
+    return addresses.add(shopper_id, body, seeded_addresses(shopper_id))
 
 
 class NotificationIn(BaseModel):

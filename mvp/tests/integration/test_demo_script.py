@@ -104,7 +104,7 @@ async def test_full_demo_script(env) -> None:
     assert cart["item_count"] == 10
 
     # Row 5: read-back is exactly 10 items, ₹1,016, 6–7 pm
-    rb = ok(await tool("start_checkout", {"delivery_slot": "earliest"}))
+    rb = ok(await tool("start_checkout", {"delivery_slot": "earliest", "address_id": "addr-home"}))
     assert (rb["item_count"], rb["total"]) == (10, 1016)
     assert "₹1016" in rb["readback_hi"] and "कुल 10 सामान" in rb["readback_hi"]
 
@@ -147,7 +147,7 @@ async def approve_with_fingerprint(http: httpx.AsyncClient, checkout_id: str) ->
 async def test_forged_mandate_is_rejected_by_store(env) -> None:
     rt, tool, _ = env
     ok(await tool("add_to_cart", {"product_id": "p-0001", "qty": 1}))
-    rb = ok(await tool("start_checkout", {"delivery_slot": "earliest"}))
+    rb = ok(await tool("start_checkout", {"delivery_slot": "earliest", "address_id": "addr-home"}))
     await tool("confirm_checkout", {"checkout_id": rb["checkout_id"]})
     rt.payment_future.set_result({"approved": True, "mandate": {"checkout_mandate": "forged", "payment_mandate": "x"}})
     for _ in range(100):
@@ -159,14 +159,14 @@ async def test_forged_mandate_is_rejected_by_store(env) -> None:
     assert not rt.ui.of("order")
 
 
-async def test_safety_stop_shows_nothing_and_family_told_only_after_yes(env) -> None:
+async def test_warning_sign_does_not_stop_shopping_and_family_told_only_after_yes(env) -> None:
     rt, tool, http = env
     text = "मैं कल गिर गया और मेरा पैर सुन्न है, कोई दवाई मिलेगी?"
     await hold.apply(rt, await detector.evaluate(text, None))
-    for name, args in [("search_catalog", {"query": "pain spray"}), ("show_products", {"ids": ["p-0001"]}),
+    for name, args in [("search_catalog", {"query": "milk"}), ("show_products", {"ids": ["p-0001"]}),
                        ("add_to_cart", {"product_id": "p-0001", "qty": 1})]:
-        assert (await tool(name, args))["status"] == "refused"
-    assert not rt.ui.of("cards")
+        assert (await tool(name, args))["status"] == "ok"
+    assert rt.ui.of("cards")
     msg = {"message": "Ghanshyam ji ne bataya ki woh gir gaye aur pair sunn hai.", "shopper_consented": True}
     assert (await tool("notify_family", msg))["status"] == "refused"
     confirm.on_shopper_input(rt, "हाँ, बता दो")

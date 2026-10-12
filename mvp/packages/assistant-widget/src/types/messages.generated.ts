@@ -8,6 +8,7 @@ export type ServerMessage =
   | CardsMsg
   | GoalListMsg
   | CartMsg
+  | AddressesMsg
   | ReadbackMsg
   | PaymentRequestMsg
   | OrderMsg
@@ -123,12 +124,25 @@ export interface UiCartLine {
   qty: number;
   line_total: number;
 }
+export interface AddressesMsg {
+  type: "addresses";
+  addresses: UiAddress[];
+}
+export interface UiAddress {
+  id: string;
+  label: string;
+  /**
+   * One-line address: house/street, area, city, pincode.
+   */
+  text: string;
+}
 export interface ReadbackMsg {
   type: "readback";
   checkout_id: string;
   item_count: number;
   total: number;
   delivery: UiDelivery;
+  address_text?: string;
   text_hi: string;
   text_en: string;
 }
@@ -144,6 +158,7 @@ export interface PaymentRequestMsg {
   total: number;
   currency: "INR";
   delivery: UiDelivery;
+  address_text?: string;
 }
 export interface OrderMsg {
   type: "order";

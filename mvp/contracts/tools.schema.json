@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://talktobuy.dev/contracts/tools.schema.json",
   "title": "TalkToBuy agent tools (provider-neutral)",
-  "description": "The nine tools the assistant may call. Defined once here; adapters convert them to each provider's function-declaration format. All tools execute on the session server, never in the browser. Server-side guards (x-guards) are enforced in code regardless of what the model asks for.",
+  "description": "The ten tools the assistant may call. Defined once here; adapters convert them to each provider's function-declaration format. All tools execute on the session server, never in the browser. Server-side guards (x-guards) are enforced in code regardless of what the model asks for.",
   "version": "1.0.0",
   "tools": [
     {
@@ -116,6 +116,22 @@
       "x-blocking": false
     },
     {
+      "name": "cancel_order",
+      "description": "Cancel the order in progress: empties the whole cart, closes any open payment step and drops the chosen address. Call it when the shopper says to cancel or drop the order. An order that is already placed cannot be cancelled here.",
+      "parameters": { "type": "object", "properties": {}, "additionalProperties": false },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "status": { "enum": ["cancelled", "nothing_to_cancel"] },
+          "removed_items": { "type": "integer" },
+          "instruction": { "type": "string" }
+        },
+        "required": ["status"]
+      },
+      "x-guards": ["never refused: cancelling is always allowed"],
+      "x-blocking": false
+    },
+    {
       "name": "get_usual_order",
       "description": "Fetch the shopper's last order so it can be proposed as 'my usual'. Does not add anything.",
       "parameters": { "type": "object", "properties": {}, "additionalProperties": false },
@@ -136,10 +152,28 @@
     },
     {
       "name": "start_checkout",
-      "description": "Open a checkout with the store for the current cart and a delivery slot. Returns the exact item count, total and delivery time to read back. Does not take payment.",
+      "description": "Open a checkout with the store for the current cart, a delivery slot and a delivery address. With no address chosen yet it returns needs_address and the saved addresses (also shown as cards): ask which one, or a new one, then call again. Otherwise returns the exact item count, total, address and delivery time to read back. Does not take payment.",
       "parameters": {
         "type": "object",
-        "properties": { "delivery_slot": { "type": "string", "description": "Slot ID, or 'earliest'." } },
+        "properties": {
+          "delivery_slot": { "type": "string", "description": "Slot ID, or 'earliest'." },
+          "address_id": { "type": "string", "description": "A saved address_id from the addresses list." },
+          "new_address": {
+            "type": "object",
+            "description": "A new delivery address the shopper gave; it is saved for next time. Use instead of address_id.",
+            "properties": {
+              "label": { "type": "string", "description": "Short name, e.g. 'Office'. Optional." },
+              "name": { "type": "string", "description": "Receiver's name." },
+              "line1": { "type": "string", "description": "House or flat number and street." },
+              "area": { "type": "string" },
+              "city": { "type": "string" },
+              "pincode": { "type": "string", "description": "6 digits." },
+              "phone": { "type": "string", "description": "10-digit mobile number." }
+            },
+            "required": ["name", "line1", "area", "city", "pincode", "phone"],
+            "additionalProperties": false
+          }
+        },
         "required": ["delivery_slot"],
         "additionalProperties": false
       },
@@ -153,11 +187,14 @@
           "delivery": { "$ref": "#/$defs/DeliverySlot" },
           "readback": { "type": "string", "description": "Server-built read-back in the session language; say it word for word." },
           "readback_hi": { "type": "string" },
-          "readback_en": { "type": "string" }
-        },
-        "required": ["checkout_id", "item_count", "total", "delivery"]
+          "readback_en": { "type": "string" },
+          "address": { "type": "object", "properties": { "address_id": { "type": "string" }, "label": { "type": "string" }, "text": { "type": "string" } } },
+          "needs_address": { "type": "boolean", "description": "True when no address is chosen yet: nothing was opened; ask the shopper." },
+          "addresses": { "type": "array", "items": { "type": "object", "properties": { "address_id": { "type": "string" }, "label": { "type": "string" }, "address": { "type": "string" } } } },
+          "instruction": { "type": "string" }
+        }
       },
-      "x-guards": ["refused when cart is empty", "refused while session.safety_hold is true"],
+      "x-guards": ["refused when cart is empty", "returns needs_address until a delivery address is chosen; confirm_checkout is refused without one", "refused while session.safety_hold is true"],
       "x-blocking": true
     },
     {

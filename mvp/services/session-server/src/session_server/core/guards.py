@@ -17,19 +17,6 @@ class Refusal:
 
 Guard = Callable[[Runtime, str, dict[str, Any]], Refusal | None]
 
-SAFETY_BLOCKED = {"search_catalog", "show_products", "add_to_cart", "start_checkout", "confirm_checkout"}
-SAFETY_REFUSAL = (
-    "Refused: a warning sign was reported, so no products may be shown, added or bought now. "
-    "Gently suggest seeing a doctor, and offer to tell their family member in the app."
-)
-
-
-def safety_guard(rt: Runtime, name: str, args: dict[str, Any]) -> Refusal | None:
-    if rt.session.safety_hold and name in SAFETY_BLOCKED:
-        return Refusal(SAFETY_REFUSAL, retryable=False)
-    return None
-
-
 def problem_limit_guard(rt: Runtime, name: str, args: dict[str, Any]) -> Refusal | None:
     if name == "show_products" and args.get("purpose") == "problem" and len(args.get("ids", [])) > 3:
         return Refusal("For a described problem, show at most 3 products (FR-034).")
@@ -81,4 +68,4 @@ def approval_guard(rt: Runtime, name: str, args: dict[str, Any]) -> Refusal | No
     return None
 
 
-GUARDS: list[Guard] = [safety_guard, problem_limit_guard, add_form_guard, approval_guard]
+GUARDS: list[Guard] = [problem_limit_guard, add_form_guard, approval_guard]

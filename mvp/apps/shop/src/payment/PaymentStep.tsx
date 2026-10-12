@@ -2,10 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import type { PaymentRequestedDetail, PaymentResult } from "@talktobuy/assistant-widget";
 import { HttpError, credentialToJson, postJson, toRequestOptions } from "./webauthn";
 import { needsRegistration, registerCredential } from "./register";
+import { tr, type Lang } from "../lang";
 
 interface Props {
   request: PaymentRequestedDetail;
   shopperId: string;
+  lang: Lang;
   onResolve: (result: PaymentResult) => void;
 }
 
@@ -24,7 +26,7 @@ const rupees = (n: number) => `₹${Math.round(n).toLocaleString("en-IN")}`;
  * with the fingerprint, never by voice. Flow: assert/options → navigator.credentials.get() →
  * /payment/approve → widget.resolvePayment({approved:true, mandate}).
  */
-export function PaymentStep({ request, shopperId, onResolve }: Props) {
+export function PaymentStep({ request, shopperId, lang, onResolve }: Props) {
   const [status, setStatus] = useState<Status>("ready");
   const [message, setMessage] = useState<{ hi: string; en: string } | null>(null);
   const primary = useRef<HTMLButtonElement>(null);
@@ -92,31 +94,35 @@ export function PaymentStep({ request, shopperId, onResolve }: Props) {
     <div className="modal-backdrop">
       <div className="modal" role="dialog" aria-modal="true" aria-labelledby="pay-title" aria-describedby="pay-summary">
         <div className="modal-head">
-          <h2 id="pay-title">भुगतान / Payment</h2>
-          <span className="test-badge">टेस्ट मोड / Test mode</span>
+          <h2 id="pay-title">{tr(lang, "भुगतान", "Payment")}</h2>
+          <span className="test-badge">{tr(lang, "टेस्ट मोड", "Test mode")}</span>
         </div>
         <dl id="pay-summary" className="pay-summary">
-          <dt>सामान / Items</dt>
+          <dt>{tr(lang, "सामान", "Items")}</dt>
           <dd>{request.item_count}</dd>
-          <dt>कुल / Total</dt>
+          <dt>{tr(lang, "कुल", "Total")}</dt>
           <dd className="pay-total">{rupees(request.total)}</dd>
-          <dt>डिलीवरी / Delivery</dt>
+          <dt>{tr(lang, "डिलीवरी", "Delivery")}</dt>
           <dd>
-            <span lang="hi">{request.delivery.label_hi}</span>
-            <span className="pay-en" lang="en">
-              {request.delivery.label_en}
-            </span>
+            <span lang={lang}>{tr(lang, request.delivery.label_hi, request.delivery.label_en)}</span>
           </dd>
+          {request.address_text && (
+            <>
+              <dt>{tr(lang, 'पता', 'Address')}</dt>
+              <dd>{request.address_text}</dd>
+            </>
+          )}
         </dl>
         <p className="pay-note">
-          यह दुकान की अपनी भुगतान स्क्रीन है। मंज़ूरी सिर्फ़ आपके फ़िंगरप्रिंट से होगी। कोई OTP या PIN नहीं माँगा जाएगा।
-          <span className="pay-en" lang="en">
-            This is the shop's own payment screen. Approval is by your fingerprint only; no OTP or PIN is ever asked.
-          </span>
+          {tr(
+            lang,
+            "यह दुकान की अपनी भुगतान स्क्रीन है। मंज़ूरी सिर्फ़ आपके फ़िंगरप्रिंट से होगी। कोई OTP या PIN नहीं माँगा जाएगा।",
+            "This is the shop's own payment screen. Approval is by your fingerprint only; no OTP or PIN is ever asked.",
+          )}
         </p>
         {message && (
           <p className="pay-error" role="alert">
-            {message.hi} <span className="pay-en" lang="en">{message.en}</span>
+            {tr(lang, message.hi, message.en)}
           </p>
         )}
         <div className="modal-actions">
@@ -126,14 +132,14 @@ export function PaymentStep({ request, shopperId, onResolve }: Props) {
             </span>
             <span>
               {status === "registering"
-                ? "फ़िंगरप्रिंट जोड़ रहे हैं… / Setting up fingerprint…"
+                ? tr(lang, "फ़िंगरप्रिंट जोड़ रहे हैं…", "Setting up fingerprint…")
                 : busy
-                  ? "रुकिए… / Please wait…"
-                  : `फ़िंगरप्रिंट से ${rupees(request.total)} दें / Pay with fingerprint`}
+                  ? tr(lang, "रुकिए…", "Please wait…")
+                  : tr(lang, `फ़िंगरप्रिंट से ${rupees(request.total)} दें`, `Pay ${rupees(request.total)} with fingerprint`)}
             </span>
           </button>
           <button type="button" className="btn-secondary" onClick={cancel} disabled={busy}>
-            रद्द करें / Cancel
+            {tr(lang, "रद्द करें", "Cancel")}
           </button>
         </div>
       </div>

@@ -19,6 +19,28 @@ def _norm(text: str) -> str:
     return " ".join(text.lower().split())
 
 
+# A "veg cake" is a vegetarian (eggless) cake, not a cake made of vegetables. Fresh produce does not
+# belong in a baking goal unless the recipe really uses it (carrot cake, banana bread, ...).
+_BAKING_WORDS = ("cake", "केक", "bake", "baking", "बेक", "cookie", "कुकी", "muffin", "मफिन",
+                 "brownie", "ब्राउनी", "cupcake", "बिस्कुट")
+_BAKING_PRODUCE_OK = ("carrot", "गाजर", "banana", "केला", "केले", "pumpkin", "कद्दू", "beetroot",
+                      "चुकंदर", "zucchini", "apple", "सेब", "lemon", "नींबू", "orange", "संतरा",
+                      "pineapple", "अनानास", "mango", "आम", "coconut", "नारियल", "strawberry",
+                      "berry", "dates", "खजूर", "raisin", "किशमिश")
+
+
+def _is_baking(goal_text: str) -> bool:
+    t = goal_text.lower()
+    return any(w in t for w in _BAKING_WORDS)
+
+
+def _produce_misfit(goal_text: str, need: str, category: str | None) -> bool:
+    if category != "produce" or not _is_baking(goal_text):
+        return False
+    t = f"{goal_text} {need}".lower()
+    return not any(w in t for w in _BAKING_PRODUCE_OK)
+
+
 async def build(rt: Runtime, goal_args: dict[str, Any]) -> GoalList:
     in_cart = set(current_lines(rt))
     on_hand = {_norm(x) for x in rt.session.on_hand}
@@ -44,6 +66,12 @@ async def build(rt: Runtime, goal_args: dict[str, Any]) -> GoalList:
     # unknown IDs are cleared and out-of-stock items flagged, and the model is told to fix them.
     await rt.ensure_products([i.product_id for i in items if i.product_id])
     problems: list[str] = []
+    unrelated: list[str] = []
+    for item in list(items):
+        product = rt.products.get(item.product_id) if item.product_id else None
+        if not item.struck and product and _produce_misfit(goal_args["goal_text"], item.need, product.category):
+            items.remove(item)
+            unrelated.append(item.need)
     for item in items:
         if item.struck or not item.product_id:
             continue
@@ -59,6 +87,8 @@ async def build(rt: Runtime, goal_args: dict[str, Any]) -> GoalList:
                     questions_asked=0, items=items, status="proposed")
     rt.goals[goal.goal_id] = goal
     rt.goal_problems[goal.goal_id] = problems
+    if unrelated:
+        rt.goal_removed[goal.goal_id] = unrelated
     confirm.arm(rt, "goal", [i.product_id for i in items if not i.struck and i.product_id])
     await rt.ui.send_json(GoalListMsg(
         type="goal_list", goal_id=goal.goal_id, goal_text=goal.goal_text,
@@ -80,12 +110,17 @@ def confirm_goal(rt: Runtime, goal_id: str) -> list[tuple[str, int]]:
     return [(i.product_id, i.qty or 1) for i in goal.items if not i.struck and i.product_id]
 
 
-def model_goal(goal: GoalList, problems: list[str] | None = None) -> dict[str, Any]:
+def model_goal(goal: GoalList, problems: list[str] | None = None,
+               removed: list[str] | None = None) -> dict[str, Any]:
     out = {
         "goal_id": goal.goal_id,
         "items": [i.model_dump() for i in goal.items],
         "left_out": [i.need for i in goal.items if i.struck],
     }
+    if removed:
+        out["removed_as_unrelated"] = removed
+        out["removed_note"] = ("These do not belong in this dish and were taken off the list. Tell "
+                               "the shopper they were left out and why; do not add them back.")
     if problems:
         out["problems"] = problems
         out["fix_first"] = ("Fix these before asking to add: search again and call show_products "

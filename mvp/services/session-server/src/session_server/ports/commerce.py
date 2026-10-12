@@ -29,6 +29,22 @@ class Slot:
 
 
 @dataclass(frozen=True)
+class Address:
+    id: str
+    label: str
+    name: str
+    line1: str
+    area: str
+    city: str
+    pincode: str
+    phone: str = ""
+
+    @property
+    def text(self) -> str:
+        return f"{self.line1}, {self.area}, {self.city} {self.pincode}"
+
+
+@dataclass(frozen=True)
 class CheckoutView:
     id: str
     status: str
@@ -38,6 +54,7 @@ class CheckoutView:
     slot: Slot | None = None
     order_id: str | None = None
     out_of_stock: tuple[str, ...] = ()
+    address: Address | None = None
 
 
 @dataclass(frozen=True)
@@ -65,9 +82,13 @@ class CommercePort(Protocol):
     async def get_cart(self, cart_id: str) -> CheckoutView: ...
 
     async def put_cart(
-        self, cart_id: str, lines: list[tuple[str, int]], slot_id: str | None = None
+        self, cart_id: str, lines: list[tuple[str, int]], slot_id: str | None = None,
+        address_id: str | None = None, shopper_id: str | None = None,
     ) -> CheckoutView:
-        """Full replacement. Changing lines clears the slot (session back to incomplete)."""
+        """Full replacement. Changing lines clears the slot (session back to incomplete).
+
+        `address_id` (with `shopper_id`) sets the delivery address; leaving it out keeps the
+        address already on the checkout."""
         ...
 
     async def complete(self, cart_id: str, mandate: dict[str, Any]) -> CheckoutView: ...
@@ -75,6 +96,14 @@ class CommercePort(Protocol):
     async def cancel(self, cart_id: str) -> CheckoutView: ...
 
     async def shopper(self, shopper_id: str) -> Shopper: ...
+
+    async def addresses(self, shopper_id: str) -> list[Address]:
+        """The shopper's saved delivery addresses."""
+        ...
+
+    async def add_address(self, shopper_id: str, fields: dict[str, Any]) -> Address:
+        """Save a new address (CommerceError INVALID_REQUEST if a field is invalid)."""
+        ...
 
     async def last_order(self, shopper_id: str) -> UsualOrder | None: ...
 

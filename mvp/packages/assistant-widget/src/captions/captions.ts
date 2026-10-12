@@ -3,6 +3,7 @@ import { property, state } from "lit/decorators.js";
 import type { CaptionMsg } from "../types/messages.generated";
 import { base } from "../styles/tokens";
 import { define } from "../define";
+import { tr, type Lang } from "../i18n";
 
 const DIGIT = "[0-9०-९]"; // ASCII and Devanagari digits
 /** A contiguous run of 4–8 digits that is not part of a longer run. */
@@ -104,6 +105,7 @@ export class TtbCaptions extends LitElement {
   ];
 
   @property({ type: Boolean, attribute: "show-translation" }) showTranslation = true;
+  @property() language: Lang = "hi";
   @state() private turns: Turn[] = [];
 
   /** Add or update a caption. */
@@ -149,14 +151,14 @@ export class TtbCaptions extends LitElement {
 
   render() {
     return html`
-      <div class="log" role="log" aria-live="polite" aria-relevant="additions text" aria-label="बातचीत के कैप्शन / Conversation captions">
+      <div class="log" role="log" aria-live="polite" aria-relevant="additions text" aria-label=${tr(this.language, "बातचीत के कैप्शन", "Conversation captions")}>
         ${this.turns.length === 0
-          ? html`<p class="empty">यहाँ बातचीत लिखी दिखेगी। / Captions appear here.</p>`
+          ? html`<p class="empty">${tr(this.language, "यहाँ बातचीत लिखी दिखेगी।", "Captions appear here.")}</p>`
           : this.turns.map(
               (t) => html`
                 <div class="turn ${t.who} ${t.final ? "" : "partial"}" data-turn=${t.turn_id}>
-                  <div class="who">${t.who === "assistant" ? "दुकानदार (AI)" : "आप"}</div>
-                  <p class="hi" lang="hi">${t.text_hi}${t.interrupted ? " …" : ""}</p>
+                  <div class="who">${t.who === "assistant" ? tr(this.language, "दुकानदार (AI)", "Shopkeeper (AI)") : tr(this.language, "आप", "You")}</div>
+                  <p class="hi" lang=${this.language}>${t.text_hi}${t.interrupted ? " …" : ""}</p>
                   ${this.showTranslation && t.text_en
                     ? html`<p class="en" lang="en" aria-label=${`English translation: ${t.text_en}`}>
                         <span class="en-tag" aria-hidden="true">EN (translation)</span><span aria-hidden="true">${t.text_en}</span>

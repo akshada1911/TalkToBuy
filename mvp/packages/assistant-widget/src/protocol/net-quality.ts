@@ -3,6 +3,7 @@ import { property } from "lit/decorators.js";
 import type { NetQualityMsg } from "../types/messages.generated";
 import { base } from "../styles/tokens";
 import { define } from "../define";
+import { tr, type Lang } from "../i18n";
 
 export const NET_QUALITY_INTERVAL_MS = 5000;
 
@@ -89,6 +90,7 @@ export class TtbMediaToggle extends LitElement {
 
   @property() mode: "avatar" | "audio_only" = "avatar";
   @property({ type: Boolean }) disabled = false;
+  @property() language: Lang = "hi";
 
   private flip() {
     const next = this.mode === "avatar" ? "audio_only" : "avatar";
@@ -101,11 +103,11 @@ export class TtbMediaToggle extends LitElement {
       type="button"
       ?disabled=${this.disabled}
       aria-pressed=${audio ? "true" : "false"}
-      aria-label=${audio ? "वीडियो चालू करें / Turn on avatar video" : "सिर्फ़ आवाज़ / Switch to audio only"}
+      aria-label=${audio ? tr(this.language, "वीडियो चालू करें", "Turn on avatar video") : tr(this.language, "सिर्फ़ आवाज़", "Switch to audio only")}
       @click=${this.flip}
     >
       <span class="icon" aria-hidden="true">${audio ? "🔈" : "🎥"}</span>
-      <span>${audio ? "वीडियो चालू करें / Video on" : "सिर्फ़ आवाज़ / Audio only"}</span>
+      <span>${audio ? tr(this.language, "वीडियो चालू करें", "Video on") : tr(this.language, "सिर्फ़ आवाज़", "Audio only")}</span>
     </button>`;
   }
 }

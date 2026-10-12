@@ -9,9 +9,21 @@ describe("<talktobuy-assistant>", () => {
     document.body.appendChild(el);
     await el.updateComplete;
     const root = el.shadowRoot!;
-    expect(root.querySelector(".ai-label")!.textContent).toContain("AI सहायक / AI assistant");
+    expect(root.querySelector(".ai-label")!.textContent).toContain("AI सहायक");
     expect(root.querySelector("button.start-btn")!.textContent).toContain("दुकानदार से बात करें");
     expect(el.showTranslation).toBe(false);
+    el.remove();
+  });
+
+  it("shows every label in English when language=en", async () => {
+    const el = document.createElement("talktobuy-assistant") as TalkToBuyAssistant;
+    el.setAttribute("language", "en");
+    document.body.appendChild(el);
+    await el.updateComplete;
+    const root = el.shadowRoot!;
+    expect(root.querySelector(".ai-label")!.textContent).toContain("AI assistant");
+    expect(root.querySelector("button.start-btn")!.textContent).toContain("Talk to the shopkeeper");
+    expect(/[ऀ-ॿ]/.test(root.textContent ?? "")).toBe(false);
     el.remove();
   });
 

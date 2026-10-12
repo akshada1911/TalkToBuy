@@ -3,6 +3,7 @@ import { property } from "lit/decorators.js";
 import type { GoalListMsg, UiGoalItem } from "../types/messages.generated";
 import { base, rupees } from "../styles/tokens";
 import { define } from "../define";
+import { tr, type Lang } from "../i18n";
 
 export const STRUCK_REASON_HI: Record<NonNullable<UiGoalItem["struck_reason"]>, string> = {
   on_hand: "आपके पास है",
@@ -91,13 +92,14 @@ export class TtbGoalList extends LitElement {
   ];
 
   @property({ attribute: false }) goal: GoalListMsg | null = null;
+  @property() language: Lang = "hi";
 
   render() {
     const g = this.goal;
     if (!g) return nothing;
     return html`
-      <section aria-label="सामान की सूची / Shopping list">
-        <h3 lang="hi">${g.goal_text}</h3>
+      <section aria-label=${tr(this.language, "सामान की सूची", "Shopping list")}>
+        <h3 lang=${this.language}>${g.goal_text}</h3>
         <ul>
           ${g.items.map((it) => this.row(it))}
         </ul>
@@ -112,12 +114,12 @@ export class TtbGoalList extends LitElement {
       <li class=${it.struck ? "struck" : ""} data-struck=${it.struck ? "true" : "false"}>
         ${p?.image ? html`<img src=${p.image} alt="" loading="lazy" />` : nothing}
         <div class="text">
-          <div class="need" lang="hi">
-            ${it.struck ? html`<span class="sr-only">हटाया गया: </span>` : nothing}${p?.local_name || it.need}
+          <div class="need" lang=${this.language}>
+            ${it.struck ? html`<span class="sr-only">${tr(this.language, "हटाया गया: ", "Removed: ")}</span>` : nothing}${(this.language === "en" ? p?.name : p?.local_name) || it.need}
           </div>
           ${p ? html`<div class="meta">${p.name} · ${p.size} · ${rupees(p.price)}</div>` : nothing}
           ${reason
-            ? html`<span class="reason" lang="hi">${STRUCK_REASON_HI[reason]}<span class="sr-only"> (${STRUCK_REASON_EN[reason]})</span></span>`
+            ? html`<span class="reason" lang=${this.language}>${this.language === "en" ? STRUCK_REASON_EN[reason] : STRUCK_REASON_HI[reason]}</span>`
             : nothing}
         </div>
         ${!it.struck && it.qty ? html`<span class="qty">× ${it.qty}</span>` : nothing}

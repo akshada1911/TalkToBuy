@@ -98,7 +98,8 @@ def complete_checkout(record: Record, body: CompleteRequest) -> dict:
     slot = totals.selected_slot(record)
     placed_at = datetime.now(UTC).isoformat(timespec="seconds")
     order_id = f"ord_{uuid.uuid4().hex[:16]}"
-    record["order"] = {"id": order_id, "delivery": slot, "mode": "test", "placed_at": placed_at}
+    record["order"] = {"id": order_id, "delivery": slot, "address": record.get("address"), "mode": "test",
+                       "placed_at": placed_at}
     STATE.orders.append({
         "order_id": order_id,
         "shopper_id": claims.get("shopper_id") or "u-ghanshyam",
@@ -106,6 +107,7 @@ def complete_checkout(record: Record, body: CompleteRequest) -> dict:
         "lines": [{"product_id": li["product_id"], "qty": li["quantity"]} for li in record["lines"]],
         "total_minor": totals.subtotal(record),
         "delivery_slot": slot,
+        "address": record.get("address"),
         "placed_at": placed_at,
         "mode": "test",
     })

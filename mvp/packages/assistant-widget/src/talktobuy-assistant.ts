@@ -10,6 +10,7 @@ import type {
   ReadbackMsg,
   ServerMessage,
   StateMsg,
+  UiAddress,
   UiCart,
   UiDelivery,
 } from "./types/messages.generated";
@@ -21,12 +22,15 @@ import { AvatarPlayer, type AvatarAudio } from "./avatar/avatar-player";
 import shopkeeperUrl from "./avatar/shopkeeper.svg?url";
 import { base, tokens } from "./styles/tokens";
 import { define } from "./define";
+import { tr } from "./i18n";
 import type { TtbCaptions } from "./captions/captions";
 import type { TtbCartView, Pace } from "./cards/cart-view";
 import "./captions/captions";
 import "./captions/text-input";
 import "./cards/cart-view";
 import "./cards/goal-list";
+import "./checkout/address-picker";
+import type { NewAddressFields } from "./checkout/address-picker";
 import "./checkout/readback";
 import "./checkout/confirmation";
 import "./camera/camera";
@@ -43,6 +47,8 @@ export interface PaymentRequestedDetail {
   currency: "INR";
   item_count: number;
   delivery: UiDelivery;
+  /** The chosen delivery address, e.g. "Home: Flat 12, Kothrud, Pune 411038". */
+  address_text?: string;
 }
 export interface OrderPlacedDetail {
   order_id: string;
@@ -79,7 +85,7 @@ function fmtTime(s: number): string {
  * (specs/001-talktobuy-assistant/contracts/widget-protocol.md).
  *
  * Attributes: ticket, ticket-url, server-url, language, show-translation, media-mode, avatar-audio.
- * Events: ttb:cart-changed, ttb:payment-requested, ttb:order-placed, ttb:session-ended.
+ * Events: ttb:cart-changed, ttb:payment-requested, ttb:payment-cancelled, ttb:order-placed, ttb:session-ended.
  * Method: resolvePayment({checkout_id, approved, mandate}).
  */
 export class TalkToBuyAssistant extends LitElement {
@@ -263,6 +269,7 @@ export class TalkToBuyAssistant extends LitElement {
   @state() private working: { label_hi?: string; label_en?: string } | null = null;
   @state() private cart: UiCart | null = null;
   @state() private goal: GoalListMsg | null = null;
+  @state() private addresses: UiAddress[] | null = null;
   @state() private readback: ReadbackMsg | null = null;
   @state() private pendingPayment: PaymentRequestMsg | null = null;
   @state() private order: OrderMsg | null = null;
@@ -286,10 +293,9 @@ export class TalkToBuyAssistant extends LitElement {
   /** Messages/frames that arrive before the live view has rendered are held here. */
   private pending: Array<() => void> | null = null;
 
-  /** Effective media mode: the server's word wins once a `state` arrives. */
+  /** Voice only: the video (avatar) mode is not offered, so the mode is always audio-only. */
   get effectiveMode(): MediaMode {
-    if (this.avatarFailed) return "audio_only";
-    return this.serverMode ?? (this.mediaMode === "audio_only" ? "audio_only" : "avatar");
+    return "audio_only";
   }
 
   // ---------------------------------------------------------------- public API
@@ -364,6 +370,21 @@ export class TalkToBuyAssistant extends LitElement {
     const t = text.trim().slice(0, 500);
     if (!t) return false;
     return this.client?.send({ type: "text", text: t }) ?? false;
+  }
+
+  /** A tapped saved address: said to the assistant exactly as if the shopper had spoken it. */
+  private chooseAddress(a: { id: string; label: string }): void {
+    this.sendText(`${tr(this.language, "पता चुना", "Address chosen")}: ${a.label} (${a.id})`);
+  }
+
+  /** A new address typed into the form (name, street, area, city, pincode, phone). */
+  private addNewAddress(f: NewAddressFields): void {
+    const L = this.language;
+    this.sendText(
+      `${tr(L, "नया पता", "New address")}: ${tr(L, "नाम", "name")} ${f.name}; ${tr(L, "मकान और गली", "house and street")} ${f.line1}; ` +
+        `${tr(L, "इलाका", "area")} ${f.area}; ${tr(L, "शहर", "city")} ${f.city}; ` +
+        `${tr(L, "पिनकोड", "pincode")} ${f.pincode}; ${tr(L, "फ़ोन", "phone")} ${f.phone}`,
+    );
   }
 
   // ---------------------------------------------------------------- lifecycle
@@ -490,9 +511,22 @@ export class TalkToBuyAssistant extends LitElement {
         this.cart = m.cart;
         this.cartView?.setCart(m.cart);
         this.emit<CartChangedDetail>("ttb:cart-changed", { cart: m.cart });
+        if (m.cart.item_count === 0 && !this.order) {
+          // The order was cancelled (or the cart emptied): close the checkout steps.
+          if (this.pendingPayment) this.emit<Record<string, never>>("ttb:payment-cancelled", {});
+          this.readback = null;
+          this.addresses = null;
+          this.pendingPayment = null;
+          this.goal = null;
+        }
+      },
+      addresses: (m) => {
+        this.addresses = m.addresses;
+        this.readback = null;
       },
       readback: (m) => {
         this.readback = m;
+        this.addresses = null; // an address is chosen: on to the read-back and payment
         this.order = null;
       },
       payment_request: (m) => {
@@ -503,11 +537,13 @@ export class TalkToBuyAssistant extends LitElement {
           currency: m.currency,
           item_count: m.item_count,
           delivery: m.delivery,
+          address_text: m.address_text,
         });
       },
       order: (m) => {
         this.order = m;
         this.pendingPayment = null;
+        this.addresses = null;
         this.emit<OrderPlacedDetail>("ttb:order-placed", { order_id: m.order_id, delivery: m.delivery });
       },
       family_notified: (m) => (this.familyName = m.contact_name),
@@ -551,6 +587,7 @@ export class TalkToBuyAssistant extends LitElement {
     this.avatarFailed = false;
     this.serverMode = null;
     this.readback = null;
+    this.addresses = null;
     this.pendingPayment = null;
     this.order = null;
     this.familyName = null;
@@ -570,55 +607,44 @@ export class TalkToBuyAssistant extends LitElement {
     this.dispatchEvent(new CustomEvent<T>(name, { detail, bubbles: true, composed: true }));
   }
 
-  private setMode(mode: MediaMode): void {
-    this.client?.send({ type: "set_media_mode", mode });
-    if (mode === "avatar") this.avatarFailed = false;
-    // Optimistic local switch; the server confirms with `state`.
-    if (mode === "audio_only") this.dropAvatar();
-    this.serverMode = mode;
-  }
-
   // ---------------------------------------------------------------- render
 
   private renderBar() {
+    const L = this.language;
     const live = this.phase === "live" || this.phase === "reconnecting";
     return html`
       <div class="bar">
-        <span class="ai-label" role="note" aria-label="AI सहायक — यह एक AI है, इंसान नहीं / AI assistant, not a human">
-          <span aria-hidden="true">🤖</span> AI सहायक / AI assistant
+        <span class="ai-label" role="note" aria-label=${tr(L, "AI सहायक — यह एक AI है, इंसान नहीं", "AI assistant, not a human")}>
+          <span aria-hidden="true">🤖</span> ${tr(L, "AI सहायक", "AI assistant")}
         </span>
         ${live
-          ? html`<span class="badge" aria-label=${`रफ़्तार: ${this.pace === "guided" ? "धीरे-धीरे" : "जल्दी"}`}>
-              ${this.pace === "guided" ? "धीरे-धीरे / Step by step" : "जल्दी / Quick"}
+          ? html`<span class="badge" aria-label=${`${tr(L, "रफ़्तार", "Pace")}: ${this.pace === "guided" ? tr(L, "धीरे-धीरे", "Step by step") : tr(L, "जल्दी", "Quick")}`}>
+              ${this.pace === "guided" ? tr(L, "धीरे-धीरे", "Step by step") : tr(L, "जल्दी", "Quick")}
             </span>`
           : nothing}
         ${live && this.remaining !== null
-          ? html`<span class="badge" role="timer" aria-label=${`बचा समय ${fmtTime(this.remaining)}`}
-              >⏱ बचा समय ${fmtTime(this.remaining)}</span
+          ? html`<span class="badge" role="timer" aria-label=${`${tr(L, "बचा समय", "Time left")} ${fmtTime(this.remaining)}`}
+              >⏱ ${tr(L, "बचा समय", "Time left")} ${fmtTime(this.remaining)}</span
             >`
           : nothing}
         <span class="spacer"></span>
         ${live
-          ? html`<ttb-media-toggle
-                .mode=${this.effectiveMode}
-                @ttb-media-mode=${(e: CustomEvent<{ mode: MediaMode }>) => this.setMode(e.detail.mode)}
-              ></ttb-media-toggle>
-              <button class="end" type="button" @click=${() => this.end()}>बंद करें / End</button>`
+          ? html`<button class="end" type="button" @click=${() => this.end()}>${tr(L, "बंद करें", "End")}</button>`
           : nothing}
       </div>
     `;
   }
 
   private renderAvatar() {
+    const L = this.language;
     const showVideo = this.effectiveMode === "avatar" && this.avatarPlaying;
     return html`
       <div class="avatar">
-        <video class="avatar-video" ?hidden=${!showVideo} playsinline autoplay muted aria-label="दुकानदार (AI अवतार) / Shopkeeper (AI avatar)"></video>
-        <img src=${shopkeeperUrl} alt="दुकानदार का चित्र / Shopkeeper illustration" ?hidden=${showVideo} />
+        <video class="avatar-video" ?hidden=${!showVideo} playsinline autoplay muted aria-label=${tr(L, "दुकानदार (AI अवतार)", "Shopkeeper (AI avatar)")}></video>
+        <img src=${shopkeeperUrl} alt=${tr(L, "दुकानदार का चित्र", "Shopkeeper illustration")} ?hidden=${showVideo} />
         ${this.working
           ? html`<div class="working" role="status" aria-live="polite">
-              <span lang="hi">${this.working.label_hi || "देख रहे हैं"}<span class="dots"></span></span>
-              ${this.showTranslation ? html`<span class="en" lang="en">${this.working.label_en || "Working…"}</span>` : nothing}
+              <span lang=${L}>${L === "en" ? this.working.label_en || "Working…" : this.working.label_hi || "देख रहे हैं"}<span class="dots"></span></span>
             </div>`
           : nothing}
       </div>
@@ -626,68 +652,69 @@ export class TalkToBuyAssistant extends LitElement {
   }
 
   private renderIdle() {
+    const L = this.language;
     const ended = this.phase === "ended";
     return html`
       <div class="start">
-        <div class="avatar"><img src=${shopkeeperUrl} alt="दुकानदार का चित्र / Shopkeeper illustration" /></div>
+        <div class="avatar"><img src=${shopkeeperUrl} alt=${tr(L, "दुकानदार का चित्र", "Shopkeeper illustration")} /></div>
         ${ended
-          ? html`<p class="hint" role="status">बातचीत ख़त्म हुई। धन्यवाद! <span class="en" lang="en">Conversation ended. Thank you!</span></p>`
+          ? html`<p class="hint" role="status">${tr(L, "बातचीत ख़त्म हुई। धन्यवाद!", "Conversation ended. Thank you!")}</p>`
           : nothing}
         <button class="primary start-btn" type="button" ?disabled=${this.phase === "connecting"} @click=${() => void this.start()}>
-          <span lang="hi">${this.phase === "connecting" ? "जुड़ रहे हैं…" : "दुकानदार से बात करें"}</span>
-          <span class="en" lang="en">${this.phase === "connecting" ? "Connecting…" : "Talk to the shopkeeper"}</span>
+          <span lang=${L}>${this.phase === "connecting" ? tr(L, "जुड़ रहे हैं…", "Connecting…") : tr(L, "दुकानदार से बात करें", "Talk to the shopkeeper")}</span>
         </button>
-        <p class="hint" lang="hi">
-          बटन दबाने पर माइक की अनुमति माँगी जाएगी। आप लिखकर भी बात कर सकते हैं।
-          <span class="en" lang="en">Tapping asks for microphone permission. You can also type.</span>
+        <p class="hint" lang=${L}>
+          ${tr(L, "बटन दबाने पर माइक की अनुमति माँगी जाएगी। आप लिखकर भी बात कर सकते हैं।", "Tapping asks for microphone permission. You can also type.")}
         </p>
       </div>
     `;
   }
 
   private renderBanners() {
+    const L = this.language;
     return html`
       ${this.phase === "reconnecting"
-        ? html`<p class="banner" role="status">फिर से जुड़ रहे हैं… <span class="en" lang="en">Reconnecting…</span></p>`
+        ? html`<p class="banner" role="status">${tr(L, "फिर से जुड़ रहे हैं…", "Reconnecting…")}</p>`
         : nothing}
       ${this.micProblem && (this.phase === "live" || this.phase === "connecting")
-        ? html`<p class="banner" role="status" lang="hi">
-            माइक नहीं मिला — नीचे लिखकर बात कीजिए।
-            <span class="en" lang="en">Microphone not available: please type below.</span>
+        ? html`<p class="banner" role="status" lang=${L}>
+            ${tr(L, "माइक नहीं मिला — नीचे लिखकर बात कीजिए।", "Microphone not available: please type below.")}
           </p>`
         : nothing}
       ${this.safetyHold
-        ? html`<p class="banner" role="status" lang="hi">
-            आपकी सेहत पहले — अभी खरीदारी रुकी है।
-            <span class="en" lang="en">Your health first: shopping is paused.</span>
+        ? html`<p class="banner" role="status" lang=${L}>
+            ${tr(L, "आपकी सेहत पहले — अभी खरीदारी रुकी है।", "Your health first: shopping is paused.")}
           </p>`
         : nothing}
       ${this.error
         ? html`<p class="banner error" role="alert">
-            <span lang="hi">${this.error.message_hi}</span>
-            ${this.showTranslation ? html`<span class="en" lang="en"> ${this.error.message_en}</span>` : nothing}
-            <button type="button" @click=${() => (this.error = null)}>ठीक है / OK</button>
+            <span lang=${L}>${L === "en" ? this.error.message_en || this.error.message_hi : this.error.message_hi}</span>
+            ${L !== "en" && this.showTranslation ? html`<span class="en" lang="en"> ${this.error.message_en}</span>` : nothing}
+            <button type="button" @click=${() => (this.error = null)}>${tr(L, "ठीक है", "OK")}</button>
           </p>`
         : nothing}
     `;
   }
 
   render() {
+    const L = this.language === "en" ? "en" : "hi";
     const live = this.phase === "live" || this.phase === "reconnecting";
     return html`
-      <div lang=${this.language || "hi"}>
+      <div lang=${L}>
         ${this.renderBar()} ${this.renderBanners()}
         ${live
           ? html`
               <div class="stage">
                 ${this.renderAvatar()}
                 <div class="side">
-                  <ttb-captions .showTranslation=${this.showTranslation}></ttb-captions>
+                  <ttb-captions .showTranslation=${this.showTranslation && L === "hi"} .language=${L}></ttb-captions>
                   <ttb-text-input
+                    .language=${L}
                     ?disabled=${this.phase !== "live"}
                     @ttb-text=${(e: CustomEvent<{ text: string }>) => this.sendText(e.detail.text)}
                   ></ttb-text-input>
                   <ttb-camera
+                    .language=${L}
                     ?disabled=${this.phase !== "live"}
                     @ttb-camera-active=${(e: CustomEvent<{ active: boolean }>) =>
                       this.client?.send({ type: "camera", active: e.detail.active })}
@@ -698,17 +725,27 @@ export class TalkToBuyAssistant extends LitElement {
               </div>
               <div class="panels">
                 ${this.order || this.familyName
-                  ? html`<ttb-confirmation .order=${this.order} .familyName=${this.familyName}></ttb-confirmation>`
+                  ? html`<ttb-confirmation .order=${this.order} .familyName=${this.familyName} .language=${L}></ttb-confirmation>`
+                  : nothing}
+                ${this.addresses && !this.order
+                  ? html`<ttb-address-picker
+                      .addresses=${this.addresses}
+                      .language=${L}
+                      ?disabled=${this.phase !== "live"}
+                      @ttb-address-select=${(e: CustomEvent<{ id: string; label: string }>) => this.chooseAddress(e.detail)}
+                      @ttb-address-new=${(e: CustomEvent<{ fields: NewAddressFields }>) => this.addNewAddress(e.detail.fields)}
+                    ></ttb-address-picker>`
                   : nothing}
                 ${this.readback && !this.order
                   ? html`<ttb-readback
                       .readback=${this.readback}
                       .awaitingPayment=${!!this.pendingPayment}
                       .showTranslation=${this.showTranslation}
+                      .language=${L}
                     ></ttb-readback>`
                   : nothing}
-                ${this.goal ? html`<ttb-goal-list .goal=${this.goal}></ttb-goal-list>` : nothing}
-                <ttb-cart-view .pace=${this.pace} .cart=${this.cart}></ttb-cart-view>
+                ${this.goal ? html`<ttb-goal-list .goal=${this.goal} .language=${L}></ttb-goal-list>` : nothing}
+                <ttb-cart-view .pace=${this.pace} .cart=${this.cart} .language=${L}></ttb-cart-view>
               </div>
             `
           : this.renderIdle()}
@@ -728,5 +765,6 @@ declare global {
     "ttb:payment-requested": CustomEvent<PaymentRequestedDetail>;
     "ttb:order-placed": CustomEvent<OrderPlacedDetail>;
     "ttb:session-ended": CustomEvent<SessionEndedDetail>;
+    "ttb:payment-cancelled": CustomEvent<Record<string, never>>;
   }
 }

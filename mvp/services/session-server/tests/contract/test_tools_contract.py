@@ -20,7 +20,7 @@ TOOLS_DOC = json.loads((MVP_ROOT / "contracts" / "tools.schema.json").read_text(
 DOMAIN_DOC = json.loads((MVP_ROOT / "contracts" / "domain.schema.json").read_text(encoding="utf-8"))
 SPECS = {s["name"]: s for s in TOOLS_DOC["tools"]}
 EXPECTED = {"search_catalog", "show_products", "add_to_cart", "update_cart", "get_usual_order",
-            "set_pace", "start_checkout", "confirm_checkout", "notify_family"}
+            "set_pace", "start_checkout", "confirm_checkout", "notify_family", "cancel_order"}
 
 
 def _returns_validator(name: str) -> Draft202012Validator:
@@ -33,7 +33,7 @@ def _domain_validator(defn: str) -> Draft202012Validator:
     return Draft202012Validator({"$ref": f"#/$defs/{defn}", "$defs": DOMAIN_DOC["$defs"]})
 
 
-def test_exactly_the_nine_tools() -> None:
+def test_exactly_the_ten_tools() -> None:
     assert set(SPECS) == EXPECTED
     assert set(HANDLERS) == EXPECTED
 
@@ -77,7 +77,7 @@ async def _call(rt, name, args):
     return result
 
 
-async def test_all_nine_handler_results_match_their_contracts() -> None:
+async def test_all_handler_results_match_their_contracts() -> None:
     rt = make_runtime()
     await _call(rt, "search_catalog", {"query": "doodh", "amount_phrase": "do litre"})
     await _call(rt, "show_products", {"ids": ["p-0112"]})
@@ -85,11 +85,12 @@ async def test_all_nine_handler_results_match_their_contracts() -> None:
     await _call(rt, "update_cart", {"product_id": "p-0112", "qty": 3})
     await _call(rt, "get_usual_order", {})
     await _call(rt, "set_pace", {"mode": "quick", "reason": "opening_question"})
-    readback = await _call(rt, "start_checkout", {"delivery_slot": "earliest"})
+    readback = await _call(rt, "start_checkout", {"delivery_slot": "earliest", "address_id": "addr-home"})
     await _call(rt, "confirm_checkout", {"checkout_id": readback["checkout_id"]})
     confirm.arm(rt, "family", [])
     confirm.on_shopper_input(rt, "हाँ")
     await _call(rt, "notify_family", {"message": "Ghanshyam ji reported a fall.", "shopper_consented": True})
+    await _call(rt, "cancel_order", {})
     await asyncio.sleep(0)
 
 

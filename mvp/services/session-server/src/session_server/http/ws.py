@@ -101,9 +101,8 @@ async def session_ws(ws: WebSocket, ticket: str = "", media_mode: str = "", lang
         session = Session(
             session_id=session_id, shopper_id=shopper_id, started_at=time.time(),
             language=language if language in LANGUAGE_CODES else "hi",
-            # The widget's switch picks the starting mode, so we never pay for an avatar connection
-            # that is immediately switched off (cost control).
-            media_mode=media_mode if media_mode in ("avatar", "audio_only") else settings.media_mode_default,
+            # Voice only: video (avatar) mode is not offered, whatever the widget asks for.
+            media_mode="audio_only",
             usage=Usage(audio_in_s=0, audio_out_s=0, video_in_s=0, tokens_in=0, tokens_out=0, est_cost_usd=0),
         )
         rt = Runtime(session=session, shopper=shopper, commerce=commerce, live=ports["live"], ui=ui,
