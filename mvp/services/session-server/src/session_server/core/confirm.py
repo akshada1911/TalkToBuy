@@ -33,6 +33,13 @@ def is_negative(text: str) -> bool:
 
 
 def arm(rt: Runtime, kind: str, product_ids: list[str]) -> None:
+    pc = rt.session.pending_confirmation
+    # Re-proposing the same (or fewer) items must not wipe a "yes" already given — models often
+    # re-show the list right after the shopper agrees (seen in live rehearsal).
+    if (pc is not None and pc.confirmed and not _expired(rt, pc) and pc.kind == kind
+            and set(product_ids) <= set(pc.product_ids)):
+        pc.armed_at = rt.clock()
+        return
     rt.session.pending_confirmation = PendingConfirmation(
         kind=kind, product_ids=list(product_ids), armed_at=rt.clock(), confirmed=False
     )

@@ -12,7 +12,7 @@
     "  p-0006 Hershey's cocoa 70 g    9500",
     "  p-0007 Amul butter 100 g       6200",
     "  p-0008 Milkmaid 380 g         14500",
-    "  p-0009 baking powder 100 g     4000",
+    "  p-0032 baking powder 50 g      4000   (smallest pack, FR-025: a small cake needs ~1 tsp)",
     "  p-0010 cake tin 7 inch        17600",
     "  13600+1500+28900+2000+3800+9500+6200+14500+4000+17600 = 101600"
   ],
@@ -68,7 +68,7 @@
   },
   "8901808000020": {
     "name": "Weikfield Baking Powder 100 g", "local_name": "वीकफ़ील्ड बेकिंग पाउडर 100 ग्राम", "brand": "Weikfield",
-    "size": "100 g", "unit_qty": 100, "unit": "g", "category": "baking", "price_minor": 4000,
+    "size": "100 g", "unit_qty": 100, "unit": "g", "category": "baking", "price_minor": 6500,
     "synonyms": ["baking powder", "beking powder", "बेकिंग पाउडर"],
     "listing": {"description": "Baking powder, 100 g pack.", "usage": "A raising agent for cakes and muffins."}
   },
@@ -213,8 +213,8 @@
   },
   "8901808000013": {
     "name": "Weikfield Baking Powder 50 g", "local_name": "वीकफ़ील्ड बेकिंग पाउडर 50 ग्राम", "brand": "Weikfield",
-    "size": "50 g", "unit_qty": 50, "unit": "g", "category": "baking", "price_minor": 2500,
-    "synonyms": ["chhota baking powder", "weikfield small"],
+    "size": "50 g", "unit_qty": 50, "unit": "g", "category": "baking", "price_minor": 4000,
+    "synonyms": ["baking powder", "chhota baking powder", "weikfield small", "बेकिंग पाउडर"],
     "listing": {"description": "Baking powder, 50 g pack.", "usage": "A raising agent for cakes and muffins."}
   },
   "p-0033": {

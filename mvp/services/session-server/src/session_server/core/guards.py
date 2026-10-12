@@ -53,7 +53,11 @@ def add_form_guard(rt: Runtime, name: str, args: dict[str, Any]) -> Refusal | No
 
 def approval_guard(rt: Runtime, name: str, args: dict[str, Any]) -> Refusal | None:
     """Inferred items need the shopper's yes before they are added (FR-015)."""
-    ask_first = "Ask the shopper first and add only after they clearly say yes."
+    ask_first = (
+        "NOT ADDED YET — this is not an availability problem; every item is in stock. The shopper "
+        "has not clearly said yes to these items since you proposed them. Ask once, e.g. "
+        "'क्या मैं ये सब डाल दूँ?', wait for a clear yes, then call add_to_cart again."
+    )
     if name == "notify_family":
         if not args.get("shopper_consented") or not confirm.allows(rt, "family", []):
             return Refusal("The shopper has not agreed to tell their family. " + ask_first)

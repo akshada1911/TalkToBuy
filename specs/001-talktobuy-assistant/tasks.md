@@ -61,7 +61,7 @@ The abbreviations are for reading only; tasks always give the full path.
   - `mvp/Makefile`
   - `mvp/scripts/tasks.ps1`, a PowerShell equivalent so Windows teammates don't need `make`
 - [X] T008 [P] Extend the repo-root `.gitignore` with `mvp/.env`, `.venv/`, `node_modules/`, `mvp/**/dist/`, `mvp/services/demo-store/*.db`, `__pycache__/`. Do NOT ignore `mvp/services/demo-store/data/catalog.json` or `vectors.npy`; they are committed snapshots.
-- [ ] T009 [P] Track A: Day 1 spike in `prototype/live-avatar-spike/`, adapted from Google's `intro_live_avatar.ipynb`:
+- [X] T009 [P] Track A: Day 1 spike in `prototype/live-avatar-spike/`, adapted from Google's `intro_live_avatar.ipynb`:
   - `spike.py` (google-genai, `vertexai=True`) opens a `gemini-3.8-live` session with `response_modalities=["VIDEO"]`, a preset `avatar_name`, `language_code="hi-IN"`, `context_window_compression` and `session_resumption`;
   - it relays MP4 chunks over a local WebSocket to `player.html`, which plays them with Media Source Extensions;
   - record in `prototype/live-avatar-spike/FINDINGS.md`: (1) access works yes/no, (2) whether audio is muxed into the MP4, (3) MSE playback quality, (4) Hindi quality, (5) whether the session survives more than 2 minutes, (6) observed latency.
@@ -283,7 +283,7 @@ The abbreviations are for reading only; tasks always give the full path.
   - `units/packs.py`: `plan(amount, packs) -> list[(product_id, qty)]`, applying the fewest-packs-≥-amount rule and the smallest-pack rule.
 
   Make T041 pass.
-- [ ] T045 [P] [US1] Write the catalogue embedding script `mvp/services/demo-store/scripts/embed_catalog.py`:
+- [X] T045 [P] [US1] Write the catalogue embedding script `mvp/services/demo-store/scripts/embed_catalog.py`:
   - embed `"{name} | {brand} | {size} | {category} | {local_name} | {synonyms}"` per product with `gemini-embedding-2` at 768 dimensions (fallback `gemini-embedding-001` with `task_type=RETRIEVAL_DOCUMENT`, normalised);
   - write `data/vectors.npy` and `data/vector_ids.json`, and commit both.
 - [X] T046 [US1] Implement hybrid search in `mvp/services/demo-store/src/demo_store/catalog/search.py`:
@@ -332,7 +332,7 @@ The abbreviations are for reading only; tasks always give the full path.
 
   Add the field `pending_confirmation` (object | null) to `Session` in `mvp/contracts/domain.schema.json` and `specs/001-talktobuy-assistant/data-model.md`. Unit-test arming, confirming, negatives and expiry in `mvp/services/session-server/tests/unit/test_guards.py`.
 - [X] T059 [US1] Implement the out-of-stock path in the store: give `mvp/services/demo-store/data/overrides.json` one non-demo item with `in_stock:false`, and make sure `search.py` returns it with `in_stock:false` so T050 builds alternatives.
-- [ ] T060 [US1] Gate check: run quickstart.md rows 0, 1, 2 and 9 live against the local stack. Record the results, latencies (reply start, interruption stop, card appearance) and any failures in `WORKLOG.md`.
+- [X] T060 [US1] Gate check: run quickstart.md rows 0, 1, 2 and 9 live against the local stack. Record the results, latencies (reply start, interruption stop, card appearance) and any failures in `WORKLOG.md`.
 
 **Checkpoint**: The gate is passed. US1 is fully functional: spoken list → exact cart with cards, captions and translations.
 
@@ -391,7 +391,7 @@ The abbreviations are for reading only; tasks always give the full path.
 - [X] T071 [US2] Implement the shop payment step:
   - `mvp/apps/shop/src/payment/PaymentStep.tsx` is a modal on `ttb:payment-requested`. It shows the items, total and delivery, plus a "Test mode" badge. A fingerprint button calls `navigator.credentials.get()` with the store's assert options, posts the result to `/payment/approve`, and calls `resolvePayment` with the mandate. Cancel → `approved:false`.
   - `mvp/apps/shop/src/payment/register.ts` handles one-time registration on first use.
-- [ ] T072 [US2] Rehearse quickstart rows 5 and 6 end to end with the US1 cart, and confirm the total is exactly ₹1,016 with the scripted items (adjust demo prices in `overrides.json` if needed). Record the results in `WORKLOG.md`.
+- [X] T072 [US2] Rehearse quickstart rows 5 and 6 end to end with the US1 cart, and confirm the total is exactly ₹1,016 with the scripted items (adjust demo prices in `overrides.json` if needed). Record the results in `WORKLOG.md`.
 
 **Checkpoint**: US1 + US2 make a complete, demonstrable order.
 
@@ -486,7 +486,7 @@ The abbreviations are for reading only; tasks always give the full path.
   - delivery is in-app only: `POST /demo/family/notifications` in `mvp/services/demo-store/src/demo_store/demo/routes.py`;
   - it pushes a `family_notified` message; with no contact it is refused (FR-033, FR-036).
 - [X] T091 [P] [US5] Implement the family view in `mvp/apps/shop/src/family/FamilyView.tsx`, at route `/family`, which polls `GET /demo/family/notifications` and shows alerts for "Rohit (son)". Add a link from the shop header.
-- [ ] T092 [US5] Finalise `mvp/prompts/safety_rules.md`:
+- [X] T092 [US5] Finalise `mvp/prompts/safety_rules.md`:
   - on a hold, show no products; gently suggest a doctor; ask whether to tell family; call `notify_family` only after yes;
   - for medicine requests without warning signs, say you can't help with medicines and show nothing.
 
@@ -541,7 +541,7 @@ The abbreviations are for reading only; tasks always give the full path.
   - explain each in 1–2 sentences using only `listing.description`/`listing.usage`, describing features and use, never health outcomes;
   - if the listing is silent, say "listing में यह नहीं लिखा";
   - never promise to remember health details (R9: nothing is stored).
-- [ ] T100 [US7] Write the claims evaluation script `mvp/services/session-server/scripts/eval_claims.py`, marked `live` and not run in CI. It runs each problem prompt from `tests/safety/prompts.yaml` through a text-only Gemini session with the real prompts and tools, then flags any output containing outcome words ("ठीक हो जाएगा", "cure", "heal", "relieve", "दर्द कम") or any product outside the include-list. Record the run in `WORKLOG.md` before the demo.
+- [X] T100 [US7] Write the claims evaluation script `mvp/services/session-server/scripts/eval_claims.py`, marked `live` and not run in CI. It runs each problem prompt from `tests/safety/prompts.yaml` through a text-only Gemini session with the real prompts and tools, then flags any output containing outcome words ("ठीक हो जाएगा", "cure", "heal", "relieve", "दर्द कम") or any product outside the include-list. Record the run in `WORKLOG.md` before the demo.
 
 **Checkpoint**: All seven stories are implemented.
 

@@ -17,6 +17,50 @@ Daily progress, decisions, blockers, and notes. Most recent entry at the top.
 
 ---
 
+## 2026-10-12 — Alok (with Claude Code)
+**Focus:** GCP setup, Live Avatar spike, catalogue embeddings, gate check.
+
+**Done:**
+- **GCP:** project `talktobuy` (billing on, Vertex AI on), region `us-central1`. The application-default credentials' quota project was changed from `zeroqueue-503710` to `talktobuy`.
+- **T009, Live Avatar works:** the preset avatar Kai speaks Hindi. Media arrive as fragmented MP4 with the audio muxed in (H.264 `avc1.42C01F` + AAC), so the widget uses `avatar-audio="muxed"`. Video uses about 4–5 Mbit/s.
+- **T045, catalogue embedded:** `gemini-embedding-2` isn't available on the project, so all 500 products were embedded with `gemini-embedding-001`. The model name is recorded in `vectors_meta.json`, and search queries use the same model.
+- **T060, gate passed:** an automated text smoke test (`mvp/scripts/smoke_live.py`) and the team's voice run both put 2 × milk 1 L and tomatoes 250 g in the cart, with cards, live.
+- **Fixes:**
+  - The Flash model is now `gemini-2.5-flash`; the 3.x IDs return 404.
+  - Thinking is turned off for translation and the safety classifier, so English captions are no longer cut off.
+  - Each caption is sent once instead of twice.
+  - New `STATE_BACKEND` setting: memory locally, Firestore on Cloud Run.
+
+**Blockers:** None for local runs. Firestore, Cloud Run, Secret Manager, Artifact Registry and Firebase APIs are not yet enabled; they are needed for deploy.
+
+**Live rehearsal by text** (`mvp/scripts/rehearse_live.py`; real model, software fingerprint):
+- **Results:**
+  - Row 1 (exact quantities; usual atta added only after a yes) passes.
+  - The read-back equals the cart.
+  - A spoken "हाँ, पे कर दो" places no order.
+  - One approval completes the order.
+  - The safety stop shows no products.
+- **T100 claims evaluation:** 27 cases, 0 violations (`services/session-server/scripts/eval_claims.py`).
+- **Bugs found live, and fixed:**
+  - Guided pace dropped items from a multi-item list (prompt fix).
+  - The model repeated `add_to_cart` calls (server de-duplicates within a request).
+  - Re-showing the goal list wiped the shopper's "yes" (a re-arm now keeps it).
+  - One bad goal line made the store reject the whole batch (goal items are vetted when shown; store rejections are logged).
+  - `<no speech>` markers appeared as captions (filtered).
+- **Demo data:** the smallest-pack rule correctly picks Weikfield baking powder 50 g, so that pack is now the ₹40 demo item (100 g repriced to ₹65). The scripted cart is still ₹1,016.
+- **Known variance:**
+  - The model sometimes picks a different pack (₹1,001 or ₹1,041); the read-back still matches the cart. For a word-exact stage total, run the store with `SEARCH_MODE=seeded`.
+  - Milk already in the cart is often not listed struck "in cart" on the cake list (T079 open). It is never added twice.
+  - The delivery slot depends on the clock ("4–5 pm" today). Set `DEMO_CLOCK` for a fixed "6–7 pm".
+
+**Next:** Camera rehearsal with the real packet (T083), cake strike-through (T079), Hindi review (T017, T108), enable the deploy APIs, then deploy (T110).
+
+**Notes:**
+- In text runs the first reply took 5.5–7.4 s to start, against the spec's 1.5 s target. It felt OK in the voice run; measure it in rehearsal.
+- A query like "pain balm" returns its nearest items (honey). This is harmless, but consider a minimum-similarity cut-off.
+
+---
+
 ## 2026-10-09 — Alok (with Claude Code)
 **Focus:** Spec Kit setup (constitution, spec, plan, tasks, analysis), then `/speckit-implement`.
 

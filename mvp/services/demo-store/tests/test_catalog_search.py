@@ -56,7 +56,7 @@ def test_medicine_queries_return_no_medicine_or_supplement(client, query):
 @pytest.mark.parametrize(("query", "expected"), [
     ("maida", "p-0005"), ("मैदा", "p-0005"), ("cocoa powder", "p-0006"), ("कोको पाउडर", "p-0006"),
     ("butter", "p-0007"), ("मक्खन", "p-0007"), ("condensed milk", "p-0008"), ("milkmaid", "p-0008"),
-    ("baking powder", "p-0009"), ("बेकिंग पाउडर", "p-0009"), ("7 inch cake tin", "p-0010"),
+    ("baking powder", "p-0032"), ("बेकिंग पाउडर", "p-0032"), ("7 inch cake tin", "p-0010"),
     ("केक टिन", "p-0010"), ("चीनी", "p-0011"), ("cheeni", "p-0011"), ("baking soda", "p-0012"),
     ("बेकिंग सोडा", "p-0012"), ("आटा", "p-0003"), ("मेरा हमेशा वाला आटा", "p-0003"),
 ])

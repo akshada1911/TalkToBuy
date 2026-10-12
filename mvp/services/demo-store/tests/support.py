@@ -17,7 +17,7 @@ UCP_HEADERS = {"UCP-Agent": 'profile="http://session.test/agent-profile.json"'}
 # The scripted 10-product cart (quickstart rows 1, 3, 4): Rs 1,016.
 SCRIPTED_CART = [
     ("p-0001", 2), ("p-0002", 1), ("p-0003", 1), ("p-0004", 1), ("p-0005", 1),
-    ("p-0006", 1), ("p-0007", 1), ("p-0008", 1), ("p-0009", 1), ("p-0010", 1),
+    ("p-0006", 1), ("p-0007", 1), ("p-0008", 1), ("p-0032", 1), ("p-0010", 1),
 ]
 
 

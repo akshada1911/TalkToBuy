@@ -98,7 +98,7 @@ async def test_full_demo_script(env) -> None:
     left_out = {i["need"]: i["struck_reason"] for i in goal["items"] if i["struck"]}
     assert left_out == {"sugar": "on_hand", "baking soda": "on_hand", "milk": "in_cart"}
     added = [i["product_id"] for i in goal["items"] if not i["struck"]]
-    assert sorted(added) == ["p-0005", "p-0006", "p-0007", "p-0008", "p-0009", "p-0010"]
+    assert sorted(added) == ["p-0005", "p-0006", "p-0007", "p-0008", "p-0010", "p-0032"]
     confirm.on_shopper_input(rt, "हाँ")
     cart = ok(await tool("add_to_cart", {"goal_id": goal["goal_id"]}))
     assert cart["item_count"] == 10

@@ -50,6 +50,59 @@ async def test_cake_list_strikes_on_hand_and_cart_items_and_adds_six_at_once() -
     assert rt.goals[shown["goal_id"]].status == "confirmed"
 
 
+async def test_bad_goal_items_are_flagged_and_never_sent_to_the_store() -> None:
+    """Live rehearsal regression: one bad line made the store reject the whole batch."""
+    rt = make_runtime()
+    router = ToolRouter(rt, HANDLERS)
+    goal = {"goal_text": "cake", "items": [
+        {"need": "maida", "product_id": "p-0401", "qty": 1, "struck": False},
+        {"need": "vanilla", "product_id": "p-9999", "qty": 1, "struck": False},   # hallucinated id
+        {"need": "paneer", "product_id": "p-0999", "qty": 1, "struck": False},    # out of stock
+    ]}
+    await router.handle(ToolCall("g", "show_products", {"goal_list": goal}))
+    shown = rt.live.response_for("g")["result"]
+    assert len(shown["problems"]) == 2 and "fix_first" in shown
+    confirm.on_shopper_input(rt, "हाँ")
+    await router.handle(ToolCall("a", "add_to_cart", {"goal_id": shown["goal_id"]}))
+    cart = rt.live.response_for("a")["result"]
+    assert [line["product_id"] for line in cart["lines"]] == ["p-0401"]
+
+
+async def test_goal_response_reports_cart_items_missing_from_the_list() -> None:
+    rt = make_runtime()
+    await add_to_cart(rt, {"product_id": "p-0112", "qty": 2})
+    router = ToolRouter(rt, HANDLERS)
+    no_milk = {**CAKE, "items": [i for i in CAKE["items"] if i["need"] != "milk"]}
+    await router.handle(ToolCall("g", "show_products", {"goal_list": no_milk}))
+    result = rt.live.response_for("g")["result"]
+    assert result["already_in_cart"] == [{"product_id": "p-0112", "name": "Toned Milk 1 L"}]
+    assert "in_cart" in result["check"]
+
+
+async def test_reshowing_the_list_after_yes_keeps_the_yes() -> None:
+    """Live rehearsal regression: the model re-called show_products right after 'हाँ'."""
+    rt = make_runtime()
+    router = ToolRouter(rt, HANDLERS)
+    await router.handle(ToolCall("g1", "show_products", {"goal_list": CAKE}))
+    confirm.on_shopper_input(rt, "हाँ, सब डाल दो")
+    await router.handle(ToolCall("g2", "show_products", {"goal_list": CAKE}))
+    goal_id = rt.live.response_for("g2")["result"]["goal_id"]
+    await router.handle(ToolCall("a", "add_to_cart", {"goal_id": goal_id}))
+    assert rt.live.response_for("a")["status"] == "ok"
+
+
+async def test_proposing_new_items_after_yes_needs_a_new_yes() -> None:
+    rt = make_runtime()
+    router = ToolRouter(rt, HANDLERS)
+    small = {"goal_text": "x", "items": [{"need": "maida", "product_id": "p-0401", "qty": 1, "struck": False}]}
+    await router.handle(ToolCall("g1", "show_products", {"goal_list": small}))
+    confirm.on_shopper_input(rt, "haan")
+    await router.handle(ToolCall("g2", "show_products", {"goal_list": CAKE}))  # more items than agreed
+    goal_id = rt.live.response_for("g2")["result"]["goal_id"]
+    await router.handle(ToolCall("a", "add_to_cart", {"goal_id": goal_id}))
+    assert rt.live.response_for("a")["status"] == "refused"
+
+
 async def test_server_strikes_cart_items_even_if_model_forgets() -> None:
     rt = make_runtime()
     await add_to_cart(rt, {"product_id": "p-0401", "qty": 1})

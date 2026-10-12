@@ -84,6 +84,21 @@ async def test_warning_sign_in_partial_transcript_arms_hold_before_tool_call() -
     assert not rt.ui.of("cards")
 
 
+async def test_no_speech_markers_are_not_captions() -> None:
+    rt, _, convo = _setup()
+    rt.live.emit(L.OutputTranscript("<no speech>", True), L.OutputTranscript("नमस्ते", True))
+    await _drain(convo, rt)
+    texts = [c["text_hi"] for c in rt.ui.of("caption")]
+    assert "नमस्ते" in texts and not any("no speech" in t for t in texts)
+
+
+async def test_new_shopper_turn_resets_duplicate_guard() -> None:
+    rt, _, convo = _setup()
+    rt.turn_adds.add(("item", "p-0112", 2, "named"))
+    await convo.on_client_json({"type": "text", "text": "do litre aur"})
+    assert rt.turn_adds == set()
+
+
 async def test_typed_text_works_like_speech() -> None:
     rt, _, convo = _setup()
     await convo.on_client_json({"type": "text", "text": "do litre doodh"})

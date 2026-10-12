@@ -39,6 +39,10 @@ class Runtime:
     line_sources: dict[str, str] = field(default_factory=dict)
     goals: dict[str, GoalList] = field(default_factory=dict)
     usual: UsualOrder | None = None
+    goal_problems: dict[str, list[str]] = field(default_factory=dict)
+    # add_to_cart calls already applied for the current shopper request (cleared on each new one);
+    # stops the model double-adding when it repeats a tool call (seen in live rehearsal).
+    turn_adds: set[tuple] = field(default_factory=set)
     camera_active: bool = False
     doctor_suggested: bool = False
     payment_future: asyncio.Future | None = None

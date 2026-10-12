@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-09T11:30:38+00:00",
+ "generated_at": "2026-10-12T06:02:47+00:00",
  "source": "Open Food Facts (ODbL; images CC BY-SA) + TalkToBuy hand-added items",
  "count": 500,
  "products": [
@@ -307,7 +307,7 @@
    "size": "100 g",
    "unit_qty": 100.0,
    "unit": "g",
-   "price_minor": 4000,
+   "price_minor": 6500,
    "currency": "INR",
    "image": "https://images.openfoodfacts.org/images/products/890/180/800/0020/front_en.4.400.jpg",
    "image_credit": "Open Food Facts contributors, CC BY-SA (openfoodfacts.org/product/8901808000020)",
@@ -1055,7 +1055,7 @@
    "size": "50 g",
    "unit_qty": 50.0,
    "unit": "g",
-   "price_minor": 2500,
+   "price_minor": 4000,
    "currency": "INR",
    "image": "https://images.openfoodfacts.org/images/products/890/180/800/0013/front_en.11.400.jpg",
    "image_credit": "Open Food Facts contributors, CC BY-SA (openfoodfacts.org/product/8901808000013)",
@@ -1072,8 +1072,10 @@
     "usage": "A raising agent for cakes and muffins."
    },
    "synonyms": [
+    "baking powder",
     "chhota baking powder",
-    "weikfield small"
+    "weikfield small",
+    "बेकिंग पाउडर"
    ],
    "in_stock": true
   },

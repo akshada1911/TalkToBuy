@@ -16,6 +16,7 @@ from typing import Any
 from jsonschema import Draft202012Validator
 
 from session_server.config import MVP_ROOT
+from session_server.core.cart import duplicate_add
 from session_server.core.guards import GUARDS, Guard
 from session_server.core.runtime import Runtime
 from session_server.logging import get_logger
@@ -76,6 +77,10 @@ class ToolRouter:
         errors = sorted(self.validators[name].iter_errors(args), key=str)
         if errors:
             return _error(f"Invalid arguments: {errors[0].message}"), "WHEN_IDLE"
+        if name == "add_to_cart" and not self.rt.session.safety_hold:
+            duplicate = duplicate_add(self.rt, args)  # a pure repeat adds nothing: skip approval
+            if duplicate is not None:
+                return {"status": "ok", "retryable": False, "result": duplicate}, "WHEN_IDLE"
         for guard in self.guards:
             refusal = guard(self.rt, name, args)
             if refusal is not None:

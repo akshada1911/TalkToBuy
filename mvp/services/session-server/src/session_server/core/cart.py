@@ -1,7 +1,9 @@
 """Cart helpers. The cart IS the store's checkout session; an edit never cancels it (F3)."""
 
+from typing import Any
+
 from session_server.core.runtime import Runtime
-from session_server.core.ui import cards_msg, cart_msg
+from session_server.core.ui import cards_msg, cart_msg, model_cart
 from session_server.ports.commerce import CheckoutView
 
 
@@ -32,3 +34,22 @@ async def apply_lines(rt: Runtime, lines: dict[str, int], added: list[str]) -> C
     if added:
         await rt.ui.send_json(cards_msg([rt.products[p] for p in added if p in rt.products], "added"))
     return view
+
+
+def request_key(args: dict[str, Any]) -> tuple:
+    """Identity of an add_to_cart request, for de-duplication within one shopper request."""
+    if "goal_id" in args:
+        return ("goal", args["goal_id"])
+    if args.get("usual"):
+        return ("usual",)
+    return ("item", args.get("product_id"), args.get("qty"), args.get("source", "named"))
+
+
+def duplicate_add(rt: Runtime, args: dict[str, Any]) -> dict[str, Any] | None:
+    """If this exact add already ran for the current shopper request, the result to return
+    instead of adding again (the model sometimes repeats tool calls); else None."""
+    if request_key(args) in rt.turn_adds and rt.cart is not None:
+        return {**model_cart(rt.cart, rt.products),
+                "note": "Already added for this request — not added twice. Do not call add_to_cart "
+                        "again for it; continue with the next item."}
+    return None

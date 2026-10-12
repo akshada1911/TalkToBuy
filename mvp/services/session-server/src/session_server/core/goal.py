@@ -40,10 +40,25 @@ async def build(rt: Runtime, goal_args: dict[str, Any]) -> GoalList:
         items.append(GoalItem(need=need, product_id=pid, qty=raw.get("qty") or 1, struck=struck,
                               struck_reason=reason if struck else None))
 
+    # The store rejects a whole batch if one line is bad, so vet every proposed product now:
+    # unknown IDs are cleared and out-of-stock items flagged, and the model is told to fix them.
+    await rt.ensure_products([i.product_id for i in items if i.product_id])
+    problems: list[str] = []
+    for item in items:
+        if item.struck or not item.product_id:
+            continue
+        product = rt.products.get(item.product_id)
+        if product is None:
+            problems.append(f"'{item.need}': unknown product_id {item.product_id}; search_catalog for it again")
+            item.product_id = None
+        elif not product.in_stock:
+            problems.append(f"'{item.need}': {product.name} is out of stock; offer an in-stock alternative")
+            item.product_id = None
+
     goal = GoalList(goal_id=f"g{len(rt.goals) + 1}", goal_text=goal_args["goal_text"],
                     questions_asked=0, items=items, status="proposed")
     rt.goals[goal.goal_id] = goal
-    await rt.ensure_products([i.product_id for i in items if i.product_id])
+    rt.goal_problems[goal.goal_id] = problems
     confirm.arm(rt, "goal", [i.product_id for i in items if not i.struck and i.product_id])
     await rt.ui.send_json(GoalListMsg(
         type="goal_list", goal_id=goal.goal_id, goal_text=goal.goal_text,
@@ -65,9 +80,14 @@ def confirm_goal(rt: Runtime, goal_id: str) -> list[tuple[str, int]]:
     return [(i.product_id, i.qty or 1) for i in goal.items if not i.struck and i.product_id]
 
 
-def model_goal(goal: GoalList) -> dict[str, Any]:
-    return {
+def model_goal(goal: GoalList, problems: list[str] | None = None) -> dict[str, Any]:
+    out = {
         "goal_id": goal.goal_id,
         "items": [i.model_dump() for i in goal.items],
         "left_out": [i.need for i in goal.items if i.struck],
     }
+    if problems:
+        out["problems"] = problems
+        out["fix_first"] = ("Fix these before asking to add: search again and call show_products "
+                            "with corrected product_ids. Items without a product are not added.")
+    return out

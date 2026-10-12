@@ -40,8 +40,24 @@ async def test_usual_item_refused_until_yes_then_allowed_once() -> None:
     assert (await _call(router, "add_to_cart", add, "a1"))["status"] == "refused"
     confirm.on_shopper_input(rt, "हाँ, वही डाल दो")
     assert (await _call(router, "add_to_cart", add, "a2"))["status"] == "ok"
-    # consumed: a second add of an inferred item needs a fresh yes
-    assert (await _call(router, "add_to_cart", add, "a3"))["status"] == "refused"
+    # repeated identical call in the same request: not added twice
+    again = await _call(router, "add_to_cart", add, "a3")
+    assert "not added twice" in again["result"]["note"] and again["result"]["lines"][0]["qty"] == 1
+    # next request: the yes was consumed, so another inferred add needs a fresh yes
+    rt.turn_adds.clear()
+    assert (await _call(router, "add_to_cart", add, "a4"))["status"] == "refused"
+
+
+async def test_duplicate_named_add_in_one_request_is_idempotent_but_not_across_requests() -> None:
+    rt = make_runtime()
+    router = ToolRouter(rt, HANDLERS)
+    milk = {"product_id": "p-0112", "qty": 2}
+    await _call(router, "add_to_cart", milk, "m1")
+    dup = await _call(router, "add_to_cart", milk, "m2")
+    assert dup["result"]["lines"][0]["qty"] == 2  # still 2, not 4
+    rt.turn_adds.clear()  # the shopper asks again ("do litre aur")
+    more = await _call(router, "add_to_cart", milk, "m3")
+    assert more["result"]["lines"][0]["qty"] == 4
 
 
 async def test_named_source_cannot_bypass_pending_camera_item() -> None:

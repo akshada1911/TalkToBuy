@@ -10,6 +10,7 @@ Responsibilities:
 
 import asyncio
 import contextlib
+import re
 from typing import Any
 
 from session_server.core import confirm, pace
@@ -28,6 +29,7 @@ from session_server.ports.translate import TranslatePort
 log = get_logger(__name__)
 
 FRAME_MIC, FRAME_JPEG, FRAME_PCM_OUT, FRAME_MP4_OUT = 0x01, 0x02, 0x11, 0x12
+NO_SPEECH = re.compile(r"^\s*<\s*no[ _-]?speech", re.IGNORECASE)
 LOW_DOWNLINK_KBPS = 1000
 UNDERRUNS_LIMIT = 3
 
@@ -162,6 +164,8 @@ class ConversationSession:
         elif isinstance(ev, L.InputTranscript):
             await self._shopper_text(ev.text, final=ev.final, incremental=True)
         elif isinstance(ev, L.OutputTranscript):
+            if NO_SPEECH.match(ev.text):
+                return  # transcription markers like "<no speech>" are not captions
             await self._finish_turn("shopper")
             await self._assistant_text(ev.text, final=ev.final)
         elif isinstance(ev, L.ToolCall):
@@ -218,6 +222,7 @@ class ConversationSession:
         rt = self.rt
         if who == "shopper":
             rt.shopper_turn_text = text
+            rt.turn_adds.clear()  # a new request: identical adds are allowed again ("one more milk")
             verdict = await detector.evaluate(text, self.classifier)
             await hold.apply(rt, verdict)
             await hold.maybe_clear(rt, text)
