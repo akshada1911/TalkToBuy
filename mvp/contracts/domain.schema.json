@@ -142,8 +142,8 @@
         "session_id": { "type": "string" },
         "shopper_id": { "type": "string" },
         "pace": { "$ref": "#/$defs/Pace", "default": "guided" },
-        "language": { "type": "string", "enum": ["hi"], "default": "hi" },
-        "show_translation": { "type": "boolean", "default": true },
+        "language": { "type": "string", "enum": ["hi", "en"], "default": "hi", "description": "Conversation language chosen by the shopper: hi = Hindi, en = Indian English" },
+        "show_translation": { "type": "boolean", "default": false },
         "cart_ref": { "type": ["string", "null"] },
         "on_hand": { "type": "array", "items": { "type": "string" }, "default": [] },
         "health_consent": { "type": "boolean", "default": false },
@@ -177,7 +177,7 @@
       "properties": {
         "id": { "type": "string" },
         "display_name": { "type": "string" },
-        "language": { "type": "string", "enum": ["hi"] },
+        "language": { "type": "string", "enum": ["hi", "en"] },
         "address_form": { "$ref": "#/$defs/AddressForm" }
       },
       "required": ["id", "display_name", "language", "address_form"],

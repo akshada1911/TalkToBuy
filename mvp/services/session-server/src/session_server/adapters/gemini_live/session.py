@@ -55,7 +55,8 @@ class GeminiLive:
             input_audio_transcription=transcription,
             output_audio_transcription=types.AudioTranscriptionConfig(language_codes=[cfg.language_code]),
             context_window_compression=types.ContextWindowCompressionConfig(
-                sliding_window=types.SlidingWindow()
+                trigger_tokens=self.settings.compress_trigger_tokens,
+                sliding_window=types.SlidingWindow(target_tokens=self.settings.compress_target_tokens),
             ),
             session_resumption=types.SessionResumptionConfig(handle=self._handle),
         )
@@ -132,6 +133,11 @@ class GeminiLive:
 
     async def send_audio(self, pcm_16k: bytes) -> None:
         await self._session.send_realtime_input(audio=types.Blob(data=pcm_16k, mime_type="audio/pcm;rate=16000"))
+
+    async def send_audio_end(self) -> None:
+        # Mic audio is only streamed while the shopper speaks; tell the model the stream paused
+        # so it finishes the turn instead of waiting for more audio.
+        await self._session.send_realtime_input(audio_stream_end=True)
 
     async def send_video(self, jpeg: bytes) -> None:
         await self._session.send_realtime_input(video=types.Blob(data=jpeg, mime_type="image/jpeg"))

@@ -33,6 +33,11 @@ NO_SPEECH = re.compile(r"^\s*<\s*no[ _-]?speech", re.IGNORECASE)
 LOW_DOWNLINK_KBPS = 1000
 UNDERRUNS_LIMIT = 3
 
+IDLE_WARNING_NOTE = (
+    "[SERVER NOTE] The shopper has been quiet for a while. In one short, warm sentence, ask whether "
+    "they need anything else and say the assistant will close soon if not."
+)
+
 TIME_WARNING_NOTE = (
     "[SERVER NOTE] About one minute is left in this session. Politely tell the shopper, and offer "
     "to finish the order now if the cart has items."
@@ -56,11 +61,16 @@ class ConversationSession:
         self._turns = {"shopper": 0, "assistant": 0}
         self._text = {"shopper": "", "assistant": ""}
         self._ended = asyncio.Event()
+        # Cost control: idle sessions end after settings.idle_timeout_s without shopper activity.
+        self._last_shopper = rt.clock()
+        self._last_assistant = rt.clock()
+        self._idle_warned = False
 
     # ---------- lifecycle ----------
 
     async def run(self) -> None:
         timer = self.rt.spawn(self._cap_timer())
+        idle = self.rt.spawn(self._idle_watch())
         try:
             await self.rt.ui.send_json(state_msg(self.rt))
             async for event in self.rt.live.events():
@@ -69,6 +79,7 @@ class ConversationSession:
                     break
         finally:
             timer.cancel()
+            idle.cancel()
             await self.end("live_closed")
 
     async def end(self, reason: str) -> None:
@@ -92,6 +103,41 @@ class ConversationSession:
         log.info("session_ended", session_id=s.session_id, reason=reason,
                  usage=s.usage.model_dump())
 
+    def _shopper_active(self) -> None:
+        self._last_shopper = self.rt.clock()
+        self._idle_warned = False
+
+    def idle_for(self) -> float:
+        """Seconds without activity. The assistant's own speech keeps the session alive only until
+        the idle warning has been given (otherwise the goodbye line would reset the clock)."""
+        last = self._last_shopper if self._idle_warned else max(self._last_shopper, self._last_assistant)
+        return self.rt.clock() - last
+
+    async def idle_tick(self) -> bool:
+        """One idle check; returns True when the session was ended. Separate for testing."""
+        cfg = self.rt.settings
+        fut = self.rt.payment_future
+        if fut is not None and not fut.done():
+            self._shopper_active()  # never time out while the payment step is open
+            return False
+        idle = self.idle_for()
+        if idle >= cfg.idle_timeout_s:
+            await self.rt.ui.send_json(ErrorMsg(type="error", code="idle",
+                                                message_hi="कोई बात नहीं हुई, इसलिए सहायक बंद हो रहा है। फिर मिलेंगे!",
+                                                message_en="Closed after a quiet minute. Tap to talk again."))
+            await self.end("idle")
+            return True
+        if idle >= cfg.idle_warn_s and not self._idle_warned:
+            self._idle_warned = True
+            await self.rt.live.send_text(IDLE_WARNING_NOTE, role="system_note")
+        return False
+
+    async def _idle_watch(self) -> None:
+        while not self._ended.is_set():
+            await asyncio.sleep(1.0)
+            if await self.idle_tick():
+                return
+
     async def _cap_timer(self) -> None:
         cfg = self.rt.settings
         elapsed = self.rt.clock() - self.rt.session.started_at
@@ -111,6 +157,8 @@ class ConversationSession:
             return
         kind, payload = data[0], data[1:]
         usage = self.rt.session.usage
+        if kind in (FRAME_MIC, FRAME_JPEG):
+            self._shopper_active()  # with browser voice detection, mic frames only arrive during speech
         if kind == FRAME_MIC:
             usage.audio_in_s += len(payload) / 32000  # 16 kHz × 2 bytes
             await self.rt.live.send_audio(payload)
@@ -121,7 +169,11 @@ class ConversationSession:
     async def on_client_json(self, msg: dict[str, Any]) -> None:
         kind = msg.get("type")
         s = self.rt.session
-        if kind == "text":
+        if kind in ("text", "payment_result", "camera", "audio_pause"):
+            self._shopper_active()
+        if kind == "audio_pause":
+            await self.rt.live.send_audio_end()
+        elif kind == "text":
             text = str(msg.get("text", ""))[:500]
             await self._shopper_text(text, final=True)
             await self.rt.live.send_text(text, role="user")
@@ -156,6 +208,8 @@ class ConversationSession:
 
     async def _on_live_event(self, ev: L.LiveEvent) -> None:
         rt = self.rt
+        if isinstance(ev, L.AudioOut | L.VideoChunk):
+            self._last_assistant = rt.clock()
         if isinstance(ev, L.AudioOut):
             rt.session.usage.audio_out_s += len(ev.pcm) / 48000  # 24 kHz × 2 bytes
             await rt.ui.send_bytes(bytes([FRAME_PCM_OUT]) + ev.pcm)
@@ -231,7 +285,10 @@ class ConversationSession:
             hold.on_assistant_text(rt, text)
         await rt.ui.send_json(CaptionMsg(type="caption", who=who, turn_id=turn_id, text_hi=text,
                                          text_en=None, final=True))
-        if self.translate is not None and rt.session.show_translation:
+        # Cost control: only the assistant's lines are translated, and only when English is on.
+        # English sessions need no translation at all.
+        if (self.translate is not None and rt.session.show_translation and who == "assistant"
+                and rt.session.language != "en"):
             rt.spawn(self._translate(who, turn_id, text))
 
     async def _translate(self, who: str, turn_id: str, text: str) -> None:

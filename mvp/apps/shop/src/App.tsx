@@ -7,6 +7,42 @@ export const SHOPPER_ID = "u-ghanshyam";
 
 // Empty in local dev (Vite proxies /v1 with WebSockets); the session server's Cloud Run URL when deployed.
 const SESSION_SERVER_URL: string = import.meta.env.VITE_PUBLIC_SESSION_SERVER_URL ?? "";
+// Cost control: English captions only on the judges' screen (open the shop with ?en=1);
+// the avatar starts off (audio-only) unless ?avatar=1, and the widget's switch can change it live.
+const PARAMS = new URLSearchParams(location.search);
+const SHOW_ENGLISH = PARAMS.get("en") === "1";
+const START_MEDIA_MODE = PARAMS.get("avatar") === "1" ? "avatar" : "audio_only";
+// Conversation language: chosen with the picker below (or ?lang=en), remembered on this device.
+type Lang = "hi" | "en";
+function initialLang(): Lang {
+  const fromUrl = PARAMS.get("lang");
+  if (fromUrl === "en" || fromUrl === "hi") return fromUrl;
+  try {
+    return localStorage.getItem("ttb-lang") === "en" ? "en" : "hi";
+  } catch {
+    return "hi";
+  }
+}
+
+function LanguagePicker({ lang, onChange }: { lang: Lang; onChange: (l: Lang) => void }) {
+  return (
+    <div className="lang-picker" role="radiogroup" aria-label="भाषा चुनें / Choose language">
+      <span className="lang-label">भाषा / Language:</span>
+      {(["hi", "en"] as const).map((l) => (
+        <button
+          key={l}
+          type="button"
+          role="radio"
+          aria-checked={lang === l}
+          className={lang === l ? "lang-btn selected" : "lang-btn"}
+          onClick={() => onChange(l)}
+        >
+          {l === "hi" ? "हिंदी" : "English"}
+        </button>
+      ))}
+    </div>
+  );
+}
 
 const AISLES = [
   { icon: "🥛", hi: "दूध-दही", en: "Dairy" },
@@ -52,6 +88,15 @@ function ShopPage() {
   const widget = useRef<TalkToBuyAssistant>(null);
   const [payment, setPayment] = useState<PaymentRequestedDetail | null>(null);
   const [cartCount, setCartCount] = useState<number | null>(null);
+  const [lang, setLang] = useState<Lang>(initialLang);
+  const chooseLang = (l: Lang) => {
+    setLang(l);
+    try {
+      localStorage.setItem("ttb-lang", l);
+    } catch {
+      /* private mode: the choice just isn't remembered */
+    }
+  };
 
   useEffect(() => {
     const el = widget.current;
@@ -81,14 +126,18 @@ function ShopPage() {
         </section>
 
         <section className="assistant-slot" aria-label="दुकानदार सहायक / Shopkeeper assistant">
+          <LanguagePicker lang={lang} onChange={chooseLang} />
           {/* Firebase Hosting can't proxy WebSockets, so deployed builds point straight at the
               session server (VITE_PUBLIC_SESSION_SERVER_URL, a public URL, never a secret). */}
+          {/* key={lang}: switching language starts a fresh assistant in that language. */}
           <talktobuy-assistant
+            key={lang}
             ref={widget}
             ticket-url={`${SESSION_SERVER_URL}/v1/demo-ticket`}
             server-url={SESSION_SERVER_URL}
-            language="hi"
-            show-translation="true"
+            language={lang}
+            show-translation={SHOW_ENGLISH && lang === "hi" ? "true" : "false"}
+            media-mode={START_MEDIA_MODE}
             avatar-audio="muxed"
           />
         </section>

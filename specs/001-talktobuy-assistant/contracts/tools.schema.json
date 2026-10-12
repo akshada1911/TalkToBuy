@@ -151,7 +151,9 @@
           "total": { "type": "integer" },
           "currency": { "const": "INR" },
           "delivery": { "$ref": "#/$defs/DeliverySlot" },
-          "readback_hi": { "type": "string", "description": "Server-built read-back sentence; the model should say this verbatim." }
+          "readback": { "type": "string", "description": "Server-built read-back in the session language; say it word for word." },
+          "readback_hi": { "type": "string" },
+          "readback_en": { "type": "string" }
         },
         "required": ["checkout_id", "item_count", "total", "delivery"]
       },
@@ -217,17 +219,17 @@
         },
         "in_stock": { "type": "boolean" }
       },
-      "required": ["id", "name", "local_name", "size", "price", "currency", "category", "listing", "in_stock"]
+      "required": ["id", "name", "local_name", "size", "price", "listing", "in_stock"]
     },
     "Cart": {
       "type": "object",
       "properties": {
-        "lines": { "type": "array", "items": { "type": "object", "properties": { "product_id": { "type": "string" }, "name": { "type": "string" }, "qty": { "type": "integer" }, "line_total": { "type": "integer" } }, "required": ["product_id", "qty", "line_total"] } },
+        "lines": { "type": "array", "items": { "type": "object", "properties": { "product_id": { "type": "string" }, "name": { "type": "string" }, "qty": { "type": "integer" }, "line_total": { "type": "integer" } }, "required": ["product_id", "qty"] } },
         "item_count": { "type": "integer" },
         "total": { "type": "integer" },
         "currency": { "const": "INR" }
       },
-      "required": ["lines", "item_count", "total", "currency"]
+      "required": ["lines", "item_count", "total"]
     },
     "DeliverySlot": {
       "type": "object",

@@ -22,13 +22,12 @@ async def show_products(rt: Runtime, args: dict[str, Any]) -> dict[str, Any]:
             for pid in current_lines(rt) if pid not in listed and pid in rt.products
         ]
         result = {"ok": True, **goal.model_goal(g, rt.goal_problems.get(g.goal_id)),
-                  "instruction": "Read the list out, say what was left out and why, then ask once "
-                                 "whether to add it all. On yes call add_to_cart with this goal_id."}
+                  "instruction": "Read it out, say what was left out and why, ask once; on yes "
+                                 "add_to_cart(goal_id)."}
         if in_cart_not_listed:
             result["already_in_cart"] = in_cart_not_listed
-            result["check"] = ("If any already_in_cart item is an ingredient this goal needs (e.g. milk "
-                               "for a cake), call show_products again with the same list plus that item "
-                               "marked struck_reason 'in_cart', so the shopper sees it is covered.")
+            result["check"] = ("If the goal needs any already_in_cart item (e.g. milk for a cake), "
+                               "show the list again with it struck_reason 'in_cart'.")
         return result
     ids = args.get("ids", [])
     await rt.ensure_products(ids)

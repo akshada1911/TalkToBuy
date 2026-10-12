@@ -73,12 +73,13 @@
     "CameraMsg": { "type": "object", "properties": { "type": { "const": "camera" }, "active": { "type": "boolean" } }, "required": ["type", "active"], "additionalProperties": false },
     "PaymentResultMsg": { "type": "object", "properties": { "type": { "const": "payment_result" }, "checkout_id": { "type": "string" }, "approved": { "type": "boolean" }, "mandate": { "type": ["object", "null"], "description": "Test-mode AP2 mandates from the payment step: {checkout_mandate, payment_mandate}" } }, "required": ["type", "checkout_id", "approved"], "additionalProperties": false },
     "NetQualityMsg": { "type": "object", "properties": { "type": { "const": "net_quality" }, "downlink_kbps": { "type": ["number", "null"] }, "rtt_ms": { "type": ["number", "null"] }, "underruns": { "type": "integer", "minimum": 0 } }, "required": ["type"], "additionalProperties": false },
+    "AudioPauseMsg": { "type": "object", "description": "Browser voice detection: the shopper stopped speaking, so mic audio stops until they speak again (cost control). The server flushes the model's audio stream.", "properties": { "type": { "const": "audio_pause" } }, "required": ["type"], "additionalProperties": false },
     "EndMsg": { "type": "object", "properties": { "type": { "const": "end" } }, "required": ["type"], "additionalProperties": false },
     "ClientMessage": {
       "oneOf": [
         { "$ref": "#/$defs/TextMsg" }, { "$ref": "#/$defs/SetMediaModeMsg" }, { "$ref": "#/$defs/SetTranslationMsg" },
         { "$ref": "#/$defs/CameraMsg" }, { "$ref": "#/$defs/PaymentResultMsg" }, { "$ref": "#/$defs/NetQualityMsg" },
-        { "$ref": "#/$defs/EndMsg" }
+        { "$ref": "#/$defs/EndMsg" }, { "$ref": "#/$defs/AudioPauseMsg" }
       ]
     },
 

@@ -99,6 +99,10 @@ class LivePort(Protocol):
 
     async def send_video(self, jpeg: bytes) -> None: ...
 
+    async def send_audio_end(self) -> None:
+        """The shopper stopped talking and the mic is paused (browser voice detection)."""
+        ...
+
     async def send_text(self, text: str, *, role: Literal["user", "system_note"] = "user") -> None:
         """Typed shopper text, or a server note to the model (e.g. safety hold, pace change)."""
         ...

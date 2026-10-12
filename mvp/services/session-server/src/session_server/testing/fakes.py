@@ -145,6 +145,7 @@ class FakeLive:
         self.config: L.LiveConfig | None = None
         self.audio: list[bytes] = []
         self.video: list[bytes] = []
+        self.audio_ends = 0
         self.texts: list[tuple[str, str]] = []
         self.tool_responses: list[tuple[str, str, dict[str, Any], str]] = []
         self.reconnects: list[str] = []
@@ -172,6 +173,9 @@ class FakeLive:
 
     async def send_video(self, jpeg):
         self.video.append(jpeg)
+
+    async def send_audio_end(self):
+        self.audio_ends += 1
 
     async def send_text(self, text, *, role="user"):
         self.texts.append((role, text))

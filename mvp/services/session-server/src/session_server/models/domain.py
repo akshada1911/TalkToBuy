@@ -149,8 +149,11 @@ class Session(BaseModel):
     session_id: str
     shopper_id: str
     pace: Literal['guided', 'quick'] | None = 'guided'
-    language: Literal['hi'] | None = 'hi'
-    show_translation: bool | None = True
+    language: Literal['hi', 'en'] | None = Field(
+        'hi',
+        description='Conversation language chosen by the shopper: hi = Hindi, en = Indian English',
+    )
+    show_translation: bool | None = False
     cart_ref: str | None = None
     on_hand: list[str] | None = []
     health_consent: bool | None = False
@@ -181,7 +184,7 @@ class Shopper(BaseModel):
     )
     id: str
     display_name: str
-    language: Literal['hi']
+    language: Literal['hi', 'en']
     address_form: Literal['respectful_male', 'respectful_female', 'neutral']
 
 

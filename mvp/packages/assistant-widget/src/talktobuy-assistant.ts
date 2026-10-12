@@ -250,8 +250,9 @@ export class TalkToBuyAssistant extends LitElement {
   @property({ attribute: "ticket-url" }) ticketUrl: string | null = null;
   @property({ attribute: "server-url" }) serverUrl: string | null = null;
   @property() language = "hi";
-  @property({ attribute: "show-translation", converter: boolAttr, reflect: true }) showTranslation = true;
-  @property({ attribute: "media-mode" }) mediaMode: MediaMode = "avatar";
+  // Cost control: English captions and the avatar are opt-in (judges' screen / demo switch).
+  @property({ attribute: "show-translation", converter: boolAttr, reflect: true }) showTranslation = false;
+  @property({ attribute: "media-mode" }) mediaMode: MediaMode = "audio_only";
   @property({ attribute: "avatar-audio" }) avatarAudio: AvatarAudio = "separate";
 
   @state() private phase: Phase = "idle";
@@ -314,7 +315,12 @@ export class TalkToBuyAssistant extends LitElement {
     // Create the playback AudioContext inside the gesture so autoplay is allowed.
     void this.playback.resume().catch(() => undefined);
 
-    this.mic = new MicCapture((pcm) => this.client?.sendBinary(FRAME.MIC_PCM, pcm));
+    // Browser voice detection: audio is sent only while the shopper speaks (cost control); when
+    // they stop, the server is told so the model can answer without waiting for more audio.
+    this.mic = new MicCapture(
+      (pcm) => this.client?.sendBinary(FRAME.MIC_PCM, pcm),
+      () => this.client?.send({ type: "audio_pause" }),
+    );
     try {
       await this.mic.start();
       this.micProblem = null;
@@ -326,6 +332,8 @@ export class TalkToBuyAssistant extends LitElement {
     this.client = new SessionClient({
       serverUrl: this.serverUrl,
       getTicket: () => this.getTicket(),
+      getMediaMode: () => this.effectiveMode,
+      getLanguage: () => (this.language === "en" ? "en" : "hi"),
       onMessage: (m) => this.gate(() => this.onServerMessage(m)),
       onBinary: (t, p) => {
         if (this.pending) {
@@ -408,7 +416,7 @@ export class TalkToBuyAssistant extends LitElement {
       }
       this.mic?.setMuted(false);
       this.client?.send({ type: "set_translation", on: this.showTranslation });
-      if (this.mediaMode === "audio_only") this.client?.send({ type: "set_media_mode", mode: "audio_only" });
+      this.client?.send({ type: "set_media_mode", mode: this.effectiveMode });
       this.net?.stop();
       this.net = new NetQualityReporter({
         underruns: () => this.playback.underruns,

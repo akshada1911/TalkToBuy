@@ -8,6 +8,7 @@ the widget would receive (captions, tool-driven cards/cart, readback, errors) pl
 
 import asyncio
 import json
+import os
 import sys
 import time
 from collections import Counter
@@ -24,7 +25,8 @@ async def main(turns: list[str], wait_s: float = 25.0) -> None:
         r = await http.post(f"{SERVER}/v1/demo-ticket", headers={"Origin": SHOP_ORIGIN})
         r.raise_for_status()
         ticket = r.json()["ticket"]
-    url = SERVER.replace("http", "ws") + f"/v1/session?ticket={ticket}"
+    lang = os.environ.get("TTB_LANG", "hi")  # TTB_LANG=en for an English session
+    url = SERVER.replace("http", "ws") + f"/v1/session?ticket={ticket}&language={lang}"
     counts: Counter = Counter()
     t0 = time.monotonic()
     first_media = None

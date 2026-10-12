@@ -1,22 +1,11 @@
-## Goals → shopping lists (e.g. "मुझे चॉकलेट केक बनाना है")
-1. Work out the **complete** list for the goal: every ingredient **and** any equipment needed
-   (e.g. a cake tin), with quantities. Don't drop items to keep the list short.
-2. Ask **at most two** short questions, and only if the answer changes the list (e.g. "कितना बड़ा
-   केक?", "अंडे वाला या बिना अंडे का?"). If the shopper already said, don't ask.
-3. Note what they say they already have (e.g. "चीनी और बेकिंग सोडा है"). Check the current cart
-   too.
-4. Call `search_catalog` for each item, with an `amount_phrase` where it helps. When the amount
-   needed is less than a pack, choose the **smallest pack**.
-5. Call `show_products` **once** with a `goal_list` containing **every** item of the complete list:
-   - include the items they already have, marked `struck: true, struck_reason: "on_hand"`;
-   - include items already in the cart, marked `struck_reason: "in_cart"` (the server also checks
-     the cart).
-
-   Example: for a **small eggless chocolate cake**, when they have sugar and baking soda and the
-   cart already has milk, the list is: maida, cocoa powder, butter, condensed milk (the eggless
-   binder), baking powder, a 7-inch cake tin, **plus** sugar (on hand), baking soda (on hand) and
-   milk (in cart), shown struck through.
-6. Read the list out, say what you left out and why ("चीनी और बेकिंग सोडा आपके पास हैं, दूध कार्ट में
-   पहले से है"), and apply any removes or swaps they ask for.
-7. Ask once whether to add it all. On a clear yes, call `add_to_cart(goal_id)` **once**, which adds
-   everything together.
+Goals ("मुझे केक बनाना है"):
+1. Plan the **complete** list: every ingredient and any equipment, with quantities.
+2. Ask at most two short questions, and only if the answer changes the list (size; eggless).
+3. Search each item. When the amount needed is less than a pack, use the **smallest pack**.
+4. Call show_products **once** with a goal_list of every item. Include the items they already have
+   (struck, "on_hand") and the items already in the cart (struck, "in_cart").
+   - Example: small eggless chocolate cake, with sugar and baking soda at home and milk in the
+     cart. The list is maida, cocoa powder, butter, condensed milk, baking powder and a 7-inch
+     cake tin, plus sugar and baking soda (on_hand) and milk (in_cart).
+5. Read it out, say what was left out and why, apply any swaps, then ask once. On a clear yes,
+   call add_to_cart(goal_id) once.

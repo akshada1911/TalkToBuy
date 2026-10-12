@@ -58,18 +58,20 @@ def state_msg(rt: Any) -> StateMsg:
 
 
 def model_product(p: Product) -> dict[str, Any]:
-    """What the model sees about a product: listing fields only, prices in rupees (FR-030)."""
+    """What the model sees about a product: the minimum it needs to speak and act, prices in
+    whole rupees, and the listing as the only basis for explanations (FR-030). Kept small on
+    purpose: every tool result is re-billed on each later turn of the Live session."""
+    listing = {"description": p.listing.description}
+    if p.listing.usage:
+        listing["usage"] = p.listing.usage
     return {
         "id": p.id,
         "name": p.name,
         "local_name": p.local_name,
-        "brand": p.brand,
         "size": p.size,
         "price": rupees(p.price_minor),
-        "currency": "INR",
-        "category": p.category,
-        "listing": {"description": p.listing.description, "usage": p.listing.usage},
         "in_stock": p.in_stock,
+        "listing": listing,
     }
 
 
@@ -80,11 +82,9 @@ def model_cart(view: CheckoutView, products: dict[str, Product]) -> dict[str, An
                 "product_id": line.product_id,
                 "name": products[line.product_id].name if line.product_id in products else None,
                 "qty": line.qty,
-                "line_total": rupees(line.line_total_minor),
             }
             for line in view.lines
         ],
         "item_count": view.item_count,
         "total": rupees(view.total_minor),
-        "currency": "INR",
     }

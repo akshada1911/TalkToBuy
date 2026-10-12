@@ -12,7 +12,7 @@ def test_all_placeholders_are_filled() -> None:
     text = build_system_instruction(_shopper("respectful_male"), "guided")
     assert "{" not in text and "}" not in text
     assert "Ghanshyam ji" in text and "GUIDED" in text
-    for must in ("OTP", "readback_hi", "notify_family", "amount_phrase", "goal_id", "camera"):
+    for must in ("OTP", "`readback`", "notify_family", "amount_phrase", "goal_id", "camera"):
         assert must in text
 
 
@@ -26,3 +26,11 @@ def test_address_form_and_pace_change_the_prompt() -> None:
 def test_prompt_never_asks_age() -> None:
     text = build_system_instruction(_shopper("neutral"), "guided").lower()
     assert "never ask their age" in text
+
+
+def test_english_session_speaks_english_without_hindi_grammar_rules() -> None:
+    en = build_system_instruction(_shopper("respectful_male"), "guided", language="en")
+    hi = build_system_instruction(_shopper("respectful_male"), "guided", language="hi")
+    assert "Speak only simple, polite Indian English" in en and "Shall we go step by step" in en
+    assert "masculine forms for them" not in en and "{" not in en
+    assert "Speak only simple, respectful, natural Hindi" in hi and "हम एक-एक करके चलें" in hi

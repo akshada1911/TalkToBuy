@@ -116,6 +116,17 @@ class NetQualityMsg(BaseModel):
     underruns: conint(ge=0) | None = None
 
 
+class AudioPauseMsg(BaseModel):
+    """
+    Browser voice detection: the shopper stopped speaking, so mic audio stops until they speak again (cost control). The server flushes the model's audio stream.
+    """
+
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    type: Literal['audio_pause']
+
+
 class EndMsg(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -258,6 +269,7 @@ class WidgetMessages(BaseModel):
         | PaymentResultMsg
         | NetQualityMsg
         | EndMsg
+        | AudioPauseMsg
         | None
     ) = None
     server: (

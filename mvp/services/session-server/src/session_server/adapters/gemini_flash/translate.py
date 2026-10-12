@@ -16,7 +16,7 @@ PROMPT = (
 
 class FlashTranslate:
     def __init__(self, settings: Settings):
-        self.model = settings.flash_model
+        self.model = settings.translate_model  # Flash-Lite: cheapest for display-only captions
         self.client = genai.Client(
             vertexai=True, project=settings.require_gcp(), location=settings.gcp_location
         )

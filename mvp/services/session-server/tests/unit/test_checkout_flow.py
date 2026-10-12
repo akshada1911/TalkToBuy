@@ -131,3 +131,14 @@ async def test_out_of_stock_at_checkout_is_reported() -> None:
     rt.commerce.products["p-0007"] = rt.commerce.products["p-0007"].model_copy(update={"in_stock": False})
     with pytest.raises(ToolError, match="out of stock"):
         await start_checkout(rt, {"delivery_slot": "earliest"})
+
+
+async def test_readback_is_in_the_session_language() -> None:
+    rt = make_runtime()
+    await _cart(rt)
+    assert (await start_checkout(rt, {"delivery_slot": "earliest"}))["readback"].startswith("आपके कार्ट")
+    rt = make_runtime()
+    rt.session.language = "en"
+    await _cart(rt)
+    rb = await start_checkout(rt, {"delivery_slot": "earliest"})
+    assert rb["readback"] == rb["readback_en"] and rb["readback"].startswith("2 items, ₹118")

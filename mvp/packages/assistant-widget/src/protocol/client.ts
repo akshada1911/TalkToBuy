@@ -46,7 +46,13 @@ export function routeServerMessage(msg: ServerMessage, handlers: ServerHandlers)
 }
 
 /** Build the session URL. An empty or missing server URL means "same origin". */
-export function sessionUrl(serverUrl: string | null | undefined, ticket: string, loc: Location = location): string {
+export function sessionUrl(
+  serverUrl: string | null | undefined,
+  ticket: string,
+  loc: Location = location,
+  mediaMode?: string | null,
+  language?: string | null,
+): string {
   let base: URL;
   if (serverUrl && serverUrl.trim()) {
     base = new URL(serverUrl.trim(), loc.href);
@@ -59,6 +65,10 @@ export function sessionUrl(serverUrl: string | null | undefined, ticket: string,
   base.pathname = `${path}/v1/session`;
   base.search = "";
   base.searchParams.set("ticket", ticket);
+  // The session starts in the switch's mode, so no avatar connection is paid for and then dropped.
+  if (mediaMode) base.searchParams.set("media_mode", mediaMode);
+  // Conversation language chosen by the shopper (hi = Hindi, en = English).
+  if (language) base.searchParams.set("language", language);
   return base.toString();
 }
 
@@ -68,6 +78,10 @@ export interface ClientOptions {
   serverUrl?: string | null;
   /** Called for every connect attempt, so a fresh ticket can be fetched after a drop. */
   getTicket: () => Promise<string>;
+  /** Media mode to start the session in (cost control: "audio_only" unless the avatar is on). */
+  getMediaMode?: () => string | null;
+  /** Conversation language to start in: "hi" or "en". */
+  getLanguage?: () => string | null;
   onMessage?: (msg: ServerMessage) => void;
   onBinary?: (type: FrameType, payload: Uint8Array) => void;
   onStatus?: (status: ClientStatus, detail?: { code?: number; reason?: string }) => void;
@@ -112,7 +126,7 @@ export class SessionClient {
     }
     if (this.stopped) return;
     const Impl = this.opts.WebSocketImpl ?? WebSocket;
-    const ws = new Impl(sessionUrl(this.opts.serverUrl, ticket));
+    const ws = new Impl(sessionUrl(this.opts.serverUrl, ticket, location, this.opts.getMediaMode?.() ?? null, this.opts.getLanguage?.() ?? null));
     ws.binaryType = "arraybuffer";
     this.ws = ws;
     this.openedAt = performance.now();

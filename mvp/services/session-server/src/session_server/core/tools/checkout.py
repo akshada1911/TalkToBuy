@@ -19,7 +19,8 @@ from session_server.ports.commerce import CheckoutView, CommerceError, Slot
 def _readback(item_count: int, total: int, slot: Slot) -> tuple[str, str]:
     hi = (f"आपके कार्ट में कुल {item_count} सामान हैं, कुल ₹{total}। "
           f"डिलीवरी {slot.label_hi} के बीच होगी। क्या मैं ऑर्डर कर दूँ?")
-    en = f"{item_count} items, ₹{total}, delivery {slot.label_en}. Shall I place the order?"
+    items = "1 item" if item_count == 1 else f"{item_count} items"
+    en = f"{items}, ₹{total}, delivery {slot.label_en}. Shall I place the order?"
     return hi, en
 
 
@@ -55,8 +56,9 @@ async def start_checkout(rt: Runtime, args: dict[str, Any]) -> dict[str, Any]:
     return {
         "checkout_id": view.id, "item_count": view.item_count, "total": total, "currency": "INR",
         "delivery": {"id": view.slot.id, "label_hi": view.slot.label_hi, "label_en": view.slot.label_en},
+        "readback": en if rt.session.language == "en" else hi,
         "readback_hi": hi, "readback_en": en,
-        "instruction": "Say readback_hi exactly as written, then wait for a clear yes before "
+        "instruction": "Say `readback` exactly as written, then wait for a clear yes before "
                        "calling confirm_checkout.",
     }
 

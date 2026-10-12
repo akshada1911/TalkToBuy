@@ -310,3 +310,13 @@ h2 {
   color: var(--muted);
   font-size: 20px;
 }
+
+/* Language picker: large, high-contrast targets for older shoppers (≥ 48 px, ≥ 20 px text). */
+.lang-picker { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.lang-label { font-size: 20px; font-weight: 600; }
+.lang-btn {
+  min-width: 120px; min-height: 52px; padding: 0 20px; font-size: 22px; border-radius: 14px;
+  border: 2px solid currentColor; background: transparent; color: inherit; cursor: pointer;
+}
+.lang-btn.selected { background: #1f5f3f; border-color: #1f5f3f; color: #ffffff; font-weight: 700; }
+.lang-btn:focus-visible { outline: 3px solid #f2b705; outline-offset: 3px; }

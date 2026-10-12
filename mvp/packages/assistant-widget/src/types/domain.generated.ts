@@ -70,7 +70,10 @@ export interface Session {
   session_id: string;
   shopper_id: string;
   pace?: "guided" | "quick";
-  language?: "hi";
+  /**
+   * Conversation language chosen by the shopper: hi = Hindi, en = Indian English
+   */
+  language?: "hi" | "en";
   show_translation?: boolean;
   cart_ref?: string | null;
   on_hand?: string[];
@@ -140,6 +143,6 @@ export interface DeliverySlot {
 export interface Shopper {
   id: string;
   display_name: string;
-  language: "hi";
+  language: "hi" | "en";
   address_form: AddressForm;
 }

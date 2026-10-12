@@ -68,7 +68,7 @@ async def test_full_demo_script(env) -> None:
     ok(await tool("add_to_cart", {"product_id": plan["product_id"], "qty": plan["qty"]}))
 
     usual = ok(await tool("get_usual_order", {}))
-    atta = next(line["product"]["id"] for line in usual["lines"] if line["product"]["category"] == "flours")
+    atta = next(line["product"]["id"] for line in usual["lines"] if "atta" in line["product"]["name"].lower())
     assert atta == "p-0003"
     assert (await tool("add_to_cart", {"product_id": atta, "qty": 1, "source": "usual"}))["status"] == "refused"
     confirm.on_shopper_input(rt, "हाँ, वही डाल दो")

@@ -25,6 +25,8 @@ from session_server.ports.live import LiveConfig
 log = get_logger(__name__)
 router = APIRouter()
 
+LANGUAGE_CODES = {"hi": "hi-IN", "en": "en-IN"}  # speech in and out for the chosen language
+
 BASE_VOCABULARY = ["Parle-G", "Amul", "Aashirvaad", "Milkmaid", "Nestlé", "Cadbury", "Bakers",
                    "Weikfield", "maida", "atta", "aata", "मैदा", "आटा", "पाव", "किलो"]
 
@@ -68,7 +70,7 @@ def build_adapters(settings: Settings) -> dict[str, Any]:
 
 
 @router.websocket("/v1/session")
-async def session_ws(ws: WebSocket, ticket: str = "") -> None:
+async def session_ws(ws: WebSocket, ticket: str = "", media_mode: str = "", language: str = "hi") -> None:
     settings = get_settings()
     await ws.accept()
     ui = WsUi(ws)
@@ -98,7 +100,10 @@ async def session_ws(ws: WebSocket, ticket: str = "") -> None:
         shopper = await commerce.shopper(shopper_id)
         session = Session(
             session_id=session_id, shopper_id=shopper_id, started_at=time.time(),
-            media_mode=settings.media_mode_default,
+            language=language if language in LANGUAGE_CODES else "hi",
+            # The widget's switch picks the starting mode, so we never pay for an avatar connection
+            # that is immediately switched off (cost control).
+            media_mode=media_mode if media_mode in ("avatar", "audio_only") else settings.media_mode_default,
             usage=Usage(audio_in_s=0, audio_out_s=0, video_in_s=0, tokens_in=0, tokens_out=0, est_cost_usd=0),
         )
         rt = Runtime(session=session, shopper=shopper, commerce=commerce, live=ports["live"], ui=ui,
@@ -106,8 +111,9 @@ async def session_ws(ws: WebSocket, ticket: str = "") -> None:
         usual = await commerce.last_order(shopper_id)
         vocabulary = BASE_VOCABULARY + [w for p, _ in (usual.lines if usual else []) for w in (p.name, p.local_name)]
         await rt.live.connect(LiveConfig(
-            system_instruction=build_system_instruction(shopper, session.pace),
+            system_instruction=build_system_instruction(shopper, session.pace, language=session.language),
             tools=load_tool_specs(), media_mode=session.media_mode, vocabulary=vocabulary,
+            language_code=LANGUAGE_CODES[session.language],
         ))
         convo = ConversationSession(rt, ToolRouter(rt, HANDLERS), ports["state"],
                                     translate=ports["translate"], classifier=ports["classifier"])

@@ -25,6 +25,8 @@ class Settings(BaseSettings):
     gcp_location: str = "us-central1"
     live_model: str = "gemini-3.8-live"
     flash_model: str = "gemini-2.5-flash"  # verified on talktobuy/us-central1 (3.x Flash IDs 404)
+    # Cheaper model for display-only English captions (cost control; verified on talktobuy).
+    translate_model: str = "gemini-2.5-flash-lite"
     avatar_name: str = "Kai"
     voice_name: str = "Charon"
     firestore_database: str = "(default)"
@@ -36,7 +38,8 @@ class Settings(BaseSettings):
     commerce_adapter: str = "ucp"
     # memory = in-process (local dev); firestore = Cloud Run (needs the Firestore API enabled)
     state_backend: str = "memory"
-    media_mode_default: str = "avatar"
+    # Cost control: voice + illustrated shopkeeper by default; the avatar is switched on per session.
+    media_mode_default: str = "audio_only"
 
     demo_admin_key: str = "change-me"
     ticket_signing_secret: str = "change-me-too"
@@ -47,6 +50,14 @@ class Settings(BaseSettings):
     session_cap_s: int = 600
     session_warn_s: int = 540
     payment_timeout_s: int = 120
+    # End the session after this long with no shopper activity (cost control); warn shortly before.
+    idle_timeout_s: int = 60
+    idle_warn_s: int = 50
+    # Live API context: summarise older turns early so each turn re-bills less (cost control).
+    compress_trigger_tokens: int = 16000
+    compress_target_tokens: int = 8000
+    # Products returned to the model per search (fewer tokens per turn).
+    search_limit: int = 5
 
     @property
     def gcp_ready(self) -> bool:
