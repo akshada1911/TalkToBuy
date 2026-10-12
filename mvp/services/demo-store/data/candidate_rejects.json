@@ -1,0 +1,4827 @@
+[
+ {
+  "barcode": "8904089915137",
+  "name": "Daily Health Toned Milk",
+  "reason": "health/medicine keyword in name or brand (Health)"
+ },
+ {
+  "barcode": "8906024480328",
+  "name": "Toned Milk",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906036670014",
+  "name": "Pasteurised Toned Milk",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906036675248",
+  "name": "Double Toned Milk",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906137050036",
+  "name": "Milma Pride",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8908001700184",
+  "name": "Namaste India",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906017810125",
+  "name": "Madhusudan Homogenized Toned Milk",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901826332226",
+  "name": "Verka Toned Milk Dahi",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901648095163",
+  "name": "Mother Dairy UHT Toned Milk",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "7622201761530",
+  "name": "Fruit & Nut Silk",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906032341062",
+  "name": "Milk-Ma whole wheat critters",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904124107442",
+  "name": "Family Milk Pasteurised Homogenised Standarised Milk",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901063136434",
+  "name": "Milk Bikis",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901399001666",
+  "name": "Santoor skin softening",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "7622201822163",
+  "name": "Dairy milk",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906001021063",
+  "name": "Milk",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "07200564",
+  "name": "milk",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906077122411",
+  "name": "milk",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902286041239",
+  "name": "Milk",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "7622201149437",
+  "name": "Dairy milk milk chocolate",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906033743155",
+  "name": "Orange Creams",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901725006839",
+  "name": "Aashirwad Chakki Atta 5kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8146066850127",
+  "name": "Organic Whole Wheat Chakki Atta",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902901028003",
+  "name": "Good life chakki atta 10kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901725121648",
+  "name": "Atta with Multigrains",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901063342491",
+  "name": "Atta sandwich",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904043551555",
+  "name": "Atta Shakti",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904132912977",
+  "name": "Snactac Atta noodle",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8903023270752",
+  "name": "More Atta Bread",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906020460676",
+  "name": "100% Atta Bread",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904022920648",
+  "name": "100% Atta Bread",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8905507000374",
+  "name": "Wheat atta 5kg(5)",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8905507000367",
+  "name": "Wheat atta 10kg(3)",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8905507015170",
+  "name": "Sharbati atta 1kg(10)",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8909081001567",
+  "name": "Aashirvaad Superior MP Atta",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8904150503638",
+  "name": "Pillsbury gold atta 5kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901058011067",
+  "name": "Maggi veg atta noodles",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "7001376117500",
+  "name": "glucose biscuits",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901063163331",
+  "name": "Tiger glucose biscuit",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901719128462",
+  "name": "Parle-G",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906071510016",
+  "name": "glucose D",
+  "reason": "denylisted tag en:alcoholic-beverages"
+ },
+ {
+  "barcode": "8901542001307",
+  "name": "Nycil Germ Expert Classic",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "9801998855235",
+  "name": "Glucose",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906001385783",
+  "name": "Glucose",
+  "reason": "health/medicine keyword in name or brand (Glucose C)"
+ },
+ {
+  "barcode": "8901542001765",
+  "name": "Glucon-D",
+  "reason": "health/medicine keyword in name or brand (Glucon)"
+ },
+ {
+  "barcode": "8901399084515",
+  "name": "glucose",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901542001673",
+  "name": "Glucon - D",
+  "reason": "health/medicine keyword in name or brand (Glucon)"
+ },
+ {
+  "barcode": "8901542016226",
+  "name": "Glucon-D Regular",
+  "reason": "denylisted tag en:energy-drinks"
+ },
+ {
+  "barcode": "8901207032424",
+  "name": "Glucose D",
+  "reason": "health/medicine keyword in name or brand (Glucose D)"
+ },
+ {
+  "barcode": "8901207030352",
+  "name": "Glucose c",
+  "reason": "health/medicine keyword in name or brand (Glucose c)"
+ },
+ {
+  "barcode": "8901725000295",
+  "name": "Sunfeast glucose plus+",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901652141030",
+  "name": "Biscuits",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908004010556",
+  "name": "Chand biscuits",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906033741366",
+  "name": "Digestive Biscuit",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901063164291",
+  "name": "Tiger biscuit",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "7622202013744",
+  "name": "Bournvita biscuit",
+  "reason": "health/medicine keyword in name or brand (Bournvita)"
+ },
+ {
+  "barcode": "8906075800915",
+  "name": "Fruit biscuits",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906166360328",
+  "name": "Butter Biscuits",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "7622201756741",
+  "name": "Sandwich Biscuit",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906032018810",
+  "name": "Patanjaali biscuits",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901719121432",
+  "name": "Monaco Classic Biscuits",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8904422704770",
+  "name": "Patanjali digestive biscuit",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901652140897",
+  "name": "Marie lite biscuit",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902041020431",
+  "name": "Creamy Wafer Biscuits",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901719120992",
+  "name": "Parle Monaco biscuits",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "7622201757359",
+  "name": "Bourn Vita biscuits",
+  "reason": "health/medicine keyword in name or brand (Bourn Vita)"
+ },
+ {
+  "barcode": "8901719100956",
+  "name": "Parle G",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901719125263",
+  "name": "Parle-G Kismi Dal Chini Cinnamon Biscuits",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "00996582",
+  "name": "Parle g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901719255144",
+  "name": "Parle-G",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901719120800",
+  "name": "Parle-G",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901719123900",
+  "name": "Parle g gold",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901719131219",
+  "name": "Parle g 800 g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901719123948",
+  "name": "Parle g gold 500g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901719128486",
+  "name": "Parle g rs 10",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901719128004",
+  "name": "Parle-G Oats & berries",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901719125478",
+  "name": "Parle-G gold 75g",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901719122293",
+  "name": "Parles",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901719122880",
+  "name": "Parle's wafers",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "6953774643802",
+  "name": "Parle milk",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901719702051",
+  "name": "Parle Monaco Classic Biscuit",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901719119255",
+  "name": "Parle Cafechino",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901719119026",
+  "name": "Parle Assorted Candy orange bite",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901719122637",
+  "name": "Parle happy happy (400g)",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901719118654",
+  "name": "20/20",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901719703058",
+  "name": "Krack Jack Medium Pack",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901719123276",
+  "name": "Parle Hide&seek(250g)",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901719127991",
+  "name": "Krackjack butter masala",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901719127434",
+  "name": "Parle Monaco salted",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901719120787",
+  "name": "PARLE top",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901719130724",
+  "name": "Parle 20 20 gold family pack 604.8g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901719119903",
+  "name": "Parle Top",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901719123443",
+  "name": "Kismis",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901719126505",
+  "name": "Hide and seek choco rolls",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8902579103057",
+  "name": "Frooti",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901719124044",
+  "name": "Happy Happy Choco-Chip Cookies",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901719124068",
+  "name": "Parle Rusk real elaichi",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901719703034",
+  "name": "Krack Jack Original",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901719107474",
+  "name": "Fab Bourbon Biscuit",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8905507035567",
+  "name": "Maida",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906046880694",
+  "name": "Maida",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902901001723",
+  "name": "Maida",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "6521542541270",
+  "name": "Maida",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906002342563",
+  "name": "Rajdhani Maida",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906010070243",
+  "name": "Ganesh Maida-500g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908000445055",
+  "name": "",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8908009059185",
+  "name": "Zero Maida Bread",
+  "reason": "health/medicine keyword in name or brand (Health)"
+ },
+ {
+  "barcode": "0908449459154",
+  "name": "Zero Maida Bread",
+  "reason": "health/medicine keyword in name or brand (Health)"
+ },
+ {
+  "barcode": "8908013841035",
+  "name": "Sir bhagyalakshmi maida",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "4905504002313",
+  "name": "Maida 500g (17)",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908009059246",
+  "name": "Zero Maida Protein Bread",
+  "reason": "health/medicine keyword in name or brand (Protein)"
+ },
+ {
+  "barcode": "8908009059178",
+  "name": "Super Multi Grain Bread - Zero Maida Bread",
+  "reason": "health/medicine keyword in name or brand (Health)"
+ },
+ {
+  "barcode": "8906012890221",
+  "name": "BAKERS Cocoa Powder",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901808000785",
+  "name": "WeikField Coco powder",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "7622202026263",
+  "name": "Cadbury Bournvita 200g pet",
+  "reason": "health/medicine keyword in name or brand (Bournvita)"
+ },
+ {
+  "barcode": "8904042310016",
+  "name": "Cocoa powder",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "7622201762353",
+  "name": "Cocoa",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901262130363",
+  "name": "Amul Pro Plus",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "7622202031496",
+  "name": "Cadbury Cocoa powder 150g pet",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "7622201762537",
+  "name": "Cadbury Hot Chocolate",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "7622202026683",
+  "name": "Cadbury Bournvita Shakti 75g pp",
+  "reason": "health/medicine keyword in name or brand (Bournvita)"
+ },
+ {
+  "barcode": "8901248103251",
+  "name": "Boroplus health skin",
+  "reason": "health/medicine keyword in name or brand (health)"
+ },
+ {
+  "barcode": "8908006267392",
+  "name": "Dark chocolate 55%",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "0701098222618",
+  "name": "",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901012100554",
+  "name": "John baby",
+  "reason": "denylisted tag en:non-food-products"
+ },
+ {
+  "barcode": "8904304353102",
+  "name": "Bodypower Nutrition Whey Protein",
+  "reason": "denylisted tag en:bodybuilding-supplements"
+ },
+ {
+  "barcode": "0748927060041",
+  "name": "Gold Standard 100% Whey Extreme Milk Chocolate Flavour",
+  "reason": "denylisted tag en:bodybuilding-supplements"
+ },
+ {
+  "barcode": "8902420000160",
+  "name": "ANS Next Gen Whey",
+  "reason": "denylisted tag en:bodybuilding-supplements"
+ },
+ {
+  "barcode": "8906143891753",
+  "name": "Whey Protein Cold Coffee",
+  "reason": "denylisted tag en:bodybuilding-supplements"
+ },
+ {
+  "barcode": "5059883417059",
+  "name": "",
+  "reason": "denylisted tag en:bodybuilding-supplements"
+ },
+ {
+  "barcode": "8998666003027",
+  "name": "Cafe Blend",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906067021199",
+  "name": "Whey Protein - rich milk chocolate flavour",
+  "reason": "health/medicine keyword in name or brand (Whey)"
+ },
+ {
+  "barcode": "8906059343612",
+  "name": "Maxn Whey Protein",
+  "reason": "health/medicine keyword in name or brand (Whey)"
+ },
+ {
+  "barcode": "8906001025146",
+  "name": "Avvatar Alpha Whey Belgian Chocolate",
+  "reason": "health/medicine keyword in name or brand (Whey)"
+ },
+ {
+  "barcode": "5060746508470",
+  "name": "MyProtein Impact Whey Protein - Coffee Caramel",
+  "reason": "health/medicine keyword in name or brand (Protein)"
+ },
+ {
+  "barcode": "8906116956571",
+  "name": "Muscleblaze Biozyme Whey",
+  "reason": "health/medicine keyword in name or brand (Whey)"
+ },
+ {
+  "barcode": "8906088702398",
+  "name": "Colombian Brew Coffee 3 in 1 Premix Nutty Hazelnut",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8904221699383",
+  "name": "asitis",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "0748927066692",
+  "name": "Whey",
+  "reason": "health/medicine keyword in name or brand (Whey)"
+ },
+ {
+  "barcode": "8906143891760",
+  "name": "protein powder",
+  "reason": "health/medicine keyword in name or brand (protein)"
+ },
+ {
+  "barcode": "0748927066012",
+  "name": "performance whey",
+  "reason": "health/medicine keyword in name or brand (whey)"
+ },
+ {
+  "barcode": "0941038897487",
+  "name": "nan pro formula milk nestle",
+  "reason": "denylisted tag en:baby-foods"
+ },
+ {
+  "barcode": "6627208398698",
+  "name": "Dairy milk",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "7622201762063",
+  "name": "Dairy milk chocolate",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "7622201138363",
+  "name": "Dark 70%",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "6348042025426",
+  "name": "Dairy Milk CHOCOLATE",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "7622201762476",
+  "name": "Dairy Milk Minis",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "7622201138424",
+  "name": "",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "5050001665550",
+  "name": "Rage Coffee Silk Blend Instant Coffee Powder",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901058011401",
+  "name": "Nescafe Ice Roast",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8905507002729",
+  "name": "Peanut butter Crunchy",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8908004415054",
+  "name": "Crunchy Nutty Peanut Butter",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8904083525585",
+  "name": "24 Mantra Organic",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906002008544",
+  "name": "Dr. Oetker Funfoods Peanut Butter",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8908010900056",
+  "name": "Peanut butter",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901512881106",
+  "name": "Peanut Butter Regular",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901512935304",
+  "name": "Peanut butter",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906069401104",
+  "name": "VEEBA CREAMY PEANUT BUTTER",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906050581143",
+  "name": "Peanut butter",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906143891302",
+  "name": "The Whole Truth High Protein Peanut Cocoa",
+  "reason": "denylisted tag en:bodybuilding-supplements"
+ },
+ {
+  "barcode": "8906067026996",
+  "name": "Protein Peanut Butter",
+  "reason": "health/medicine keyword in name or brand (Protein)"
+ },
+ {
+  "barcode": "8906143890053",
+  "name": "Unsweetened Peanut Butter",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8902433005787",
+  "name": "Galaxy Milk Chocolate Smooth Milk",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8902433003707",
+  "name": "galaxy milk chocolate smooth milk",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "0760412594794",
+  "name": "Milk rusk",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908014814038",
+  "name": "Milk Bread",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906036675163",
+  "name": "Milk Peda",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901063035027",
+  "name": "Milk Bikis",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906009220598",
+  "name": "Nutrifud Rich Milk milk cake",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901063012516",
+  "name": "Milk Bikis",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "7622201150181",
+  "name": "Dairy Milk",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906024480175",
+  "name": "Dodla milk",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901719128325",
+  "name": "Milk Shakti",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "0031290721818",
+  "name": "Milk chocolate",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "7622201440046",
+  "name": "dairy milk",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901058005509",
+  "name": "Nescafe Sunrise",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901058826784",
+  "name": "Nescafe classic",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901058004748",
+  "name": "Classic",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901030478673",
+  "name": "Bru Instant",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901120143771",
+  "name": "Sugar free gold",
+  "reason": "health/medicine keyword in name or brand (Sugar free)"
+ },
+ {
+  "barcode": "8901120143139",
+  "name": "Sugar free mature 300 p pet",
+  "reason": "health/medicine keyword in name or brand (Sugar free)"
+ },
+ {
+  "barcode": "8901548431009",
+  "name": "Sugar free green",
+  "reason": "health/medicine keyword in name or brand (Sugar free)"
+ },
+ {
+  "barcode": "4411183387677",
+  "name": "Sugar free natura",
+  "reason": "health/medicine keyword in name or brand (Sugar free)"
+ },
+ {
+  "barcode": "8901548430033",
+  "name": "Sugar free natura sweet drops",
+  "reason": "health/medicine keyword in name or brand (Sugar free)"
+ },
+ {
+  "barcode": "0639277143303",
+  "name": "Hard Candy",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901928292008",
+  "name": "Sugar free",
+  "reason": "health/medicine keyword in name or brand (Sugar free)"
+ },
+ {
+  "barcode": "4901229202755",
+  "name": "Biskfram sugar free",
+  "reason": "health/medicine keyword in name or brand (sugar free)"
+ },
+ {
+  "barcode": "8901120143733",
+  "name": "Sugar Free Gold No.1",
+  "reason": "health/medicine keyword in name or brand (Sugar Free)"
+ },
+ {
+  "barcode": "8908007127060",
+  "name": "Sugar Free Strawberry cookies",
+  "reason": "health/medicine keyword in name or brand (Sugar Free)"
+ },
+ {
+  "barcode": "8901764032707",
+  "name": "Sprite",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901063026278",
+  "name": "Nutri Choice Sugar Free Crackers",
+  "reason": "health/medicine keyword in name or brand (Sugar Free)"
+ },
+ {
+  "barcode": "8902901029604",
+  "name": "Sugar",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902929009688",
+  "name": "Miltop Jaggery Powder",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901764112270",
+  "name": "Coca Cola Zero Sugar",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901571010370",
+  "name": "",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906006853867",
+  "name": "Sweet cream vanilla",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906098831224",
+  "name": "bajra chips",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901207014147",
+  "name": "Coconut Milk",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901030825545",
+  "name": "Horlicks Protein Plus Vanilla Flavour",
+  "reason": "health/medicine keyword in name or brand (Horlicks)"
+ },
+ {
+  "barcode": "5060709740343",
+  "name": "",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908024057104",
+  "name": "Hazelnut chocolate Laddoos",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906131680635",
+  "name": "Berry Crunch",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906084560022",
+  "name": "Ragi with oats biscuits",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906143891296",
+  "name": "The Whole Truth Coffee Cocoa",
+  "reason": "denylisted tag en:bodybuilding-supplements"
+ },
+ {
+  "barcode": "8908020710102",
+  "name": "Coffee Fudge",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "0787099828059",
+  "name": "",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0731788453046",
+  "name": "",
+  "reason": "denylisted tag en:bodybuilding-supplements"
+ },
+ {
+  "barcode": "8908019333008",
+  "name": "Chocolate Flavour Collgen",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901220004774",
+  "name": "",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901030824913",
+  "name": "Mother horlicks 500 g",
+  "reason": "health/medicine keyword in name or brand (horlicks)"
+ },
+ {
+  "barcode": "8901725008307",
+  "name": "",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904132954885",
+  "name": "Campa",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901764022272",
+  "name": "Fanta Orange Flv 750ml",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906017291429",
+  "name": "Limonata",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8908000589391",
+  "name": "Fizz Jeera Masala",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906017290774",
+  "name": "Soda",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906017291412",
+  "name": "Spyci",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901764042805",
+  "name": "Thums Up",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8902080104055",
+  "name": "Pepsi Drink 750ml",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "89000564",
+  "name": "Coca Cola",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8902080304349",
+  "name": "7up 2.25",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8904132992313",
+  "name": "Campa Cola",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904132948174",
+  "name": "Campa (cola) 500ml pet",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8902080001156",
+  "name": "Pepsi",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901764012501",
+  "name": "Coke Brand Coca Cola 2ltr",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8902080104024",
+  "name": "Pepsi cola",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8902080304028",
+  "name": "7up lemon 250ml",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901764132919",
+  "name": "Fanta Apple Delite",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906017291542",
+  "name": "Rev",
+  "reason": "denylisted tag en:energy-drinks"
+ },
+ {
+  "barcode": "8901396381808",
+  "name": "Billers Soda",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "3948764012914",
+  "name": "Cocacola zero",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8902080001286",
+  "name": "Pepsi black",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901764012273",
+  "name": "Coca Cola Coke Brand 750ml",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901012350041",
+  "name": "ORSL Plus Electrolyte Drink Orange",
+  "reason": "denylisted tag en:energy-drinks"
+ },
+ {
+  "barcode": "3948764061257",
+  "name": "Diet coke",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904132952607",
+  "name": "Campa cola 2ltr pet",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901764042300",
+  "name": "Thums Up  (Coca-Cola)",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901764041259",
+  "name": "Thums Up 300ml can",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8902080285020",
+  "name": "Pepsi Cola Zero Sugar 250ml Can",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901764112706",
+  "name": "Coca Cola Zero",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8902080001293",
+  "name": "Black",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901764111259",
+  "name": "Coca cola zero sugar 300ml",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901764061257",
+  "name": "Diet Coke Can 250ml",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "3948764311253",
+  "name": "",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901764052309",
+  "name": "Linca",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "3948764052910",
+  "name": "Limca",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8902080002283",
+  "name": "7up",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "3948764022913",
+  "name": "fanta coca cola",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8902080304561",
+  "name": "7 up",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906000211007",
+  "name": "Oven cake mix",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901764042911",
+  "name": "Thums up",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901764012471",
+  "name": "Coke",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8902080105021",
+  "name": "Pepsi Cola 250ml Can",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904132949775",
+  "name": "Campa Lemon Flv 1ltr",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8902080364084",
+  "name": "Mountain Dew",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901764102912",
+  "name": "Rim Zim",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901764042508",
+  "name": "Coke Brand Thumbs up 2ltr",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906151150545",
+  "name": "Zeera Masala Soda",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906049972433",
+  "name": "Sudha Shakti Milk",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "7622201758042",
+  "name": "Dairy Milk Silk Minis",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901233030548",
+  "name": "Cadbury Dairy Milk",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906036672995",
+  "name": "Slim UHT Sterilised Skimmed Milk",
+  "reason": "health/medicine keyword in name or brand (Slim)"
+ },
+ {
+  "barcode": "8904258701547",
+  "name": "Almond Milk",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906036676290",
+  "name": "Santhrupthi Milk",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901725121143",
+  "name": "Aashirvaad whole wheat atta",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901725007911",
+  "name": "Aashirvaad Select Sharbati Atta",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "51012370",
+  "name": "FC ragi atta 500g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "51012304",
+  "name": "FC rice atta (9)",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8905507015217",
+  "name": "Sharbati atta 5(1)",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906049492634",
+  "name": "Thoughtful Organic Whole Wheat",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "59464723",
+  "name": "Babies",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8908002288339",
+  "name": "Sooji",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901725121754",
+  "name": "Aashirvaad",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906038500074",
+  "name": "Wheat flour",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906081810083",
+  "name": "manchurian rings",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906032018919",
+  "name": "Nutrela Soya mini chunks",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901030976179",
+  "name": "Horlicks Classic Malt",
+  "reason": "denylisted tag en:dietary-supplements"
+ },
+ {
+  "barcode": "8939108804864",
+  "name": "Whole Wheat Chapati",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0787099827861",
+  "name": "whole wheat bread",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906020580138",
+  "name": "Whole Wheat Chapati",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904043551548",
+  "name": "Whole Wheat Bread",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8903000364073",
+  "name": "Besan",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906039390100",
+  "name": "Besan",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904132918214",
+  "name": "Besan Ladoo",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904132925434",
+  "name": "Besan ladu",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906055440278",
+  "name": "Organic besan",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906010070465",
+  "name": "Ganesh Besan-500g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8905507002347",
+  "name": "Besan 500g(20)",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906009073163",
+  "name": "swaadesi ghee besan laddoo",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "2000000146048",
+  "name": "AMARA",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906042151101",
+  "name": "Rice Vermicelli",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906080349652",
+  "name": "Murmura, Kurmura",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906142950956",
+  "name": "Rice pappad",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8905532000400",
+  "name": "Bharat Rice",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906007283205",
+  "name": "Fortune biryani spe basmati rice 1 kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904083504870",
+  "name": "24 Mantra Puffed Rice",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8904049650580",
+  "name": "Riz basmati",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901047001055",
+  "name": "Riz basmati",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901537074415",
+  "name": "Sona Masoori Rice",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901537078314",
+  "name": "Biryani Kit Lucknowi",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906022620115",
+  "name": "rice bran oil",
+  "reason": "health/medicine keyword in name or brand (health)"
+ },
+ {
+  "barcode": "8906031311424",
+  "name": "Rice bran oil",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "0089686018011",
+  "name": "Mi Instant Sarimi Isi 2",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901552023450",
+  "name": "Chana Pulao",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906008811766",
+  "name": "Punjabi Khichdi",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904082761007",
+  "name": "Rice flour",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0690225101127",
+  "name": "Basmati rice (raw)",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "4901135025127",
+  "name": "Dawat super basmati rice 1 kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901537077669",
+  "name": "Devaaya biryani basmati rice 1 kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0940947025127",
+  "name": "Dawat super basmati rice 1 kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902901034226",
+  "name": "GL biryani basmati rice 1 kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906007287883",
+  "name": "Fortune rozana basmati rice 1 kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906007282475",
+  "name": "Fortune super basmati rice 1 kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901537007123",
+  "name": "Dwt rozana supr basmati rice 1 kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0926997283205",
+  "name": "Fortune biryani spe basmati rice 1 kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906008814095",
+  "name": "Kohinoor ex lng basmati rice 1 kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0690225305754",
+  "name": "IG daily pri basmati rice 1 kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "02412418",
+  "name": "Organic tattva white basmati rice 1 kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906007289504",
+  "name": "Fortune biryani classic prim basmati rice 1 kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0000151009660",
+  "name": "Primium basmati 1kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "151009660",
+  "name": "Primium basmati 1kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906055440513",
+  "name": "Poha",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904132946323",
+  "name": "Masti Oye Poha",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8904043904061",
+  "name": "Tata Sampann Poha",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901725114015",
+  "name": "Aashirvaad Instant Khatta Meetha Poha",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906082650138",
+  "name": "Athavale's Patal Poha Chivada (Indian Snack)",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8908003744261",
+  "name": "suji",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906020461185",
+  "name": "Suji Rusk",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906037060012",
+  "name": "Suji Rusk",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906055440261",
+  "name": "Organic Suji",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8908002979930",
+  "name": "Suji Ravva SRILALITHA",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8908013841004",
+  "name": "BL Roasted Suji",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908014694012",
+  "name": "BL Bansi Suji",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904293726918",
+  "name": "Classic Suji / Rawa",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904293726925",
+  "name": "Flipkart Grocery Classic Suji / Rawa",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901725001063",
+  "name": "Aashirvaad Double Roasted Suji Rava",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8905507001425",
+  "name": "First crop Suji bake Rusk(200g)",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "305000002015062",
+  "name": "dal moth",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901721011233",
+  "name": "Moong Dal",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901414001190",
+  "name": "Moong Dal",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904004403725",
+  "name": "Moong Dal",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906010500559",
+  "name": "Mung Dal",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904004403718",
+  "name": "Moong Dal",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8908007811068",
+  "name": "Moong Dal",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904083505808",
+  "name": "Tur dal",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904004403800",
+  "name": "Moong dal",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901047816208",
+  "name": "Dal makhani",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8905507002248",
+  "name": "Chana dal 1kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904063252388",
+  "name": "Moong Dal Burfi",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8907592000598",
+  "name": "Organic Arhar Dal",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8904156707320",
+  "name": "Maiyas Moong Dal",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8908005080305",
+  "name": "Manpasand Tarka Dal",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904109443107",
+  "name": "Patanjali Moong Dal",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906055440001",
+  "name": "Organic Tur dal",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904112704455",
+  "name": "Durga moong dal",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902901224610",
+  "name": "GL chana dal 1kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906010500221",
+  "name": "Balaji Wafers Mung Dal",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904162939852",
+  "name": "GL unp chana dal",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8905507002125",
+  "name": "Arhar dal 2kg(10)",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8905507025186",
+  "name": "Mix dal 500g(2)",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906158650123",
+  "name": "Rabgrace chana dal 350g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "18902901224726",
+  "name": "GL Toor dal 500G",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904132932913",
+  "name": "GL unpo toor dal 1kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902901011685",
+  "name": "Good life toor dal 2kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902901221930",
+  "name": "Best farms toor dal 1 kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902901224672",
+  "name": "GL moong dal 500g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902901224665",
+  "name": "GL moong dal 1kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906090573641",
+  "name": "Too Yumm Moong Dal",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8902901225181",
+  "name": "Moong dal whole 500g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906069610247",
+  "name": "Jolliz Salty Chunks Moong Dal",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8904132932876",
+  "name": "GL unpo moong dal 500g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902901225068",
+  "name": "GL moong dal chilka 500gm",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904043926322",
+  "name": "Tata smp unpo moong dal 500g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904132932920",
+  "name": "GL unpo moong dal 1 kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906055440728",
+  "name": "Organic tattva moong dal yellow split 1kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904043926520",
+  "name": "Tata smp unpo moong dal chilka 500g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906055440018",
+  "name": "Organic moong green dal 500g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904117900067",
+  "name": "Pro nature Moong Whole dal",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904132966963",
+  "name": "Whl moong",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "4907748011014",
+  "name": "Moong Papad",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901441014019",
+  "name": "Moong papad",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0000151009697",
+  "name": "Moong whole 500g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "151009697",
+  "name": "Moong whole 500g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0000151013261",
+  "name": "Chana bomay",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "151013261",
+  "name": "Chana bomay",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904132929630",
+  "name": "Roasted chana",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8905507002231",
+  "name": "Brown chana",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904043926308",
+  "name": "Kala chana",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908012214106",
+  "name": "Adya Chana Sattu",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906005910578",
+  "name": "Aakash Hing Chana",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8904970596474",
+  "name": "Sprouts Chana Brown",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901042954875",
+  "name": "Matt chana masala",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906078180403",
+  "name": "Dnv chana papad",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906066993879",
+  "name": "Masala Roasted Chana",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902901224627",
+  "name": "GL chana dal 500g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902901029840",
+  "name": "Pulses kabuli chana 2kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906055440124",
+  "name": "Organic chana dal 500g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902901039795",
+  "name": "Pulses brown chana 2kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "151012425",
+  "name": "Hara chana 500g (14)",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8905507020457",
+  "name": "Chana brown 1kg (6)",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "4902607224918",
+  "name": "GL kabuli chana 1kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8002901124917",
+  "name": "GL kabuli chana 1kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906062861387",
+  "name": "Brij roasted chana 400g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8903363000002",
+  "name": "Dmart Premia Yellow Chana",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8905507024721",
+  "name": "Chana brown 500g (18)",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902901224917",
+  "name": "GL kabuli chana 1kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901192223111",
+  "name": "Rajma masala",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8905507025087",
+  "name": "Rajma red",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901786540501",
+  "name": "Everest Rajma Masala",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0000891224696",
+  "name": "Rajma chitra 500g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "00891224696",
+  "name": "Rajma chitra 500g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904132919303",
+  "name": "Desi kitchen rajma masala",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0000927002217",
+  "name": "Rajma chitra 1kg(10)",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0000151009701",
+  "name": "Rajma chitra 1kg (10)",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902901225082",
+  "name": "Good life rajma chitra",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0013508818527",
+  "name": "GL rajma chitra 500g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902901011722",
+  "name": "Pulses rajma chitra 2kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904004442816",
+  "name": "Minute Khana Rajma Raseela",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902901224856",
+  "name": "Good life rajma sharmli",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "151009701",
+  "name": "Rajma chitra 1kg (10)",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8905507002217",
+  "name": "Pulses rajma chitra 1kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0945927402257",
+  "name": "Pulses Rajma chitra 1kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902901224696",
+  "name": "GL rajma chitra 500g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0000140001756",
+  "name": "Aa Unbranded Rajma Chitra 500g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "140001756",
+  "name": "Aa Unbranded Rajma Chitra 500g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "120000564",
+  "name": "AA Unbranded Rajma Chitra-200g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901537077485",
+  "name": "Daawat Cuppa Rice Rajma Chawal",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0000140000371",
+  "name": "Aa Umbranded Rajma Chitra -1Kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "140000371",
+  "name": "Aa Umbranded Rajma Chitra -1Kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904043926681",
+  "name": "Tata Sampann Rajma(Chitra)-500g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901248270212",
+  "name": "Emami Healthy & Tasty Refined Sunflower Oil",
+  "reason": "health/medicine keyword in name or brand (Health)"
+ },
+ {
+  "barcode": "8901296042175",
+  "name": "Sunflower oil",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901088155458",
+  "name": "Saffola Gold",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906008811902",
+  "name": "Pro Immunity Multi-source Edible Oil",
+  "reason": "health/medicine keyword in name or brand (Immun)"
+ },
+ {
+  "barcode": "8908000120280",
+  "name": "Safal premium sunflower oil",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "6926858900948",
+  "name": "",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906006330726",
+  "name": "Natural fresh Acti-lite refined soybean oil",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906090574198",
+  "name": "Namkeen Bikaneri Bhujia",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901030844799",
+  "name": "Liril",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8480024754288",
+  "name": "Barritas de platano y chocolate",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901089010763",
+  "name": "SevenSeas Original Cod-liver Oil Capsules",
+  "reason": "health/medicine keyword in name or brand (Capsule)"
+ },
+ {
+  "barcode": "8906132692354",
+  "name": "Cod Liver Oil",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906007280037",
+  "name": "Fortune Soya Health Refined Oil",
+  "reason": "health/medicine keyword in name or brand (Health)"
+ },
+ {
+  "barcode": "3336590080045",
+  "name": "Huile D'olive  Vierge extra",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906004620256",
+  "name": "Kachi Ghani Mustard Oil",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8908007766030",
+  "name": "Train Marka Mustard Oil",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8908008717031",
+  "name": "Saloni Kacchi Ghani Mustard Oil",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901248270298",
+  "name": "Emami Healthy & Tasty Mustard Oil",
+  "reason": "health/medicine keyword in name or brand (Health)"
+ },
+ {
+  "barcode": "8906020930124",
+  "name": "ENGINE BRAND KACHI GHANI MUSTARD OIL GRADE 1",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906007280990",
+  "name": "Fortune mustard oil 5ltr",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8943440002833",
+  "name": "Dhara mustard oil 1ltr",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908017902008",
+  "name": "kacchi ghani mustard oil",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906004620287",
+  "name": "Dhara mustard oil 5ltr",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902901028324",
+  "name": "Good life Mustard oil 5ltr",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906035030758",
+  "name": "freedom kachi ghani mustard oil",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "3258831003982",
+  "name": "Dijon Mustard",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904293728776",
+  "name": "Mustard",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904293701922",
+  "name": "Mustard (Rai Big)",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8903363003485",
+  "name": "Rai Small",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904288601855",
+  "name": "Mustard sauce",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8902901222838",
+  "name": "Mustard fine",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901440043058",
+  "name": "Eastern Mustard",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "0544000015034",
+  "name": "Dijon Mustard",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906112480544",
+  "name": "Desi Ghee",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906001727026",
+  "name": "Desi Ghee",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906016414058",
+  "name": "Ghee",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "5909449414056",
+  "name": "Ghee",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8908010819044",
+  "name": "Vastu Ghee",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8908000655201",
+  "name": "Udhaya Krishna Ghee",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8908010012452",
+  "name": "Sudarshan Agmark Cow Ghee",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "3031336700026",
+  "name": "",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906016781129",
+  "name": "Desi Ghee",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901725111625",
+  "name": "Aashirvaad svasti",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904076000037",
+  "name": "Ghee",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908004203033",
+  "name": "Ghee",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908007836504",
+  "name": "ghee",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8849442891171",
+  "name": "Ghee",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "7560102886504",
+  "name": "ghee",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906001025559",
+  "name": "Govardhan ghee",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906069960601",
+  "name": "Sanchi ghee",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906036670977",
+  "name": "Nandini Paneer",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901262180429",
+  "name": "High Protein Paneer",
+  "reason": "health/medicine keyword in name or brand (Protein)"
+ },
+ {
+  "barcode": "8901781000147",
+  "name": "Sunrise paneer butter masala",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901725113186",
+  "name": "Paneer Makhni",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908001631211",
+  "name": "Kpn mtp",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904063257468",
+  "name": "Paneer onion paratha",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906107170191",
+  "name": "Momos Vegetable and Paneer",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908002515046",
+  "name": "kalimark vibro paneer",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906020580978",
+  "name": "Paneer Paratha By iD",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "4025839033827",
+  "name": "",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8904063211392",
+  "name": "Fried Rice with Chilli Paneer",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902167001116",
+  "name": "SHAHI PANEER MASALA mdh",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901014012619",
+  "name": "Cup noodle paneer  butter masala",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904256723015",
+  "name": "Happychef Tandoori Paneer Tikka Pizza",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901414008649",
+  "name": "Bikano paneer bhujia 250g(10)",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8905507002880",
+  "name": "Imli tree authentic paneer masala 100g(6)",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "9017761826474",
+  "name": "Curd Chilly",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8908010694078",
+  "name": "Curd",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904057395503",
+  "name": "Hatsun Curd",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906016413259",
+  "name": "Jersey Curd",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906017815656",
+  "name": "Madhusudan Curd",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906036670205",
+  "name": "Nandini Curd",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8904089993159",
+  "name": "Total Curd",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904057397101",
+  "name": "Hatsun Curd",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906023649832",
+  "name": "Thirumala Curd",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8908007653095",
+  "name": "Rachana Curd Chillies",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904083306085",
+  "name": "Milky Mist Curd",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901648001546",
+  "name": "Mother Dairy Curd",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8939108857716",
+  "name": "Golden Hill Curd",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8904405902452",
+  "name": "Karimnagar Dairy Curd",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904083303152",
+  "name": "Milky Mist CurD",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "0084226303152",
+  "name": "Milky Mist Curd",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8908000233058",
+  "name": "Iyer's Curd Chillies Papad",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908002787023",
+  "name": "Tofu",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908003398006",
+  "name": "",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908001927116",
+  "name": "Tofu",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908000231016",
+  "name": "Mozzarella",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901648092667",
+  "name": "Cheese Cubes",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901063401136",
+  "name": "Cheese Slices",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901262020305",
+  "name": "Amul Cheese",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901565001322",
+  "name": "Cheese Balls",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906064651474",
+  "name": "Cheesy Sauce",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901063401198",
+  "name": "Cheese Block",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906000610909",
+  "name": "Potato Cheese Shotz",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901063410312",
+  "name": "The Laughing Cow",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904083310136",
+  "name": "Milky Mist Cheese Slice",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906010090593",
+  "name": "Natural Cheddar slices",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901063401457",
+  "name": "Britannia Cheese",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904083310112",
+  "name": "Cheese Slice",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908005583189",
+  "name": "cheese balls",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "0946450090775",
+  "name": "",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901058847482",
+  "name": "Maggie Pazzta Chese Macaroni",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901058002997",
+  "name": "Pazzta mashroom",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901058003000",
+  "name": "Pazzta Cheese Macaroni",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0230826705517",
+  "name": "Britannia cheese spread",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906069400473",
+  "name": "Cheese and Jalapeno dip",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901725135201",
+  "name": "yippeei pasta cheese",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901052010615",
+  "name": "Premium",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904132917651",
+  "name": "Tea bags 100% Assam Tea",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8904132917675",
+  "name": "Green Tea",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901052005154",
+  "name": "Gold Care",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904132917682",
+  "name": "Green Tea Honey and Lemon",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906153090467",
+  "name": "Blue Tea Chamomile Flower Herbal Tea",
+  "reason": "health/medicine keyword in name or brand (Herbal)"
+ },
+ {
+  "barcode": "8901764952029",
+  "name": "Honest Tea with organic green tea Mango flavoured",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901052000913",
+  "name": "Gold",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901030577697",
+  "name": "Lipton green tea honey lemon",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8908000339361",
+  "name": "Karak tea",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901052000722",
+  "name": "TATA TEA premium desh ki chai",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901030681530",
+  "name": "Tea bags",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901052031504",
+  "name": "Kanan Devan Strong",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906069840392",
+  "name": "Adrak Elaichi Chai Tea",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901052004034",
+  "name": "Gold",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901052087594",
+  "name": "GREEN TEA Classic",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901030779312",
+  "name": "Lipton Green Tea",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901030722059",
+  "name": "Taj Mahal",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "0801541100507",
+  "name": "Tulsi Original",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "1947445003809",
+  "name": "Green tea honey lemon",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901747003854",
+  "name": "Shudh kahwa green tea",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901030684777",
+  "name": "Green Tea (honey lemon flavour)",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901052087617",
+  "name": "Tetley green tea ginger mint",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8903754000840",
+  "name": "Tata Coffee Grand Cold Coffee Belgian Chocolate",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "5059603179342",
+  "name": "Original",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901036173459",
+  "name": "Continental Xtra 200g Jar | Instant Coffee | South Indian Blend with Chicory",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901030625381",
+  "name": "bru coffee",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901090326051",
+  "name": "Coffee Grand Premium",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901030535895",
+  "name": "Bru Instant Coffee",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901058012149",
+  "name": "sunrise coffee",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901058007169",
+  "name": "Nescafe Classic Instant coffee",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901030774980",
+  "name": "Bru Green Label",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "89009949",
+  "name": "Nescafe Classic Instant coffee",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901036163351",
+  "name": "Continental Xtra Coffee Powder",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901090328109",
+  "name": "Tata Coffee Grand Classic",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906001141006",
+  "name": "Mysore Royal",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "5059603179281",
+  "name": "Rage Coffee Dark Chocolate",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901058016055",
+  "name": "Nescafe Classic Instant Coffee",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901037033448",
+  "name": "Girnar Instant Coffee Premix",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8908014388034",
+  "name": "Filter Coffee Liquid Brew",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901090328574",
+  "name": "Tata Coffee Grand Classic",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "89008430",
+  "name": "Nescafe Iced Latte",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "0710859306245",
+  "name": "Yum Nuts Roasted & Salted",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "0003839068890",
+  "name": "Roasted & Salted Pistachios",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906005670427",
+  "name": "Salted Peanuts",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8908013338795",
+  "name": "SENDHA NAMAK",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8908002937237",
+  "name": "Heem Rock Salt",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8908003080437",
+  "name": "Khari Sing",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8902901049718",
+  "name": "Good Life Pista Roasted & Salted",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "1111104081983",
+  "name": "CRYSTAL STAR",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906090575539",
+  "name": "",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906098670076",
+  "name": "PERI PERI THRILLER POPCORN",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "6001069206581",
+  "name": "Potato Chips Salt & Vinegar Flavour",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8908006666034",
+  "name": "Pistachios",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904004404630",
+  "name": "salted peanuts",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904063253842",
+  "name": "Salted peanuts",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904146309879",
+  "name": "Iodized Salt",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901063017634",
+  "name": "Britannia 5050",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "17139168",
+  "name": "Roasted Peanut",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904067709857",
+  "name": "Roasted peanuts",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904422701106",
+  "name": "Patanjali black salt",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906021061209",
+  "name": "cashews blissfully salted",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906030680415",
+  "name": "Gurujee fryums salt",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908012731535",
+  "name": "Mount Rock Salt",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901314009067",
+  "name": "Colgate ACTIVE SALT",
+  "reason": "denylisted tag en:non-food-products"
+ },
+ {
+  "barcode": "8901786425006",
+  "name": "Turmeric",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906002080038",
+  "name": "Sakthi Turmeric Powder",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8908003032139",
+  "name": "Kitchen treasures Turmeric Powder",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8904209322937",
+  "name": "",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8902901222241",
+  "name": "Turmeric powder",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901748000043",
+  "name": "RUCHI Turmeric Powder",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902901222210",
+  "name": "Good life turmeric powder",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901138711962",
+  "name": "Himalaya neem & turmeric soap",
+  "reason": "denylisted tag en:non-food-products"
+ },
+ {
+  "barcode": "8902901222272",
+  "name": "Good life turmeric power",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904083515241",
+  "name": "24 Mantra Turmeric powder 200g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901399005305",
+  "name": "SANTOOR Skin Moisturising Sandal & Turmeric",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8903227023055",
+  "name": "Agmark Chilli Powder Grade: Standard",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904209304087",
+  "name": "Chilli Powder",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906002080144",
+  "name": "CHILLI POWDER",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8905507000985",
+  "name": "Red chilli powder",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902901222197",
+  "name": "Good life chilli powder",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902901222258",
+  "name": "Good life chilly powder",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902167001284",
+  "name": "KASHMIRI CHILLI POWDER mdh",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "6001941222258",
+  "name": "Good life chilly powder",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904132919242",
+  "name": "Desi kitchen Idli Chilli powder",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904043927220",
+  "name": "Tata Sampanna Chilli Powder -200g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "990082090193190001",
+  "name": "just mix idly chilli powder",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "4904839949256",
+  "name": "Independence red chilli powder 200g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904083503972",
+  "name": "24 Mantra chilly powder 200g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8905507020655",
+  "name": "Imli tree red chilli powder 500g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901786410507",
+  "name": "Kashmirilal",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901042970417",
+  "name": "Garam masala",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901192216113",
+  "name": "Garam masala",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906021121149",
+  "name": "garam masala",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901781000109",
+  "name": "Sunrise garam masala",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901774002370",
+  "name": "Badshah panjabi garam masala",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906049670636",
+  "name": "Masala",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901042954721",
+  "name": "Sambar Powder",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901491503020",
+  "name": "masala",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8904004403671",
+  "name": "Shing Bhujia",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906111540492",
+  "name": "Chips Mix Masala",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8908008820052",
+  "name": "Masala peanut",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906019350339",
+  "name": "Peanut masala",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8868504111507",
+  "name": "MADHOOTH MASALA",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906010366575",
+  "name": "Masala Pori",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901595863051",
+  "name": "Pasta Masala",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901786650101",
+  "name": "Pasta masala",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906078720890",
+  "name": "Masala Ponga",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906030680422",
+  "name": "Fryrums Masala",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901192108128",
+  "name": "Jeera pwdr",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908002026467",
+  "name": "Jeera Special",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906005671820",
+  "name": "Jeera Khakhra",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904103336306",
+  "name": "Active Jeera",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908023922021",
+  "name": "Jodhpuri Jeera",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906040411542",
+  "name": "Jal jeera",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901781000369",
+  "name": "Sunrise jeera powder",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908000589292",
+  "name": "Fizz Jeera Masala",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904063253415",
+  "name": "Roasted Chana Cracker Heeng Jeera",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8908012768043",
+  "name": "R M Maharaj Kaka Jeera",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8905507019482",
+  "name": "Roasted jeera powder 100g(20)",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906159660589",
+  "name": "Dehaat Honest Cumin jeera whole",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901063026209",
+  "name": "Sugar Free Cracker Nature spice Jeera & Ajwain",
+  "reason": "health/medicine keyword in name or brand (Sugar Free)"
+ },
+ {
+  "barcode": "7622201756789",
+  "name": "Oreo Strawberry Biscuit",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906032019664",
+  "name": "Aarogya Multigrain Biscuits",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901063012615",
+  "name": "Milk bikies biscuit",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901725002206",
+  "name": "5-Grain Digestive High Fibre",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906065030131",
+  "name": "Karachi Biscuits Fruit Almond",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "7622201756918",
+  "name": "Cadbury Oreo Vanilla 481.25g",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901063093089",
+  "name": "Good day Cashew",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901063164321",
+  "name": "Tiger Kreemz Orange",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906033742455",
+  "name": "Digestive",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906009535159",
+  "name": "7 Grain Breakfast Cookie Choco Almond",
+  "reason": "health/medicine keyword in name or brand (Protein)"
+ },
+ {
+  "barcode": "8901063155459",
+  "name": "Tiger Krunch ChocoChips",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "4901265161429",
+  "name": "Pure Magic Chocolush",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901725013882",
+  "name": "Super Millets Cookies",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8902335011190",
+  "name": "butter crunch cookies",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "7622201098971",
+  "name": "Chocobakes",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904022910205",
+  "name": "Americana Coconut Cookies",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906009073958",
+  "name": "Unibic Coconut Cookies",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8993175549387",
+  "name": "Nextar Soft Brownies",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901063029316",
+  "name": "Jimjam pops",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906009077420",
+  "name": "Pineapple cookies (sugar free)",
+  "reason": "health/medicine keyword in name or brand (sugar free)"
+ },
+ {
+  "barcode": "8906009072678",
+  "name": "Unibic Choco nut Cookies",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901063093393",
+  "name": "Good day cashew cookies",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906009077277",
+  "name": "Butter cookies",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906009070520",
+  "name": "UNIBIC Orange Splash Cookies",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906009533148",
+  "name": "Max Protein GrainBreakfast Cookie",
+  "reason": "health/medicine keyword in name or brand (Protein)"
+ },
+ {
+  "barcode": "8906009077543",
+  "name": "Sugar Free Multigrain Cookies",
+  "reason": "health/medicine keyword in name or brand (Sugar Free)"
+ },
+ {
+  "barcode": "8906033744725",
+  "name": "McVities Tasties Cashew & Almond Cookies",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906009534725",
+  "name": "Max Protein 7 Grain Breakfast Cookie",
+  "reason": "health/medicine keyword in name or brand (Protein)"
+ },
+ {
+  "barcode": "8904063240224",
+  "name": "Namkeen",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906114280234",
+  "name": "Premium Namkeen",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906010500368",
+  "name": "Tikha Mitha Mix",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906062861684",
+  "name": "Brij Punjabi mixture namkeen",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901725198336",
+  "name": "MAD ANGLES",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904067706894",
+  "name": "green peas onion garlic",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904063240071",
+  "name": "Bhujia",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904063240194",
+  "name": "Bhujia",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901414000117",
+  "name": "bhujia",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904063230010",
+  "name": "Haldiram Bhujia400g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906005500083",
+  "name": "Bikaneri Bhujia",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8907003500082",
+  "name": "Alu Bhujia",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904004400052",
+  "name": "Bhujia Sev",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904132912786",
+  "name": "aloo bhujia",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904063214393",
+  "name": "Aloo bhujia",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904132912779",
+  "name": "Bikaneri Bhujia",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906015657104",
+  "name": "Bikharam Bhujia",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901414004467",
+  "name": "Bikaneri Bhujia",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904004400076",
+  "name": "Bhujia Sev",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "4000210000063",
+  "name": "Bikano Aloo bhujia",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901721000022",
+  "name": "Prabhakar bhujia 200gm",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904004400762",
+  "name": "Haldirams Alu Bhujia",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "12751112",
+  "name": "Haldirams Aloo Bhujia",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "4904464200005",
+  "name": "Haldiram bhujia 220g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901414000650",
+  "name": "Bikano bikaneri bhujia 1kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "3948721000695",
+  "name": "Prabhuji aloo bhujia 1kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906005500397",
+  "name": "Bikaji aloo bhujia 1kg",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "4007272751278",
+  "name": "Bombay hot bhujia 400g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0000148019243",
+  "name": "Bikaneri bhujia 150g(28)",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901721000046",
+  "name": "Prabhuji Bhujia - Muchy Masti",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906005500335",
+  "name": "Aloo Bhujia Tana-Tan",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "148019243",
+  "name": "Bikaneri bhujia 150g(28)",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901721000695",
+  "name": "Prabhuji aloo bhujia 1kg(24)",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901414000070",
+  "name": "Bikano bikaneri bhujia 1kg (30)",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8905507022901",
+  "name": "First crop aloo bhujia 150g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906111540508",
+  "name": "Chips Cream & Onion",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901491990080",
+  "name": "Doritos Nacho Cheese Flavours",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901725018771",
+  "name": "Bingo! Hot and spicy Korean style",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904063200525",
+  "name": "Salted Banana Chips",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906030680408",
+  "name": "Gold finger",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901725192327",
+  "name": "Potato chips",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8886467122422",
+  "name": "Fusion Chutney Flavour",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901491503037",
+  "name": "American Style Cream & Onion 10rs",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906125981731",
+  "name": "Corn Chips",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906005505224",
+  "name": "Chips Cream & onion",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906004563454",
+  "name": "YD potato chips",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8904072000048",
+  "name": "Mota's Potato Chips",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901725192341",
+  "name": "bingo potato chips chilli",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8886467122439",
+  "name": "Pringles Desi Masala Tadka Flavour",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906066701030",
+  "name": "Kettle Studio Potato Chips",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901719122316",
+  "name": "parles's potato piri piri chips",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901058901511",
+  "name": "2-minute noodles",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901014004935",
+  "name": "spiced chunky chicken",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901014011117",
+  "name": "Top Ramen Atta Masala Noodles",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8908008194115",
+  "name": "noodles",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906003926557",
+  "name": "noodles",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901030865862",
+  "name": "Knorr mast masal",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901058904000",
+  "name": "Instant noodles",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901014000364",
+  "name": "Masala noodles",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901014000395",
+  "name": "Top Ramen Curry",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "4901126963360",
+  "name": "chings noodles",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906131680581",
+  "name": "millet noodles",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901014003181",
+  "name": "Top Ramen Curry",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901058004144",
+  "name": "MAGGI MASALA NOODLES",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901595853403",
+  "name": "Veg Hakka Noodles",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0870351009904",
+  "name": "Hakka noodles",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906108530000",
+  "name": "Veg Hakka Noodles",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901725012830",
+  "name": "Yippee Noodles Magic Masala",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901030926457",
+  "name": "Orange marmalade",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904288626070",
+  "name": "Mixed fruit Jam",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901030831690",
+  "name": "",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901063029217",
+  "name": "Jim Jam",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901719127212",
+  "name": "JAM-IN 495g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901044220084",
+  "name": "Mapro jam",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901719129452",
+  "name": "Fab Jam in",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8905507000817",
+  "name": "Fb strawberry jam 500",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8854761800537",
+  "name": "Mixed Berry Fruit Jam",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901719114038",
+  "name": "PARLE fab jam in 150g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901063029323",
+  "name": "Jim jam Britannia biscuit",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901030831720",
+  "name": "Kissan mix fruit jam 700g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "3045320524147",
+  "name": "Raspberry preserve",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901725118341",
+  "name": "Kitchens Of India Strawberry & Mint Fruit & Spice Conserve",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901764239809",
+  "name": "PROTEIN TOTAL FAT pany",
+  "reason": "health/medicine keyword in name or brand (PROTEIN)"
+ },
+ {
+  "barcode": "8906021922067",
+  "name": "Himalaya honey",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906022070347",
+  "name": "Organic honey",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901207025365",
+  "name": "Honey",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906081500465",
+  "name": "Honey",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906021922760",
+  "name": "Himalaya Honey",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8908011844014",
+  "name": "TS Girijan Honey",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8908018095006",
+  "name": "Bonphool Natural Mangrove Honey",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8904109449727",
+  "name": "Honey",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904132907829",
+  "name": "HEALTHY LIFE PURE GRADE HONEY",
+  "reason": "health/medicine keyword in name or brand (HEALTH)"
+ },
+ {
+  "barcode": "8908884700202",
+  "name": "Honey gulkand",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8801133003102",
+  "name": "Honey Buttee Almond",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906003381431",
+  "name": "Honey maple syrup",
+  "reason": "health/medicine keyword in name or brand (syrup)"
+ },
+ {
+  "barcode": "8904049708120",
+  "name": "Nature's essence almond and honey",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901220600136",
+  "name": "Baidyanath HONEY ASLI AYURVED",
+  "reason": "health/medicine keyword in name or brand (AYURVED)"
+ },
+ {
+  "barcode": "0614299748064",
+  "name": "Honey Vanilla Bourbon Pecans",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0846597026029",
+  "name": "Mixed Pickle",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8904288612806",
+  "name": "mixed pickle",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906065550226",
+  "name": "Mango Pickle",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906003656423",
+  "name": "Three Mango Ginger Pickle",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906021128735",
+  "name": "Mango Ginger Pickle",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906001052784",
+  "name": "Mother's Recipe Mixed pickle",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906003656089",
+  "name": "Three Mango Tomato Pickle",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8903241110045",
+  "name": "Mango Pickle",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906001051343",
+  "name": "Mother's Recipe Stuffed Red Chilli Pickle",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906029450784",
+  "name": "Meal Time Lime Pickle",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8905507001050",
+  "name": "Imli Tree Red Stuffed Chilli Pickle",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8904288612868",
+  "name": "Tops Gold Stuffed Red Chilli Pickle",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906001050117",
+  "name": "Mother's Recipe Karnataka Cut Mango Pickle",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906030061535",
+  "name": "Sliced Black Olives",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8908003623955",
+  "name": "Dnv pickle",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908003623757",
+  "name": "Dnv pickle",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906001054580",
+  "name": "Mixed Pickle",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8903241110281",
+  "name": "Lime pickle",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8903241110021",
+  "name": "Mango pickle",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901483002395",
+  "name": "Jalapeno Slices",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901030667756",
+  "name": "Fresh Tomato Ketchup",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904288601183",
+  "name": "Tomato Ketchup",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8903553851612",
+  "name": "Tomato Ketchup",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901058903812",
+  "name": "Maggi Rich Tomato Ketchup Pichkoo",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901246005373",
+  "name": "TOMATO KETCHUP CLASSIC BLEND",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "0608410874244",
+  "name": "ketchup",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901030921797",
+  "name": "kissan fresh tomato",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906069402989",
+  "name": "veeba ketchup",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901030902932",
+  "name": "tomato ketchup",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901689702860",
+  "name": "Tomato Ketchup",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "3948246005373",
+  "name": "Tomato Ketchup",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901058101577",
+  "name": "Tomato Ketchup",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8904304500759",
+  "name": "Swad Tomato Ketchup",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901030699085",
+  "name": "Fresh tomato ketchup",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901030743047",
+  "name": "Fresh Tomato Ketchup",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "96188460",
+  "name": "Rich tomato ketchup",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901030534898",
+  "name": "Kissan Fresh Tomato Ketchup",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906069403412",
+  "name": "Chef's Special Tomato Ketchup",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906006783058",
+  "name": "D-lite Tomato Ketchup",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901030897542",
+  "name": "Kissan Fresh Tomato Ketchup",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904132913226",
+  "name": "Snac tac Tomato Ketchup",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901058844894",
+  "name": "maggi rich tomato ketchup pichkoo",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8903363008763",
+  "name": "Homechef tomato ketchup",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901058868418",
+  "name": "Rich Tomato Ketchup",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901058895766",
+  "name": "maggi Pichkoo tomato ketchup",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901030653407",
+  "name": "Kissan Fresh Tomato Ketchup",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901246002075",
+  "name": "Del Monte Tomato Ketchup",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901058000597",
+  "name": "Rich Tomato Sauce No Onion No Garlic",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901030532832",
+  "name": "Fresh Tomato Ketchup",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901058001181",
+  "name": "",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901246006448",
+  "name": "",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906133800147",
+  "name": "Snacks Dressing",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8001048004953",
+  "name": "Pichkoo",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901030532719",
+  "name": "Fresh 🍅 500g",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901058904987",
+  "name": "Maggi Pichku",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901030989742",
+  "name": "",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8942152112540",
+  "name": "tomato sauce",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "89020708",
+  "name": "Maggi rich tomato sauce",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8715700033235",
+  "name": "Ketchup P'tits Heinz",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8908018651189",
+  "name": "tomato sauce",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901595864096",
+  "name": "",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8908012605003",
+  "name": "tomato ketchup",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901560043037",
+  "name": "",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8908018964159",
+  "name": "",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "89009703",
+  "name": "Tomato ketchup",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8938527759809",
+  "name": "Fresh rice vermicelli",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904287001069",
+  "name": "Vermicelli",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901155113114",
+  "name": "Gits vermicelli kheer",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906042150067",
+  "name": "Anil Roasted Short Vermicelli",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "2200000801494",
+  "name": "Idiyappam",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901499007728",
+  "name": "Oats",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8908019140019",
+  "name": "Chocolate Oat Drink",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901491702546",
+  "name": "Oats multigrain",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901499010230",
+  "name": "Oats",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906112662414",
+  "name": "Rolled oats",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "0051111407592",
+  "name": "Birthday Cake Protein Oats",
+  "reason": "denylisted tag en:bodybuilding-supplements"
+ },
+ {
+  "barcode": "4906537989848",
+  "name": "High Protein Oats (Dark Chocolate)",
+  "reason": "health/medicine keyword in name or brand (Protein)"
+ },
+ {
+  "barcode": "8906127551086",
+  "name": "Alpino Super Oats Chocolate",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906008350500",
+  "name": "Oats",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "1928342350470",
+  "name": "manna oats",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901088129817",
+  "name": "Masala oats",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "19066554",
+  "name": "Oats Digestive",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901088050562",
+  "name": "Saffola Oats",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902710100600",
+  "name": "Rolled Oats",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906151420075",
+  "name": "Lakshminarayan cornflakes",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0820294212589",
+  "name": "kaju cornflakes",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906030680361",
+  "name": "Gurujee Cornflakes Masala",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902570811227",
+  "name": "Spencer's Smart Choice Cornflakes",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8906101090105",
+  "name": "Strawberry, Chocolate, Jaggery",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908016386021",
+  "name": "Fennel Cane Jaggery",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "9427142488021",
+  "name": "Rajbhog natural jaggery",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904113522003",
+  "name": "Agro fresh jaggery",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906075005037",
+  "name": "JAGGERY OATS MILLET COOKIES",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908010900988",
+  "name": "High Protein Peanut Butter (Organic Jaggery)",
+  "reason": "health/medicine keyword in name or brand (Protein)"
+ },
+ {
+  "barcode": "8906000212202",
+  "name": "Custard Powder",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901030551956",
+  "name": "Custard powder vanilla",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901808000990",
+  "name": "Caramel Custard",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901063325357",
+  "name": "Toastea Rusk",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8904097150445",
+  "name": "Eggless Cake Rusk",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901719132025",
+  "name": "PARLE PREMIUM RUSK",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8904300201643",
+  "name": "TRDP Mario Milk Rusk",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8901063325609",
+  "name": "Toastea premium rusk",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901719902482",
+  "name": "Rusk",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0760412595135",
+  "name": "Butter rusk",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908000770980",
+  "name": "Bakery rusk",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908006487028",
+  "name": "elaichi rusk",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8908014705329",
+  "name": "Milk baby rusk",
+  "reason": "health/medicine keyword in name or brand (baby)"
+ },
+ {
+  "barcode": "8901063325586",
+  "name": "toastea bilk rusk",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901063325746",
+  "name": "toastea premium rusk",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901719126093",
+  "name": "Parle Rusk 327g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908023653079",
+  "name": "Aditi Elaichi rusk",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "3948719133701",
+  "name": "Rusk ilaichi toast",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901719122910",
+  "name": "Parle real elaichi rusk",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908014705343",
+  "name": "Dark Belgian protein rusk",
+  "reason": "health/medicine keyword in name or brand (protein)"
+ },
+ {
+  "barcode": "8901719125638",
+  "name": "Parle Rusk Real Elaichi",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904004402131",
+  "name": "Dry fruit mix",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8908012861928",
+  "name": "Karachi dry fruit collection",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906167243873",
+  "name": "Panchmeva Dry Fruits Mix",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0000490416753",
+  "name": "Ma Nan Dry fruit  mix",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "490416753",
+  "name": "Ma Nan Dry fruit  mix",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906142774934",
+  "name": "Bolas Panchmewa Dry fruit mix",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "151010430",
+  "name": "FC Dry fruits Pista R&S",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906140203450",
+  "name": "Natural choice mixed dry fruits 400g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0000151010430",
+  "name": "FC Dry fruits Pista R&S",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901414010093",
+  "name": "Bikano dry fruit mixture 250g (20)",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908006107476",
+  "name": "Ganga Kesariya Brahmi Badam Dry Fruit Syrup",
+  "reason": "health/medicine keyword in name or brand (Syrup)"
+ },
+ {
+  "barcode": "00024858",
+  "name": "Dry Yeast",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8902901011593",
+  "name": "Dry dates",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906006644700",
+  "name": "Clean and DRY",
+  "reason": "denylisted tag en:non-food-products"
+ },
+ {
+  "barcode": "8906002483204",
+  "name": "Pedigree 2.8 kg pink",
+  "reason": "denylisted tag en:non-food-products"
+ },
+ {
+  "barcode": "5000329002179",
+  "name": "London dry gin",
+  "reason": "denylisted tag en:alcoholic-beverages"
+ },
+ {
+  "barcode": "8902901225761",
+  "name": "white peas dry",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8901786270507",
+  "name": "Dry Mango Powder",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8902901224047",
+  "name": "Dry dates chuawara",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8853301006132",
+  "name": "Whiskas with chicken in gravy 85g",
+  "reason": "denylisted tag en:non-food-products"
+ },
+ {
+  "barcode": "8904063208101",
+  "name": "Delista macaroni",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8906055500088",
+  "name": "fruits",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901030935176",
+  "name": "fruit",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906002482856",
+  "name": "Adult Chicken & Vegetables Adult 1KG",
+  "reason": "denylisted tag en:non-food-products"
+ },
+ {
+  "barcode": "8004323130378",
+  "name": "pasta",
+  "reason": "unparseable quantity"
+ },
+ {
+  "barcode": "8904035426083",
+  "name": "Fruit facewash",
+  "reason": "denylisted tag en:non-food-products"
+ },
+ {
+  "barcode": "8902901224078",
+  "name": "Mixed Fruit",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906065795153",
+  "name": "FRUIT DRINK",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901262071109",
+  "name": "Super Fruit",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906080602085",
+  "name": "mixed fruit",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901393016147",
+  "name": "Centre Fruit",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908009450104",
+  "name": "fruit bun",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901764175091",
+  "name": "Fruit drink",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8902901221855",
+  "name": "Best Farms white peas dry",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901030735349",
+  "name": "Fruit & Nut",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8907790000338",
+  "name": "Fruit mufflins",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904258700748",
+  "name": "Mixed Fruit",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8902901223057",
+  "name": "Good Life Dry ginger powder",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8908000233034",
+  "name": "Chilly Papad",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908000233300",
+  "name": "Plain Papad",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0738759759947",
+  "name": "Guruvayoor Papad",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904085900137",
+  "name": "Appalam Papad",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0946602150616",
+  "name": "Happala",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8905507001852",
+  "name": "Amritsari papad",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908004896204",
+  "name": "Rohini pappadam",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906078183206",
+  "name": "Sabudana Papad",
+  "reason": "no Hindi lexicon entry"
+ },
+ {
+  "barcode": "8904085900090",
+  "name": "Ambika papad",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901441011025",
+  "name": "udad papad",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0041001017024",
+  "name": "punjabi masala papad",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8526078180885",
+  "name": "Dnv garlic papad",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0743724576535",
+  "name": "Guruvayoor Special Pappadam",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908004896013",
+  "name": "Pepper pappadam",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908004896129",
+  "name": "Aanamark pappadam",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908004896419",
+  "name": "Mulak pappadam",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908004896068",
+  "name": "Aanamark Pappadam",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "0738759759862",
+  "name": "Guruvayoor Kutty Pappadam",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908000233355",
+  "name": "Iyers rice wafers papad",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8906078180120",
+  "name": "Dnv papad 180 g",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8905507001845",
+  "name": "FC Papad urad (24)",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908000233232",
+  "name": "Iyer's Punjabi Masala Papad",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908000233102",
+  "name": "iyers gold finger papad",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8901441017027",
+  "name": "Lizzath punjabi masala papad",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908000233249",
+  "name": "Iyers papad long chips",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8904422700734",
+  "name": "Patanjali kali mirch papad",
+  "reason": "no category in the include-list"
+ },
+ {
+  "barcode": "8908000233225",
+  "name": "Iyers Punjabi masala papad 200g",
+  "reason": "no category in the include-list"
+ }
+]

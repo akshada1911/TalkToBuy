@@ -1,0 +1,14 @@
+.venv/
+**/__pycache__/
+**/*.pyc
+node_modules/
+**/node_modules/
+**/dist/
+.env
+**/.env
+*.pem
+*.key
+**/*.db
+playwright-report/
+test-results/
+.git/

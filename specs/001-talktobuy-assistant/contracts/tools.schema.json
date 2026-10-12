@@ -1,0 +1,238 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://talktobuy.dev/contracts/tools.schema.json",
+  "title": "TalkToBuy agent tools (provider-neutral)",
+  "description": "The nine tools the assistant may call. Defined once here; adapters convert them to each provider's function-declaration format. All tools execute on the session server, never in the browser. Server-side guards (x-guards) are enforced in code regardless of what the model asks for.",
+  "version": "1.0.0",
+  "tools": [
+    {
+      "name": "search_catalog",
+      "description": "Find products by spoken description, brand or local (Hindi) name. Returns at most 10 in-stock-first products. Medicines and supplements never appear.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": { "type": "string", "description": "What the shopper asked for, in any language, e.g. 'toned milk', 'दूध', 'Parle-G'." },
+          "amount_phrase": { "type": "string", "description": "The shopper's quantity words verbatim, e.g. 'paav kilo', 'do litre', 'aadha kilo'. The server converts it deterministically and returns a pack plan per product." },
+          "filters": {
+            "type": "object",
+            "properties": {
+              "category": { "type": "string" },
+              "brand": { "type": "string" },
+              "max_price": { "type": "integer", "minimum": 1 },
+              "in_stock_only": { "type": "boolean", "default": false }
+            },
+            "additionalProperties": false
+          }
+        },
+        "required": ["query"],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "products": { "type": "array", "maxItems": 10, "items": { "$ref": "#/$defs/Product" } },
+          "pack_plans": {
+            "type": "array",
+            "description": "Present when amount_phrase was given: for each product, the qty to add and a sentence to say, e.g. '250 g = 1 pack of 250 g'.",
+            "items": { "type": "object", "properties": { "product_id": { "type": "string" }, "qty": { "type": "integer" }, "interpreted_en": { "type": "string" }, "interpreted_hi": { "type": "string" } }, "required": ["product_id", "qty"] }
+          },
+          "ambiguous": { "type": "boolean", "description": "True when the top two matches are too close; ask the shopper to choose." }
+        },
+        "required": ["products"]
+      },
+      "x-blocking": false
+    },
+    {
+      "name": "show_products",
+      "description": "Put product cards, or a goal list with struck-through items, on the shopper's screen. Does not add anything to the cart.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "ids": { "type": "array", "items": { "type": "string" }, "maxItems": 10, "description": "Product IDs to show as cards." },
+          "goal_list": {
+            "type": "object",
+            "description": "Optional: show these as a goal list instead of plain cards.",
+            "properties": {
+              "goal_text": { "type": "string" },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "need": { "type": "string" },
+                    "product_id": { "type": ["string", "null"] },
+                    "qty": { "type": "integer", "minimum": 1 },
+                    "struck": { "type": "boolean" },
+                    "struck_reason": { "enum": ["on_hand", "in_cart", null] }
+                  },
+                  "required": ["need", "struck"],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": ["goal_text", "items"],
+            "additionalProperties": false
+          },
+          "purpose": { "enum": ["browse", "problem"], "default": "browse", "description": "Use 'problem' when suggesting products for a described everyday problem; at most 3 ids are allowed then (FR-034)." }
+        },
+        "additionalProperties": false
+      },
+      "returns": { "type": "object", "properties": { "ok": { "type": "boolean" }, "goal_id": { "type": ["string", "null"], "description": "Set when a goal_list was shown; pass it to add_to_cart after the shopper says yes." } } },
+      "x-guards": ["refused while session.safety_hold is true", "at most 3 products when called for a described problem (FR-034)"],
+      "x-blocking": false
+    },
+    {
+      "name": "add_to_cart",
+      "description": "Add to the cart. Use exactly ONE form: (a) product_id + qty for one product; (b) goal_id to add every non-struck item of a goal list shown with show_products, all at once; (c) usual=true to add the whole last order at once. Items the shopper named can be added directly with source 'named'. Items recognised on camera, recalled from the usual order, or from a goal list may be added ONLY after the shopper said yes.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "product_id": { "type": "string" },
+          "qty": { "type": "integer", "minimum": 1, "maximum": 20 },
+          "source": { "enum": ["named", "camera", "usual", "goal"], "default": "named" },
+          "goal_id": { "type": "string", "description": "Form (b): add the whole confirmed goal list." },
+          "usual": { "type": "boolean", "description": "Form (c): add the whole last order." }
+        },
+        "additionalProperties": false
+      },
+      "returns": { "$ref": "#/$defs/Cart" },
+      "x-guards": ["refused while session.safety_hold is true", "if the checkout session is ready_for_complete, returns it to incomplete (lines kept, never canceled)"],
+      "x-blocking": false
+    },
+    {
+      "name": "update_cart",
+      "description": "Change the quantity of a cart line. qty 0 removes the item. To swap a brand, set the old one to 0 and add the new one.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "product_id": { "type": "string" },
+          "qty": { "type": "integer", "minimum": 0, "maximum": 20 }
+        },
+        "required": ["product_id", "qty"],
+        "additionalProperties": false
+      },
+      "returns": { "$ref": "#/$defs/Cart" },
+      "x-guards": ["if the checkout session is ready_for_complete, returns it to incomplete (lines kept, never canceled)"],
+      "x-blocking": false
+    },
+    {
+      "name": "get_usual_order",
+      "description": "Fetch the shopper's last order so it can be proposed as 'my usual'. Does not add anything.",
+      "parameters": { "type": "object", "properties": {}, "additionalProperties": false },
+      "returns": { "type": "object", "properties": { "lines": { "type": "array", "items": { "type": "object", "properties": { "product": { "$ref": "#/$defs/Product" }, "qty": { "type": "integer" } } } } } },
+      "x-blocking": false
+    },
+    {
+      "name": "set_pace",
+      "description": "Set how much the assistant explains: 'guided' (one card at a time, read back, confirm each step) or 'quick' (act, then summarise once).",
+      "parameters": {
+        "type": "object",
+        "properties": { "mode": { "enum": ["guided", "quick"] }, "reason": { "enum": ["opening_question", "shopper_asked", "repeat_or_corrections"] } },
+        "required": ["mode"],
+        "additionalProperties": false
+      },
+      "returns": { "type": "object", "properties": { "pace": { "enum": ["guided", "quick"] } } },
+      "x-blocking": false
+    },
+    {
+      "name": "start_checkout",
+      "description": "Open a checkout with the store for the current cart and a delivery slot. Returns the exact item count, total and delivery time to read back. Does not take payment.",
+      "parameters": {
+        "type": "object",
+        "properties": { "delivery_slot": { "type": "string", "description": "Slot ID, or 'earliest'." } },
+        "required": ["delivery_slot"],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "checkout_id": { "type": "string" },
+          "item_count": { "type": "integer" },
+          "total": { "type": "integer" },
+          "currency": { "const": "INR" },
+          "delivery": { "$ref": "#/$defs/DeliverySlot" },
+          "readback_hi": { "type": "string", "description": "Server-built read-back sentence; the model should say this verbatim." }
+        },
+        "required": ["checkout_id", "item_count", "total", "delivery"]
+      },
+      "x-guards": ["refused when cart is empty", "refused while session.safety_hold is true"],
+      "x-blocking": true
+    },
+    {
+      "name": "confirm_checkout",
+      "description": "After the shopper said yes to the read-back, ask the shopping app to open its payment step. The order is placed only when the shopper approves there (fingerprint). This call runs in the background: keep talking and guide the shopper to the fingerprint step; the result arrives when they approve, decline, or time out.",
+      "parameters": {
+        "type": "object",
+        "properties": { "checkout_id": { "type": "string" } },
+        "required": ["checkout_id"],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "status": { "enum": ["completed", "declined", "timed_out", "cart_changed"] },
+          "order_id": { "type": ["string", "null"] },
+          "delivery": { "$ref": "#/$defs/DeliverySlot" }
+        },
+        "required": ["status"]
+      },
+      "x-guards": ["order is completed only with a valid approval from the payment step; a spoken yes is never sufficient (FR-020)"],
+      "x-blocking": false,
+      "x-response-scheduling": "INTERRUPT"
+    },
+    {
+      "name": "notify_family",
+      "description": "Tell the shopper's linked family member about a warning sign, inside the app. Call ONLY after the shopper explicitly agreed.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "message": { "type": "string", "maxLength": 280 },
+          "shopper_consented": { "const": true }
+        },
+        "required": ["message", "shopper_consented"],
+        "additionalProperties": false
+      },
+      "returns": { "type": "object", "properties": { "delivered": { "type": "boolean" }, "contact_name": { "type": "string" } } },
+      "x-guards": ["in-app channel only (FR-036)", "refused if no family contact is linked"],
+      "x-blocking": false
+    }
+  ],
+  "$defs": {
+    "Product": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "local_name": { "type": "string" },
+        "brand": { "type": ["string", "null"] },
+        "size": { "type": "string" },
+        "price": { "type": "integer" },
+        "currency": { "const": "INR" },
+        "image": { "type": "string", "format": "uri" },
+        "category": { "type": "string" },
+        "listing": {
+          "type": "object",
+          "properties": { "description": { "type": "string" }, "usage": { "type": ["string", "null"] } },
+          "required": ["description"]
+        },
+        "in_stock": { "type": "boolean" }
+      },
+      "required": ["id", "name", "local_name", "size", "price", "currency", "category", "listing", "in_stock"]
+    },
+    "Cart": {
+      "type": "object",
+      "properties": {
+        "lines": { "type": "array", "items": { "type": "object", "properties": { "product_id": { "type": "string" }, "name": { "type": "string" }, "qty": { "type": "integer" }, "line_total": { "type": "integer" } }, "required": ["product_id", "qty", "line_total"] } },
+        "item_count": { "type": "integer" },
+        "total": { "type": "integer" },
+        "currency": { "const": "INR" }
+      },
+      "required": ["lines", "item_count", "total", "currency"]
+    },
+    "DeliverySlot": {
+      "type": "object",
+      "properties": { "id": { "type": "string" }, "label_hi": { "type": "string" }, "label_en": { "type": "string" }, "start": { "type": "string", "format": "date-time" }, "end": { "type": "string", "format": "date-time" } },
+      "required": ["id", "label_hi", "label_en"]
+    }
+  }
+}

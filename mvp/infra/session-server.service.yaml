@@ -1,0 +1,38 @@
+# Cloud Run service for the session server (T105). deploy.sh substitutes ${PROJECT_ID}, ${REGION},
+# ${IMAGE}, ${STORE_URL}, ${SHOP_ORIGIN} and ${SESSION_URL}.
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: talktobuy-session-server
+  annotations:
+    run.googleapis.com/ingress: all
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "1"      # demo: no cold start on stage
+        autoscaling.knative.dev/maxScale: "2"
+        run.googleapis.com/sessionAffinity: "true" # WebSocket reconnects land on the same instance
+    spec:
+      timeoutSeconds: 3600                         # long-lived WebSocket sessions
+      containerConcurrency: 20
+      serviceAccountName: talktobuy-session@${PROJECT_ID}.iam.gserviceaccount.com  # roles/aiplatform.user, roles/datastore.user
+      containers:
+        - image: ${IMAGE}
+          ports: [{ containerPort: 8080 }]
+          resources: { limits: { cpu: "1", memory: 1Gi } }
+          env:
+            - { name: GCP_PROJECT, value: "${PROJECT_ID}" }
+            - { name: GCP_LOCATION, value: "${REGION}" }
+            - { name: STORE_BASE_URL, value: "${STORE_URL}" }
+            - { name: SESSION_SERVER_URL, value: "${SESSION_URL}" }
+            - { name: SHOP_ORIGIN, value: "${SHOP_ORIGIN}" }
+            - { name: MEDIA_MODE_DEFAULT, value: "avatar" }
+            - { name: STATE_BACKEND, value: "firestore" }
+            - { name: DEMO_TICKETS_ENABLED, value: "true" }
+            - { name: MAX_CONCURRENT_SESSIONS, value: "3" }
+            - { name: DAILY_SESSION_QUOTA, value: "100" }
+            - name: TICKET_SIGNING_SECRET
+              valueFrom: { secretKeyRef: { name: talktobuy-ticket-secret, key: latest } }
+            - name: DEMO_ADMIN_KEY
+              valueFrom: { secretKeyRef: { name: talktobuy-demo-admin-key, key: latest } }

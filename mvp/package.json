@@ -1,0 +1,18 @@
+{
+  "name": "talktobuy-mvp",
+  "private": true,
+  "workspaces": [
+    "packages/assistant-widget",
+    "apps/shop"
+  ],
+  "scripts": {
+    "build": "npm run build -w packages/assistant-widget && npm run build -w apps/shop",
+    "test": "npm run test -w packages/assistant-widget",
+    "test:e2e": "npm run test:e2e -w apps/shop",
+    "gen-types:ts": "json2ts -i contracts/domain.schema.json -o packages/assistant-widget/src/types/domain.generated.ts --no-additionalProperties && json2ts -i contracts/widget-messages.schema.json -o packages/assistant-widget/src/types/messages.generated.ts --no-additionalProperties"
+  },
+  "devDependencies": {
+    "json-schema-to-typescript": "^15.0.4",
+    "typescript": "^5.8.3"
+  }
+}

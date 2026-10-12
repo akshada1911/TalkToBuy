@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://talktobuy.dev/contracts/widget-messages.schema.json",
+  "title": "WidgetMessages",
+  "description": "JSON text frames between <talktobuy-assistant> and the session server (specs/001-talktobuy-assistant/contracts/widget-protocol.md). Binary frames carry media and are NOT JSON. The first byte is the type: 0x01 = mic PCM 16 kHz 16-bit LE mono (client to server); 0x02 = camera JPEG ~768x768, max 1 fps, only while the camera is active (client to server); 0x11 = assistant PCM 24 kHz 16-bit LE mono (server to client); 0x12 = avatar MP4 chunk, 24 fps (server to client). Prices in UI messages are whole rupees.",
+  "type": "object",
+  "properties": {
+    "client": { "$ref": "#/$defs/ClientMessage" },
+    "server": { "$ref": "#/$defs/ServerMessage" }
+  },
+  "$defs": {
+    "UiProduct": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "local_name": { "type": "string" },
+        "size": { "type": "string" },
+        "price": { "type": "integer", "description": "Whole rupees (demo price)" },
+        "image": { "type": "string" },
+        "image_credit": { "type": "string" },
+        "in_stock": { "type": "boolean" }
+      },
+      "required": ["id", "name", "local_name", "size", "price", "image", "image_credit", "in_stock"],
+      "additionalProperties": false
+    },
+    "UiCartLine": {
+      "type": "object",
+      "properties": {
+        "product": { "$ref": "#/$defs/UiProduct" },
+        "qty": { "type": "integer", "minimum": 1 },
+        "line_total": { "type": "integer", "minimum": 0 }
+      },
+      "required": ["product", "qty", "line_total"],
+      "additionalProperties": false
+    },
+    "UiCart": {
+      "type": "object",
+      "properties": {
+        "lines": { "type": "array", "items": { "$ref": "#/$defs/UiCartLine" } },
+        "item_count": { "type": "integer", "minimum": 0 },
+        "total": { "type": "integer", "minimum": 0 }
+      },
+      "required": ["lines", "item_count", "total"],
+      "additionalProperties": false
+    },
+    "UiGoalItem": {
+      "type": "object",
+      "properties": {
+        "need": { "type": "string" },
+        "product": { "anyOf": [{ "$ref": "#/$defs/UiProduct" }, { "type": "null" }] },
+        "qty": { "type": "integer", "minimum": 1 },
+        "struck": { "type": "boolean" },
+        "struck_reason": { "type": ["string", "null"], "enum": ["on_hand", "in_cart", null] }
+      },
+      "required": ["need", "struck"],
+      "additionalProperties": false
+    },
+    "UiDelivery": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "label_hi": { "type": "string" },
+        "label_en": { "type": "string" }
+      },
+      "required": ["id", "label_hi", "label_en"],
+      "additionalProperties": false
+    },
+
+    "TextMsg": { "type": "object", "properties": { "type": { "const": "text" }, "text": { "type": "string", "minLength": 1, "maxLength": 500 } }, "required": ["type", "text"], "additionalProperties": false },
+    "SetMediaModeMsg": { "type": "object", "properties": { "type": { "const": "set_media_mode" }, "mode": { "type": "string", "enum": ["avatar", "audio_only"] } }, "required": ["type", "mode"], "additionalProperties": false },
+    "SetTranslationMsg": { "type": "object", "properties": { "type": { "const": "set_translation" }, "on": { "type": "boolean" } }, "required": ["type", "on"], "additionalProperties": false },
+    "CameraMsg": { "type": "object", "properties": { "type": { "const": "camera" }, "active": { "type": "boolean" } }, "required": ["type", "active"], "additionalProperties": false },
+    "PaymentResultMsg": { "type": "object", "properties": { "type": { "const": "payment_result" }, "checkout_id": { "type": "string" }, "approved": { "type": "boolean" }, "mandate": { "type": ["object", "null"], "description": "Test-mode AP2 mandates from the payment step: {checkout_mandate, payment_mandate}" } }, "required": ["type", "checkout_id", "approved"], "additionalProperties": false },
+    "NetQualityMsg": { "type": "object", "properties": { "type": { "const": "net_quality" }, "downlink_kbps": { "type": ["number", "null"] }, "rtt_ms": { "type": ["number", "null"] }, "underruns": { "type": "integer", "minimum": 0 } }, "required": ["type"], "additionalProperties": false },
+    "EndMsg": { "type": "object", "properties": { "type": { "const": "end" } }, "required": ["type"], "additionalProperties": false },
+    "ClientMessage": {
+      "oneOf": [
+        { "$ref": "#/$defs/TextMsg" }, { "$ref": "#/$defs/SetMediaModeMsg" }, { "$ref": "#/$defs/SetTranslationMsg" },
+        { "$ref": "#/$defs/CameraMsg" }, { "$ref": "#/$defs/PaymentResultMsg" }, { "$ref": "#/$defs/NetQualityMsg" },
+        { "$ref": "#/$defs/EndMsg" }
+      ]
+    },
+
+    "CaptionMsg": { "type": "object", "properties": { "type": { "const": "caption" }, "who": { "type": "string", "enum": ["shopper", "assistant"] }, "turn_id": { "type": "string" }, "text_hi": { "type": "string" }, "text_en": { "type": ["string", "null"], "description": "Labelled machine translation of text_hi (FR-009)" }, "final": { "type": "boolean" } }, "required": ["type", "who", "turn_id", "text_hi", "final"], "additionalProperties": false },
+    "InterruptedMsg": { "type": "object", "properties": { "type": { "const": "interrupted" }, "turn_id": { "type": ["string", "null"] } }, "required": ["type"], "additionalProperties": false },
+    "CardsMsg": { "type": "object", "properties": { "type": { "const": "cards" }, "mode": { "type": "string", "enum": ["suggest", "added"] }, "products": { "type": "array", "items": { "$ref": "#/$defs/UiProduct" } } }, "required": ["type", "mode", "products"], "additionalProperties": false },
+    "GoalListMsg": { "type": "object", "properties": { "type": { "const": "goal_list" }, "goal_id": { "type": "string" }, "goal_text": { "type": "string" }, "items": { "type": "array", "items": { "$ref": "#/$defs/UiGoalItem" } } }, "required": ["type", "goal_id", "goal_text", "items"], "additionalProperties": false },
+    "CartMsg": { "type": "object", "properties": { "type": { "const": "cart" }, "cart": { "$ref": "#/$defs/UiCart" } }, "required": ["type", "cart"], "additionalProperties": false },
+    "ReadbackMsg": { "type": "object", "properties": { "type": { "const": "readback" }, "checkout_id": { "type": "string" }, "item_count": { "type": "integer" }, "total": { "type": "integer" }, "delivery": { "$ref": "#/$defs/UiDelivery" }, "text_hi": { "type": "string" }, "text_en": { "type": "string" } }, "required": ["type", "checkout_id", "item_count", "total", "delivery", "text_hi", "text_en"], "additionalProperties": false },
+    "PaymentRequestMsg": { "type": "object", "properties": { "type": { "const": "payment_request" }, "checkout_id": { "type": "string" }, "item_count": { "type": "integer" }, "total": { "type": "integer" }, "currency": { "const": "INR" }, "delivery": { "$ref": "#/$defs/UiDelivery" } }, "required": ["type", "checkout_id", "item_count", "total", "currency", "delivery"], "additionalProperties": false },
+    "OrderMsg": { "type": "object", "properties": { "type": { "const": "order" }, "order_id": { "type": "string" }, "delivery": { "$ref": "#/$defs/UiDelivery" } }, "required": ["type", "order_id", "delivery"], "additionalProperties": false },
+    "FamilyNotifiedMsg": { "type": "object", "properties": { "type": { "const": "family_notified" }, "contact_name": { "type": "string" } }, "required": ["type", "contact_name"], "additionalProperties": false },
+    "StateMsg": { "type": "object", "properties": { "type": { "const": "state" }, "pace": { "type": "string", "enum": ["guided", "quick"] }, "media_mode": { "type": "string", "enum": ["avatar", "audio_only"] }, "safety_hold": { "type": "boolean" }, "remaining_s": { "type": "integer", "minimum": 0 } }, "required": ["type", "pace", "media_mode", "safety_hold", "remaining_s"], "additionalProperties": false },
+    "WorkingMsg": { "type": "object", "properties": { "type": { "const": "working" }, "on": { "type": "boolean" }, "label_hi": { "type": "string" }, "label_en": { "type": "string" } }, "required": ["type", "on"], "additionalProperties": false },
+    "ErrorMsg": { "type": "object", "properties": { "type": { "const": "error" }, "code": { "type": "string" }, "message_hi": { "type": "string" }, "message_en": { "type": "string" } }, "required": ["type", "code", "message_hi", "message_en"], "additionalProperties": false },
+    "ServerMessage": {
+      "oneOf": [
+        { "$ref": "#/$defs/CaptionMsg" }, { "$ref": "#/$defs/InterruptedMsg" }, { "$ref": "#/$defs/CardsMsg" },
+        { "$ref": "#/$defs/GoalListMsg" }, { "$ref": "#/$defs/CartMsg" }, { "$ref": "#/$defs/ReadbackMsg" },
+        { "$ref": "#/$defs/PaymentRequestMsg" }, { "$ref": "#/$defs/OrderMsg" }, { "$ref": "#/$defs/FamilyNotifiedMsg" },
+        { "$ref": "#/$defs/StateMsg" }, { "$ref": "#/$defs/WorkingMsg" }, { "$ref": "#/$defs/ErrorMsg" }
+      ]
+    }
+  }
+}

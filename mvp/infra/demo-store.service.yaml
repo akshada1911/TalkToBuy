@@ -1,0 +1,31 @@
+# Cloud Run service for the demo store (T105). SQLite is per-instance and reset on deploy (demo only),
+# so maxScale is 1 to keep a single cart/order database.
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: talktobuy-demo-store
+  annotations:
+    run.googleapis.com/ingress: all
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "1"
+        autoscaling.knative.dev/maxScale: "1"
+    spec:
+      timeoutSeconds: 60
+      serviceAccountName: talktobuy-store@${PROJECT_ID}.iam.gserviceaccount.com
+      containers:
+        - image: ${IMAGE}
+          ports: [{ containerPort: 8080 }]
+          resources: { limits: { cpu: "1", memory: 512Mi } }
+          env:
+            - { name: SHOP_ORIGIN, value: "${SHOP_ORIGIN}" }
+            - { name: WEBAUTHN_RP_ID, value: "${RP_ID}" }
+            - { name: SEARCH_MODE, value: "live" }
+            - name: STORE_SIGNING_KEY_PEM
+              valueFrom: { secretKeyRef: { name: talktobuy-store-signing-key, key: latest } }
+            - name: MANDATE_SIGNING_KEY_PEM
+              valueFrom: { secretKeyRef: { name: talktobuy-mandate-signing-key, key: latest } }
+            - name: DEMO_ADMIN_KEY
+              valueFrom: { secretKeyRef: { name: talktobuy-demo-admin-key, key: latest } }

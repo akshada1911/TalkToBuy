@@ -1,0 +1,27 @@
+[project]
+name = "demo-store"
+version = "0.1.0"
+description = "TalkToBuy demo grocery store speaking UCP 2026-08-25, with AP2 test-mode checkout"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.32",
+  "pydantic>=2.9",
+  "pydantic-settings>=2.6",
+  "ucp-sdk>=0.5,<0.6",
+  "jwcrypto>=1.5",
+  "rfc8785>=0.1.4",
+  "webauthn>=3.0",
+  "httpx>=0.27",
+  "google-genai>=2.28",
+  "numpy>=2.1",
+  # AP2 Python SDK: NOT the unrelated PyPI package "ap2". Pinned to a commit (research R4).
+  # Added in T065 once the mandate API is confirmed; see UPSTREAM.md.
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/demo_store"]

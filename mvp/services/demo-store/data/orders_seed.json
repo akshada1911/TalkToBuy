@@ -1,0 +1,22 @@
+{
+  "_comment": "Seeded demo data (T023). Ghanshyam ji's last order contains the usual atta (p-0003). address_form is seeded, never inferred (FR-008); there is no age field.",
+  "shoppers": [
+    {"id": "u-ghanshyam", "display_name": "Ghanshyam ji", "language": "hi", "address_form": "respectful_male"}
+  ],
+  "family": {
+    "u-ghanshyam": {"id": "f-rohit", "name": "Rohit (son)", "channel": "in_app"}
+  },
+  "orders": [
+    {
+      "order_id": "ord_seed_ghanshyam_0001",
+      "shopper_id": "u-ghanshyam",
+      "lines": [
+        {"product_id": "p-0003", "qty": 1},
+        {"product_id": "p-0011", "qty": 1}
+      ],
+      "total_minor": 33700,
+      "placed_at": "2026-10-02T10:30:00+05:30",
+      "mode": "test"
+    }
+  ]
+}

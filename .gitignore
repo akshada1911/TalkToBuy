@@ -218,3 +218,24 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# --- TalkToBuy (T008) ---
+# Secrets and local env (never commit; see mvp/.env.example)
+mvp/.env
+mvp/**/.env
+*.pem
+*.key
+# Node / browser builds
+node_modules/
+mvp/**/dist/
+*.tsbuildinfo
+playwright-report/
+test-results/
+# Demo store runtime databases (catalog.json and vectors.npy ARE committed snapshots)
+mvp/services/demo-store/*.db
+mvp/services/demo-store/data/*.db
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp

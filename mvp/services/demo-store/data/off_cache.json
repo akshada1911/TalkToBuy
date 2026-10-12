@@ -1,0 +1,567 @@
+{
+ "8901058869262": {
+  "brands": "Nestlé",
+  "categories_tags": [
+   "en:dairies",
+   "en:milks-liquid-and-powder",
+   "en:milks"
+  ],
+  "code": "8901058869262",
+  "countries_tags": [
+   "en:india"
+  ],
+  "ecoscore_tags": [
+   "d"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/890/105/886/9262/front_en.10.400.jpg",
+  "product_name": "Toned Milk a+",
+  "quantity": "1000 ml"
+ },
+ "8901725121129": {
+  "brands": "Aashirvaad, ITC",
+  "categories_tags": [
+   "en:plant-based-foods-and-beverages",
+   "en:plant-based-foods",
+   "en:cereals-and-potatoes",
+   "en:seeds",
+   "en:cereals-and-their-products",
+   "en:flours",
+   "en:cereal-flours",
+   "en:cereal-grains",
+   "en:wheat-flours",
+   "en:wheats"
+  ],
+  "code": "8901725121129",
+  "countries_tags": [
+   "en:india"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/890/172/512/1129/front_en.30.400.jpg",
+  "product_name": "Shudh Chakki Atta",
+  "quantity": "5 kg"
+ },
+ "8901719255151": {
+  "brands": "Parle-G",
+  "categories_tags": [
+   "en:snacks",
+   "en:sweet-snacks",
+   "en:biscuits-and-cakes",
+   "en:biscuits-and-crackers",
+   "en:biscuits",
+   "en:dry-biscuits"
+  ],
+  "code": "8901719255151",
+  "countries_tags": [
+   "en:india"
+  ],
+  "ecoscore_tags": [
+   "d"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/890/171/925/5151/front_en.3.400.jpg",
+  "product_name": "Parle-G Original Gluco Biscuits",
+  "quantity": "150g"
+ },
+ "8906008811117": {
+  "brands": "fortune",
+  "categories_tags": [
+   "en:plant-based-foods-and-beverages",
+   "en:plant-based-foods",
+   "en:cereals-and-potatoes",
+   "en:cereals-and-their-products",
+   "en:flours",
+   "en:cereal-flours",
+   "en:wheat-flours",
+   "en:white-wheat-flours"
+  ],
+  "code": "8906008811117",
+  "countries_tags": [
+   "en:india"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/890/600/881/1117/front_en.3.400.jpg",
+  "product_name": "maida refined wheat flour",
+  "quantity": "500g"
+ },
+ "8901071702102": {
+  "brands": "Hershey's",
+  "categories_tags": [
+   "en:cocoa-and-its-products",
+   "en:cocoa-and-chocolate-powders",
+   "en:cocoa-powders"
+  ],
+  "code": "8901071702102",
+  "countries_tags": [
+   "en:india"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/890/107/170/2102/front_en.3.400.jpg",
+  "product_name": "Hershey's Cocoa",
+  "quantity": "70g"
+ },
+ "8901262010016": {
+  "brands": "Amul",
+  "categories_tags": [
+   "en:dairies",
+   "en:spreads",
+   "en:fats",
+   "en:spreadable-fats",
+   "en:animal-fats",
+   "en:dairy-spreads",
+   "en:milkfat",
+   "en:butters"
+  ],
+  "code": "8901262010016",
+  "countries_tags": [
+   "en:bahrain",
+   "en:hong-kong",
+   "en:india",
+   "en:kuwait",
+   "en:malaysia",
+   "en:new-zealand",
+   "en:oman",
+   "en:qatar",
+   "en:singapore",
+   "en:sri-lanka",
+   "en:united-arab-emirates",
+   "en:united-states"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/890/126/201/0016/front_en.53.400.jpg",
+  "product_name": "Amul Pasteurized Butter",
+  "quantity": "100.0 g"
+ },
+ "8901058903959": {
+  "brands": "Nestlé",
+  "categories_tags": [
+   "en:dairies",
+   "en:condensed-milks",
+   "en:Sweetened condensed milk"
+  ],
+  "code": "8901058903959",
+  "countries_tags": [
+   "en:india"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/890/105/890/3959/front_en.5.400.jpg",
+  "product_name": "milkmaid 100+ recipes",
+  "quantity": "380 g"
+ },
+ "8901808000020": {
+  "brands": "WeiKFiELD",
+  "categories_tags": [
+   "en:plant-based-foods-and-beverages",
+   "en:plant-based-foods",
+   "en:cereals-and-potatoes",
+   "en:cooking-helpers",
+   "en:food-additives",
+   "en:bakery-products",
+   "en:baking-powder-or-raising-agent",
+   "en:baking-powders"
+  ],
+  "code": "8901808000020",
+  "countries_tags": [
+   "en:india"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/890/180/800/0020/front_en.4.400.jpg",
+  "product_name": "Baking Powder",
+  "quantity": "100g"
+ },
+ "8906026900022": {
+  "brands": "madhur",
+  "categories_tags": [
+   "en:sweeteners",
+   "en:sugars"
+  ],
+  "code": "8906026900022",
+  "countries_tags": [
+   "en:india"
+  ],
+  "ecoscore_tags": [
+   "a"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/890/602/690/0022/front_en.4.400.jpg",
+  "product_name": "sugar",
+  "quantity": "1 kg"
+ },
+ "8906028560941": {
+  "brands": "Monaliz Foods Incorporation",
+  "categories_tags": [
+   "en:food-additives",
+   "en:anticaking-agents",
+   "en:bicarbonates-of-soda"
+  ],
+  "code": "8906028560941",
+  "countries_tags": [
+   "en:india"
+  ],
+  "ecoscore_tags": [
+   "b"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/890/602/856/0941/front_en.3.400.jpg",
+  "product_name": "Baking Soda",
+  "quantity": "100g"
+ },
+ "8901262260121": {
+  "brands": "Amul, Amul taaza",
+  "categories_tags": [
+   "en:dairies",
+   "en:milks-liquid-and-powder",
+   "en:milks",
+   "en:pasteurised-products",
+   "en:pasteurised-milks",
+   "en:whole-milks",
+   "en:whole-pasteurised-milks"
+  ],
+  "code": "8901262260121",
+  "countries_tags": [
+   "en:india"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/890/126/226/0121/front_en.52.400.jpg",
+  "product_name": "Amul Taaza Milky Milk",
+  "quantity": "500 ml"
+ },
+ "8906024480311": {
+  "brands": "Dodla",
+  "categories_tags": [
+   "en:dairies",
+   "en:milks-liquid-and-powder",
+   "en:milks",
+   "en:pasteurised-products",
+   "en:buffalo-milks",
+   "en:pasteurised-milks",
+   "en:toned-milks"
+  ],
+  "code": "8906024480311",
+  "countries_tags": [
+   "en:india"
+  ],
+  "ecoscore_tags": [
+   "d"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/890/602/448/0311/front_en.5.400.jpg",
+  "product_name": "toned milk",
+  "quantity": "1L"
+ },
+ "8904083301455": {
+  "brands": "Milky Mist",
+  "categories_tags": [
+   "en:dairies",
+   "en:milks-liquid-and-powder",
+   "en:milks",
+   "en:pasteurised-products",
+   "en:pasteurised-milks"
+  ],
+  "code": "8904083301455",
+  "countries_tags": [
+   "en:india"
+  ],
+  "ecoscore_tags": [
+   "c"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/890/408/330/1455/front_en.17.400.jpg",
+  "product_name": "Toned Milk",
+  "quantity": "1l"
+ },
+ "8906000210314": {
+  "brands": "Pilsbury",
+  "categories_tags": [
+   "en:plant-based-foods-and-beverages",
+   "en:plant-based-foods",
+   "en:cereals-and-potatoes",
+   "en:cereals-and-their-products",
+   "en:flours",
+   "en:cereal-flours",
+   "en:wheat-flours"
+  ],
+  "code": "8906000210314",
+  "countries_tags": [
+   "en:india"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/890/600/021/0314/front_en.7.400.jpg",
+  "product_name": "Pilsbury fresh Atta 5kg",
+  "quantity": "5"
+ },
+ "8901725121112": {
+  "brands": "Aashirvaad",
+  "categories_tags": [
+   "en:plant-based-foods-and-beverages",
+   "en:plant-based-foods",
+   "en:cereals-and-potatoes",
+   "en:cereals-and-their-products",
+   "en:flours",
+   "en:cereal-flours",
+   "en:wheat-flours",
+   "en:whole-wheat-flours"
+  ],
+  "code": "8901725121112",
+  "countries_tags": [
+   "en:india"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/890/172/512/1112/front_en.3.400.jpg",
+  "product_name": "Aashirvaad Atta",
+  "quantity": "10kg"
+ },
+ "8906007289139": {
+  "brands": "Fortune",
+  "categories_tags": [
+   "en:plant-based-foods-and-beverages",
+   "en:plant-based-foods",
+   "en:flours"
+  ],
+  "code": "8906007289139",
+  "countries_tags": [
+   "en:india"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/890/600/728/9139/front_en.3.400.jpg",
+  "product_name": "Fortune Atta",
+  "quantity": "1kg"
+ },
+ "8901719123894": {
+  "brands": "Parle",
+  "categories_tags": [
+   "en:snacks",
+   "en:sweet-snacks",
+   "en:biscuits-and-cakes",
+   "en:biscuits-and-crackers",
+   "en:biscuits"
+  ],
+  "code": "8901719123894",
+  "countries_tags": [
+   "en:india"
+  ],
+  "ecoscore_tags": [
+   "c"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/890/171/912/3894/front_en.3.400.jpg",
+  "product_name": "Parle -G (800g)",
+  "quantity": ""
+ },
+ "8901063163287": {
+  "brands": "Britannia",
+  "categories_tags": [
+   "en:snacks",
+   "en:sweet-snacks",
+   "en:biscuits-and-cakes",
+   "en:biscuits-and-crackers",
+   "en:biscuits",
+   "en:biscuit-with-milk"
+  ],
+  "code": "8901063163287",
+  "countries_tags": [
+   "en:india"
+  ],
+  "ecoscore_tags": [
+   "b"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/890/106/316/3287/front_en.3.400.jpg",
+  "product_name": "Tiger glucose biscuits",
+  "quantity": "49.7 grams"
+ },
+ "8901725113520": {
+  "brands": "Sunfeast",
+  "categories_tags": [
+   "en:snacks",
+   "en:sweet-snacks",
+   "en:biscuits-and-cakes",
+   "en:biscuits-and-crackers",
+   "en:biscuits",
+   "en:dry-biscuits",
+   "en:plain-biscuit"
+  ],
+  "code": "8901725113520",
+  "countries_tags": [
+   "en:india"
+  ],
+  "ecoscore_tags": [
+   "c"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/890/172/511/3520/front_en.4.400.jpg",
+  "product_name": "Glucose Biscuits",
+  "quantity": "100 g"
+ },
+ "8902901001730": {
+  "brands": "Good Life",
+  "categories_tags": [
+   "en:plant-based-foods-and-beverages",
+   "en:plant-based-foods",
+   "en:cereals-and-potatoes",
+   "en:cereals-and-their-products",
+   "en:flours",
+   "en:cereal-flours",
+   "en:wheat-flours",
+   "en:white-wheat-flours"
+  ],
+  "code": "8902901001730",
+  "countries_tags": [
+   "en:india"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/890/290/100/1730/front_en.22.400.jpg",
+  "product_name": "Maida",
+  "quantity": "1kg"
+ },
+ "8906010070267": {
+  "brands": "Ganesh",
+  "categories_tags": [
+   "en:plant-based-foods-and-beverages",
+   "en:plant-based-foods",
+   "en:cereals-and-potatoes",
+   "en:cereals-and-their-products",
+   "en:flours",
+   "en:cereal-flours",
+   "en:wheat-flours",
+   "en:whole-wheat-flours"
+  ],
+  "code": "8906010070267",
+  "countries_tags": [
+   "en:india"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/890/601/007/0267/front_en.16.400.jpg",
+  "product_name": "Maida",
+  "quantity": "1 kg"
+ },
+ "8901071211161": {
+  "brands": "HERSHEY'S",
+  "categories_tags": [
+   "en:cocoa-and-its-products",
+   "en:cocoa-and-chocolate-powders",
+   "en:cocoa-powders",
+   "en:Powder"
+  ],
+  "code": "8901071211161",
+  "countries_tags": [
+   "en:india"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/890/107/121/1161/front_en.20.400.jpg",
+  "product_name": "COCOA POWDER MEDIUM FAT COCOA POWDER",
+  "quantity": "225 g"
+ },
+ "7622201762582": {
+  "brands": "Cadbury",
+  "categories_tags": [
+   "en:cocoa-and-its-products",
+   "en:cocoa-and-chocolate-powders",
+   "en:cocoa-powders"
+  ],
+  "code": "7622201762582",
+  "countries_tags": [
+   "en:india"
+  ],
+  "ecoscore_tags": [
+   "f"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/762/220/176/2582/front_en.3.400.jpg",
+  "product_name": "Cocoa",
+  "quantity": "150g"
+ },
+ "8906036672292": {
+  "brands": "Nandini",
+  "categories_tags": [
+   "en:dairies",
+   "en:spreads",
+   "en:fats",
+   "en:spreadable-fats",
+   "en:animal-fats",
+   "en:dairy-spreads",
+   "en:milkfat",
+   "en:butters",
+   "en:unsalted-butters"
+  ],
+  "code": "8906036672292",
+  "countries_tags": [
+   "en:india"
+  ],
+  "ecoscore_tags": [
+   "d"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/890/603/667/2292/front_en.12.400.jpg",
+  "product_name": "Pasteurised Table Butter Unsalted",
+  "quantity": "200 g"
+ },
+ "8901018028531": {
+  "brands": "Nilgiris",
+  "categories_tags": [
+   "en:dairies",
+   "en:spreads",
+   "en:fats",
+   "en:spreadable-fats",
+   "en:animal-fats",
+   "en:dairy-spreads",
+   "en:milkfat",
+   "en:butters",
+   "en:unsalted-butters",
+   "en:pasteurized-butters",
+   "en:unsalted-butter-with-82-fat"
+  ],
+  "code": "8901018028531",
+  "countries_tags": [
+   "en:india"
+  ],
+  "ecoscore_tags": [
+   "e"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/890/101/802/8531/front_en.3.400.jpg",
+  "product_name": "Pasteurised Unsalted Cooking Butter",
+  "quantity": "500 g"
+ },
+ "8906012890023": {
+  "brands": "Baker's",
+  "categories_tags": [
+   "en:food-additives",
+   "en:baking-powder-or-raising-agent",
+   "en:baking-powders"
+  ],
+  "code": "8906012890023",
+  "countries_tags": [
+   "en:india"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/890/601/289/0023/front_en.3.400.jpg",
+  "product_name": "Baking Powder",
+  "quantity": "100 g"
+ },
+ "8901808000013": {
+  "brands": "Weikfield",
+  "categories_tags": [
+   "en:cooking-helpers",
+   "en:food-additives",
+   "en:pastry-helpers",
+   "en:baking-powder-or-raising-agent",
+   "en:baking-powders"
+  ],
+  "code": "8901808000013",
+  "countries_tags": [
+   "en:india"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/890/180/800/0013/front_en.11.400.jpg",
+  "product_name": "Weikfield baking powder Double Action",
+  "quantity": "50 g"
+ },
+ "8906009011301": {
+  "brands": "Parry's",
+  "categories_tags": [
+   "en:sweeteners",
+   "en:sugars"
+  ],
+  "code": "8906009011301",
+  "countries_tags": [
+   "en:india"
+  ],
+  "ecoscore_tags": [
+   "a"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/890/600/901/1301/front_en.17.400.jpg",
+  "product_name": "White Label Sugar",
+  "quantity": "1 kg"
+ },
+ "8906026900053": {
+  "brands": "Madhur",
+  "categories_tags": [
+   "en:sweeteners",
+   "en:sugars"
+  ],
+  "code": "8906026900053",
+  "countries_tags": [
+   "en:india"
+  ],
+  "ecoscore_tags": [
+   "a"
+  ],
+  "image_front_url": "https://images.openfoodfacts.org/images/products/890/602/690/0053/front_en.4.400.jpg",
+  "product_name": "Sugar",
+  "quantity": "5kg"
+ }
+}

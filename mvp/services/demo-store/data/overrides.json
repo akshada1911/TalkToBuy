@@ -1,0 +1,276 @@
+{
+  "_comment": [
+    "Keyed by barcode (Open Food Facts items) or by product id (hand-added items, which carry every field).",
+    "Prices are DEMO prices in paise, not real retail prices. Listings are written from pack facts only, with no health claims.",
+    "Hindi strings (local_name, synonyms) need a team review; record the sign-off in WORKLOG.md.",
+    "Scripted 10-product cart = Rs 1,016 = 101600 paise:",
+    "  p-0001 toned milk 1 L      2 x 6800 = 13600",
+    "  p-0002 tomatoes 250 g          1500",
+    "  p-0003 Aashirvaad atta 5 kg   28900",
+    "  p-0004 Parle-G 150 g           2000",
+    "  p-0005 Fortune maida 500 g     3800",
+    "  p-0006 Hershey's cocoa 70 g    9500",
+    "  p-0007 Amul butter 100 g       6200",
+    "  p-0008 Milkmaid 380 g         14500",
+    "  p-0009 baking powder 100 g     4000",
+    "  p-0010 cake tin 7 inch        17600",
+    "  13600+1500+28900+2000+3800+9500+6200+14500+4000+17600 = 101600"
+  ],
+
+  "8901058869262": {
+    "name": "Nestlé a+ Toned Milk 1 L", "local_name": "टोंड दूध 1 लीटर", "brand": "Nestlé",
+    "size": "1 L", "unit_qty": 1000, "unit": "ml", "category": "dairy", "price_minor": 6800,
+    "synonyms": ["doodh", "dudh", "toned milk", "toned doodh", "milk", "दूध", "टोंड दूध", "nestle doodh"],
+    "listing": {"description": "Toned milk in a 1 litre pack.", "usage": "Keep refrigerated after opening. For tea, coffee and everyday cooking."}
+  },
+  "p-0002": {
+    "barcode": null, "name": "Tomatoes 250 g", "local_name": "टमाटर 250 ग्राम", "brand": null,
+    "size": "250 g", "unit_qty": 250, "unit": "g", "category": "produce", "price_minor": 1500,
+    "synonyms": ["tamatar", "tamaatar", "tomato", "tomatoes", "टमाटर", "paav kilo tamatar"],
+    "listing": {"description": "Fresh red tomatoes, 250 g.", "usage": "For curries, chutneys and salads."},
+    "image_credit": "TalkToBuy placeholder illustration"
+  },
+  "8901725121129": {
+    "name": "Aashirvaad Shudh Chakki Atta 5 kg", "local_name": "आशीर्वाद शुद्ध चक्की आटा 5 किलो", "brand": "Aashirvaad",
+    "size": "5 kg", "unit_qty": 5000, "unit": "g", "category": "flours", "price_minor": 28900,
+    "synonyms": ["aata", "atta", "chakki atta", "gehun ka atta", "aashirvaad atta", "आटा", "चक्की आटा", "गेहूं का आटा"],
+    "listing": {"description": "Whole wheat chakki atta in a 5 kg pack.", "usage": "For rotis, parathas and puris."}
+  },
+  "8901719255151": {
+    "name": "Parle-G Original Gluco Biscuits 150 g", "local_name": "पारले-जी ग्लूकोज़ बिस्किट", "brand": "Parle",
+    "size": "150 g", "unit_qty": 150, "unit": "g", "category": "biscuits", "price_minor": 2000,
+    "synonyms": ["parle-g", "parle g", "parleg", "parle ji", "parle-g biscuit", "parle g biscuit", "parle biscuit", "parle-g packet", "पारले-जी बिस्किट", "glucose biscuit", "gluco biscuit", "biscuit", "biskut", "पारले जी", "बिस्किट"],
+    "listing": {"description": "Parle-G original glucose biscuits, 150 g pack.", "usage": "A tea-time biscuit; store in a cool, dry place."}
+  },
+  "8906008811117": {
+    "name": "Fortune Maida 500 g", "local_name": "फ़ॉर्च्यून मैदा 500 ग्राम", "brand": "Fortune",
+    "size": "500 g", "unit_qty": 500, "unit": "g", "category": "flours", "price_minor": 3800,
+    "synonyms": ["maida", "maidaa", "refined flour", "all purpose flour", "मैदा"],
+    "listing": {"description": "Refined wheat flour (maida), 500 g pack.", "usage": "For cakes, naan, samosa and baking."}
+  },
+  "8901071702102": {
+    "name": "Hershey's Cocoa Powder 70 g", "local_name": "हर्शीज़ कोको पाउडर 70 ग्राम", "brand": "Hershey's",
+    "size": "70 g", "unit_qty": 70, "unit": "g", "category": "baking", "price_minor": 9500,
+    "synonyms": ["cocoa", "cocoa powder", "koko powder", "coco powder", "chocolate powder", "कोको", "कोको पाउडर"],
+    "listing": {"description": "Unsweetened cocoa powder, 70 g pack.", "usage": "For chocolate cakes, brownies and hot chocolate."}
+  },
+  "8901262010016": {
+    "name": "Amul Butter 100 g", "local_name": "अमूल मक्खन 100 ग्राम", "brand": "Amul",
+    "size": "100 g", "unit_qty": 100, "unit": "g", "category": "dairy", "price_minor": 6200,
+    "synonyms": ["butter", "makhan", "makkhan", "amul butter", "मक्खन", "बटर"],
+    "listing": {"description": "Pasteurised table butter, 100 g pack.", "usage": "Keep refrigerated. For bread, parathas and baking."}
+  },
+  "8901058903959": {
+    "name": "Nestlé Milkmaid Sweetened Condensed Milk 380 g", "local_name": "मिल्कमेड कंडेंस्ड मिल्क 380 ग्राम", "brand": "Nestlé",
+    "size": "380 g", "unit_qty": 380, "unit": "g", "category": "dairy", "price_minor": 14500,
+    "synonyms": ["milkmaid", "condensed milk", "condensed doodh", "kandens milk", "मिल्कमेड", "कंडेंस्ड मिल्क"],
+    "listing": {"description": "Sweetened condensed milk, 380 g tin.", "usage": "For eggless cakes, kheer and Indian sweets."}
+  },
+  "8901808000020": {
+    "name": "Weikfield Baking Powder 100 g", "local_name": "वीकफ़ील्ड बेकिंग पाउडर 100 ग्राम", "brand": "Weikfield",
+    "size": "100 g", "unit_qty": 100, "unit": "g", "category": "baking", "price_minor": 4000,
+    "synonyms": ["baking powder", "beking powder", "बेकिंग पाउडर"],
+    "listing": {"description": "Baking powder, 100 g pack.", "usage": "A raising agent for cakes and muffins."}
+  },
+  "p-0010": {
+    "barcode": null, "name": "Round Cake Tin 7 inch", "local_name": "केक टिन 7 इंच", "brand": null,
+    "size": "7 inch", "unit_qty": 1, "unit": "piece", "category": "home", "price_minor": 17600,
+    "synonyms": ["cake tin", "7 inch cake tin", "cake mould", "cake ka bartan", "baking tin", "केक टिन", "केक का बर्तन"],
+    "source_categories": ["talktobuy:bakeware"],
+    "listing": {"description": "Round aluminium cake tin, 7 inch (18 cm) across.", "usage": "For baking a small cake in an oven or OTG."},
+    "image_credit": "TalkToBuy placeholder illustration"
+  },
+  "8906026900022": {
+    "name": "Madhur Sugar 1 kg", "local_name": "मधुर चीनी 1 किलो", "brand": "Madhur",
+    "size": "1 kg", "unit_qty": 1000, "unit": "g", "category": "staples", "price_minor": 4800,
+    "synonyms": ["sugar", "chini", "cheeni", "shakkar", "चीनी", "शक्कर"],
+    "listing": {"description": "Refined white sugar, 1 kg pack.", "usage": "For tea, sweets and baking."}
+  },
+  "8906028560941": {
+    "name": "Monaliz Baking Soda 100 g", "local_name": "बेकिंग सोडा 100 ग्राम", "brand": "Monaliz",
+    "size": "100 g", "unit_qty": 100, "unit": "g", "category": "baking", "price_minor": 2500,
+    "synonyms": ["baking soda", "meetha soda", "khane ka soda", "soda bicarbonate", "बेकिंग सोडा", "मीठा सोडा"],
+    "listing": {"description": "Sodium bicarbonate (baking soda), 100 g pack.", "usage": "A raising agent for cakes, dhokla and bhature."}
+  },
+
+  "8901262260121": {
+    "name": "Amul Taaza Toned Milk 500 ml", "local_name": "अमूल ताज़ा टोंड दूध 500 मिली", "brand": "Amul",
+    "size": "500 ml", "unit_qty": 500, "unit": "ml", "category": "dairy", "price_minor": 2900,
+    "synonyms": ["amul taaza", "taaza doodh", "chhota doodh", "amul milk", "अमूल दूध"],
+    "listing": {"description": "Amul Taaza toned milk, 500 ml pack.", "usage": "Keep refrigerated after opening. For tea and cooking."}
+  },
+  "8906024480311": {
+    "name": "Dodla Toned Milk 1 L", "local_name": "डोडला टोंड दूध 1 लीटर", "brand": "Dodla",
+    "size": "1 L", "unit_qty": 1000, "unit": "ml", "category": "dairy", "price_minor": 6600,
+    "synonyms": ["dodla doodh", "dodla milk", "डोडला दूध"],
+    "listing": {"description": "Dodla toned milk, 1 litre pack.", "usage": "Keep refrigerated after opening. For tea and cooking."}
+  },
+  "8904083301455": {
+    "name": "Milky Mist Toned Milk 1 L", "local_name": "मिल्की मिस्ट टोंड दूध 1 लीटर", "brand": "Milky Mist",
+    "size": "1 L", "unit_qty": 1000, "unit": "ml", "category": "dairy", "price_minor": 7000,
+    "synonyms": ["milky mist doodh", "milky mist milk", "मिल्की मिस्ट दूध"],
+    "listing": {"description": "Milky Mist toned milk, 1 litre pack.", "usage": "Keep refrigerated after opening. For tea and cooking."}
+  },
+  "p-0016": {
+    "barcode": null, "name": "Tomatoes Value Pack 1 kg", "local_name": "टमाटर बड़ा पैक 1 किलो", "brand": null,
+    "size": "1 kg", "unit_qty": 1000, "unit": "g", "category": "produce", "price_minor": 5200,
+    "synonyms": ["tamatar bada pack", "tomato value pack", "tamatar jumbo"],
+    "listing": {"description": "Fresh red tomatoes, 1 kg value pack.", "usage": "For curries, chutneys and salads."},
+    "image_credit": "TalkToBuy placeholder illustration"
+  },
+  "p-0017": {
+    "barcode": null, "name": "Cherry Tomatoes 200 g", "local_name": "चेरी टमाटर 200 ग्राम", "brand": null,
+    "size": "200 g", "unit_qty": 200, "unit": "g", "category": "produce", "price_minor": 6500,
+    "synonyms": ["cherry tomato", "chhote tamatar", "चेरी टमाटर"],
+    "listing": {"description": "Red cherry tomatoes, 200 g punnet.", "usage": "For salads and garnishing."},
+    "image_credit": "TalkToBuy placeholder illustration"
+  },
+  "8906000210314": {
+    "name": "Pillsbury Chakki Fresh Atta 5 kg", "local_name": "पिल्सबरी चक्की फ़्रेश आटा 5 किलो", "brand": "Pillsbury",
+    "size": "5 kg", "unit_qty": 5000, "unit": "g", "category": "flours", "price_minor": 27500,
+    "synonyms": ["pillsbury atta", "pillsbury chakki atta", "पिल्सबरी आटा"],
+    "listing": {"description": "Pillsbury whole wheat chakki atta, 5 kg pack.", "usage": "For rotis and parathas."},
+    "in_stock": false
+  },
+  "8901725121112": {
+    "name": "Aashirvaad Atta 10 kg", "local_name": "आशीर्वाद आटा 10 किलो", "brand": "Aashirvaad",
+    "size": "10 kg", "unit_qty": 10000, "unit": "g", "category": "flours", "price_minor": 54500,
+    "synonyms": ["aashirvaad atta bada pack", "आशीर्वाद आटा"],
+    "listing": {"description": "Aashirvaad whole wheat atta, 10 kg pack.", "usage": "For rotis, parathas and puris."}
+  },
+  "8906007289139": {
+    "name": "Fortune Chakki Fresh Atta 1 kg", "local_name": "फ़ॉर्च्यून आटा 1 किलो", "brand": "Fortune",
+    "size": "1 kg", "unit_qty": 1000, "unit": "g", "category": "flours", "price_minor": 6200,
+    "synonyms": ["fortune atta", "chhota atta", "फ़ॉर्च्यून आटा"],
+    "listing": {"description": "Fortune whole wheat atta, 1 kg pack.", "usage": "For rotis and parathas."}
+  },
+  "8901719123894": {
+    "name": "Parle-G Original Gluco Biscuits 800 g", "local_name": "पारले-जी बिस्किट बड़ा पैक 800 ग्राम", "brand": "Parle",
+    "size": "800 g", "unit_qty": 800, "unit": "g", "category": "biscuits", "price_minor": 9000,
+    "synonyms": ["parle-g family pack", "parle g bada pack", "पारले जी बड़ा पैक"],
+    "listing": {"description": "Parle-G original glucose biscuits, 800 g family pack.", "usage": "A tea-time biscuit; store in a cool, dry place."}
+  },
+  "8901063163287": {
+    "name": "Britannia Tiger Glucose Biscuits 49.7 g", "local_name": "ब्रिटानिया टाइगर ग्लूकोज़ बिस्किट", "brand": "Britannia",
+    "size": "49.7 g", "unit_qty": 49.7, "unit": "g", "category": "biscuits", "price_minor": 500,
+    "synonyms": ["tiger biscuit", "britannia tiger", "टाइगर बिस्किट"],
+    "listing": {"description": "Britannia Tiger glucose biscuits, 49.7 g pack.", "usage": "A tea-time biscuit."}
+  },
+  "8901725113520": {
+    "name": "Sunfeast Glucose Biscuits 100 g", "local_name": "सनफ़ीस्ट ग्लूकोज़ बिस्किट 100 ग्राम", "brand": "Sunfeast",
+    "size": "100 g", "unit_qty": 100, "unit": "g", "category": "biscuits", "price_minor": 1000,
+    "synonyms": ["sunfeast glucose", "sunfeast biscuit", "सनफ़ीस्ट बिस्किट"],
+    "listing": {"description": "Sunfeast glucose biscuits, 100 g pack.", "usage": "A tea-time biscuit."}
+  },
+  "8902901001730": {
+    "name": "GoodLife Maida 1 kg", "local_name": "गुडलाइफ़ मैदा 1 किलो", "brand": "GoodLife",
+    "size": "1 kg", "unit_qty": 1000, "unit": "g", "category": "flours", "price_minor": 6500,
+    "synonyms": ["goodlife maida", "गुडलाइफ़ मैदा"],
+    "listing": {"description": "Refined wheat flour (maida), 1 kg pack.", "usage": "For baking, naan and samosa."}
+  },
+  "8906010070267": {
+    "name": "Ganesh Maida 1 kg", "local_name": "गणेश मैदा 1 किलो", "brand": "Ganesh",
+    "size": "1 kg", "unit_qty": 1000, "unit": "g", "category": "flours", "price_minor": 6200,
+    "synonyms": ["ganesh maida", "गणेश मैदा"],
+    "listing": {"description": "Refined wheat flour (maida), 1 kg pack.", "usage": "For baking, naan and samosa."}
+  },
+  "8901071211161": {
+    "name": "Hershey's Cocoa Powder 225 g", "local_name": "हर्शीज़ कोको पाउडर 225 ग्राम", "brand": "Hershey's",
+    "size": "225 g", "unit_qty": 225, "unit": "g", "category": "baking", "price_minor": 24500,
+    "synonyms": ["hersheys cocoa bada pack", "हर्शीज़ कोको"],
+    "listing": {"description": "Unsweetened cocoa powder, 225 g tin.", "usage": "For chocolate cakes and brownies."}
+  },
+  "7622201762582": {
+    "name": "Cadbury Bournville Cocoa Powder 150 g", "local_name": "कैडबरी कोको पाउडर 150 ग्राम", "brand": "Cadbury",
+    "size": "150 g", "unit_qty": 150, "unit": "g", "category": "baking", "price_minor": 21000,
+    "synonyms": ["cadbury cocoa", "bournville cocoa", "कैडबरी कोको"],
+    "listing": {"description": "Cadbury cocoa powder, 150 g pack.", "usage": "For chocolate cakes and drinks."}
+  },
+  "8906036672292": {
+    "name": "Nandini Unsalted Table Butter 200 g", "local_name": "नंदिनी बिना नमक का मक्खन 200 ग्राम", "brand": "Nandini",
+    "size": "200 g", "unit_qty": 200, "unit": "g", "category": "dairy", "price_minor": 11500,
+    "synonyms": ["unsalted butter", "nandini butter", "bina namak makhan", "अनसाल्टेड बटर"],
+    "listing": {"description": "Pasteurised unsalted table butter, 200 g pack.", "usage": "Keep refrigerated. For baking and cooking."}
+  },
+  "8901018028531": {
+    "name": "Nilgiris Unsalted Cooking Butter 500 g", "local_name": "नीलगिरी कुकिंग बटर 500 ग्राम", "brand": "Nilgiris",
+    "size": "500 g", "unit_qty": 500, "unit": "g", "category": "dairy", "price_minor": 27500,
+    "synonyms": ["cooking butter", "nilgiris butter", "bada butter", "कुकिंग बटर"],
+    "listing": {"description": "Pasteurised unsalted cooking butter, 500 g pack.", "usage": "Keep refrigerated. For cooking and baking."}
+  },
+  "p-0030": {
+    "barcode": null, "name": "Amul Mithaimate Sweetened Condensed Milk 400 g", "local_name": "अमूल मिठाईमेट कंडेंस्ड मिल्क 400 ग्राम", "brand": "Amul",
+    "size": "400 g", "unit_qty": 400, "unit": "g", "category": "dairy", "price_minor": 14000,
+    "synonyms": ["mithaimate", "amul condensed milk", "मिठाईमेट"],
+    "listing": {"description": "Sweetened condensed milk, 400 g tin.", "usage": "For cakes, kheer and Indian sweets."},
+    "image_credit": "TalkToBuy placeholder illustration"
+  },
+  "8906012890023": {
+    "name": "Baker's Baking Powder 100 g", "local_name": "बेकर्स बेकिंग पाउडर 100 ग्राम", "brand": "Baker's",
+    "size": "100 g", "unit_qty": 100, "unit": "g", "category": "baking", "price_minor": 4500,
+    "synonyms": ["bakers baking powder", "बेकर्स बेकिंग पाउडर"],
+    "listing": {"description": "Baking powder, 100 g pack.", "usage": "A raising agent for cakes and muffins."}
+  },
+  "8901808000013": {
+    "name": "Weikfield Baking Powder 50 g", "local_name": "वीकफ़ील्ड बेकिंग पाउडर 50 ग्राम", "brand": "Weikfield",
+    "size": "50 g", "unit_qty": 50, "unit": "g", "category": "baking", "price_minor": 2500,
+    "synonyms": ["chhota baking powder", "weikfield small"],
+    "listing": {"description": "Baking powder, 50 g pack.", "usage": "A raising agent for cakes and muffins."}
+  },
+  "p-0033": {
+    "barcode": null, "name": "Round Cake Tin 8 inch", "local_name": "केक टिन 8 इंच", "brand": null,
+    "size": "8 inch", "unit_qty": 1, "unit": "piece", "category": "home", "price_minor": 21900,
+    "synonyms": ["8 inch cake tin", "bada cake tin", "बड़ा केक टिन"],
+    "source_categories": ["talktobuy:bakeware"],
+    "listing": {"description": "Round aluminium cake tin, 8 inch (20 cm) across.", "usage": "For baking a medium cake in an oven or OTG."},
+    "image_credit": "TalkToBuy placeholder illustration"
+  },
+  "p-0034": {
+    "barcode": null, "name": "Loaf Cake Tin", "local_name": "लोफ़ केक टिन", "brand": null,
+    "size": "1 piece", "unit_qty": 1, "unit": "piece", "category": "home", "price_minor": 19900,
+    "synonyms": ["loaf tin", "bread tin", "lamba cake tin"],
+    "source_categories": ["talktobuy:bakeware"],
+    "listing": {"description": "Rectangular aluminium loaf tin, about 9 x 5 inch.", "usage": "For loaf cakes and bread."},
+    "image_credit": "TalkToBuy placeholder illustration"
+  },
+  "8906009011301": {
+    "name": "Parry's White Label Sugar 1 kg", "local_name": "पैरीज़ चीनी 1 किलो", "brand": "Parry's",
+    "size": "1 kg", "unit_qty": 1000, "unit": "g", "category": "staples", "price_minor": 5200,
+    "synonyms": ["parrys sugar", "पैरीज़ चीनी"],
+    "listing": {"description": "Refined white sugar, 1 kg pack.", "usage": "For tea, sweets and baking."}
+  },
+  "8906026900053": {
+    "name": "Madhur Sugar 5 kg", "local_name": "मधुर चीनी 5 किलो", "brand": "Madhur",
+    "size": "5 kg", "unit_qty": 5000, "unit": "g", "category": "staples", "price_minor": 23500,
+    "synonyms": ["chini bada pack", "मधुर चीनी बड़ा पैक"],
+    "listing": {"description": "Refined white sugar, 5 kg pack.", "usage": "For tea, sweets and baking."}
+  },
+  "p-0037": {
+    "barcode": null, "name": "Baking Soda Jumbo Pack 200 g", "local_name": "बेकिंग सोडा बड़ा पैक 200 ग्राम", "brand": null,
+    "size": "200 g", "unit_qty": 200, "unit": "g", "category": "baking", "price_minor": 4000,
+    "synonyms": ["bada baking soda", "baking soda jumbo"],
+    "listing": {"description": "Sodium bicarbonate (baking soda), 200 g pack.", "usage": "A raising agent for cakes, dhokla and bhature."},
+    "image_credit": "TalkToBuy placeholder illustration"
+  },
+  "p-0038": {
+    "barcode": null, "name": "Onions 1 kg", "local_name": "प्याज़ 1 किलो", "brand": null,
+    "size": "1 kg", "unit_qty": 1000, "unit": "g", "category": "produce", "price_minor": 4000,
+    "synonyms": ["pyaz", "pyaaz", "kanda", "onion", "प्याज़", "प्याज"],
+    "listing": {"description": "Red onions, 1 kg.", "usage": "For curries, salads and tadka."},
+    "image_credit": "TalkToBuy placeholder illustration"
+  },
+  "p-0039": {
+    "barcode": null, "name": "Potatoes 1 kg", "local_name": "आलू 1 किलो", "brand": null,
+    "size": "1 kg", "unit_qty": 1000, "unit": "g", "category": "produce", "price_minor": 3500,
+    "synonyms": ["aloo", "alu", "potato", "आलू"],
+    "listing": {"description": "Potatoes, 1 kg.", "usage": "For sabzi, paratha and snacks."},
+    "image_credit": "TalkToBuy placeholder illustration"
+  },
+  "p-0040": {
+    "barcode": null, "name": "Ginger 100 g", "local_name": "अदरक 100 ग्राम", "brand": null,
+    "size": "100 g", "unit_qty": 100, "unit": "g", "category": "produce", "price_minor": 1500,
+    "synonyms": ["adrak", "ginger", "अदरक"],
+    "listing": {"description": "Fresh ginger root, 100 g.", "usage": "For tea, curries and chutneys."},
+    "image_credit": "TalkToBuy placeholder illustration"
+  }
+}

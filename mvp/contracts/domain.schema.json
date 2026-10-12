@@ -1,0 +1,210 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://talktobuy.dev/contracts/domain.schema.json",
+  "title": "TalkToBuyDomain",
+  "description": "Domain entities from specs/001-talktobuy-assistant/data-model.md. Source of truth for generated Pydantic and TypeScript types. There is deliberately no age field anywhere (FR-039).",
+  "type": "object",
+  "properties": {
+    "product": { "$ref": "#/$defs/Product" },
+    "cart": { "$ref": "#/$defs/Cart" },
+    "session": { "$ref": "#/$defs/Session" },
+    "order": { "$ref": "#/$defs/Order" },
+    "shopper": { "$ref": "#/$defs/Shopper" }
+  },
+  "$defs": {
+    "Unit": { "type": "string", "enum": ["g", "ml", "piece"] },
+    "Currency": { "type": "string", "enum": ["INR"] },
+    "Listing": {
+      "type": "object",
+      "description": "The only allowed basis for product explanations (FR-030).",
+      "properties": {
+        "description": { "type": "string", "minLength": 1 },
+        "usage": { "type": ["string", "null"] }
+      },
+      "required": ["description"],
+      "additionalProperties": false
+    },
+    "Product": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "pattern": "^p-\\d{4}$" },
+        "barcode": { "type": ["string", "null"] },
+        "name": { "type": "string", "minLength": 1 },
+        "local_name": { "type": "string", "minLength": 1, "description": "Hindi (Devanagari) name" },
+        "brand": { "type": ["string", "null"] },
+        "size": { "type": "string", "minLength": 1, "description": "Human label, e.g. '1 L', '250 g'" },
+        "unit_qty": { "type": "number", "exclusiveMinimum": 0 },
+        "unit": { "$ref": "#/$defs/Unit" },
+        "price_minor": { "type": "integer", "exclusiveMinimum": 0, "description": "INR paise" },
+        "currency": { "$ref": "#/$defs/Currency" },
+        "image": { "type": "string", "minLength": 1 },
+        "image_credit": { "type": "string" },
+        "category": {
+          "type": "string",
+          "enum": ["dairy", "flours", "biscuits", "baking", "beverages", "spices", "staples", "snacks", "produce", "home"]
+        },
+        "source_categories": { "type": "array", "items": { "type": "string" } },
+        "listing": { "$ref": "#/$defs/Listing" },
+        "synonyms": { "type": "array", "items": { "type": "string" } },
+        "in_stock": { "type": "boolean" }
+      },
+      "required": ["id", "name", "local_name", "size", "unit_qty", "unit", "price_minor", "currency", "image", "image_credit", "category", "source_categories", "listing", "synonyms", "in_stock"],
+      "additionalProperties": false
+    },
+    "CartLineSource": { "type": "string", "enum": ["named", "camera", "usual", "goal"] },
+    "CartLine": {
+      "type": "object",
+      "properties": {
+        "product_id": { "type": "string" },
+        "qty": { "type": "integer", "minimum": 1 },
+        "line_total_minor": { "type": "integer", "minimum": 0 },
+        "source": { "$ref": "#/$defs/CartLineSource" }
+      },
+      "required": ["product_id", "qty", "line_total_minor", "source"],
+      "additionalProperties": false
+    },
+    "Cart": {
+      "type": "object",
+      "properties": {
+        "lines": { "type": "array", "items": { "$ref": "#/$defs/CartLine" } },
+        "item_count": { "type": "integer", "minimum": 0, "description": "Distinct products" },
+        "total_minor": { "type": "integer", "minimum": 0 },
+        "currency": { "$ref": "#/$defs/Currency" }
+      },
+      "required": ["lines", "item_count", "total_minor", "currency"],
+      "additionalProperties": false
+    },
+    "DeliverySlot": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "label_hi": { "type": "string" },
+        "label_en": { "type": "string" },
+        "start": { "type": ["string", "null"], "format": "date-time" },
+        "end": { "type": ["string", "null"], "format": "date-time" }
+      },
+      "required": ["id", "label_hi", "label_en"],
+      "additionalProperties": false
+    },
+    "GoalItem": {
+      "type": "object",
+      "properties": {
+        "need": { "type": "string" },
+        "product_id": { "type": ["string", "null"] },
+        "qty": { "type": "integer", "minimum": 1 },
+        "struck": { "type": "boolean" },
+        "struck_reason": { "type": ["string", "null"], "enum": ["on_hand", "in_cart", null] }
+      },
+      "required": ["need", "struck"],
+      "additionalProperties": false
+    },
+    "GoalList": {
+      "type": "object",
+      "properties": {
+        "goal_id": { "type": "string" },
+        "goal_text": { "type": "string" },
+        "questions_asked": { "type": "integer", "minimum": 0, "maximum": 2 },
+        "items": { "type": "array", "items": { "$ref": "#/$defs/GoalItem" } },
+        "status": { "type": "string", "enum": ["proposed", "confirmed", "discarded"] }
+      },
+      "required": ["goal_id", "goal_text", "questions_asked", "items", "status"],
+      "additionalProperties": false
+    },
+    "PendingConfirmation": {
+      "type": "object",
+      "properties": {
+        "kind": { "type": "string", "enum": ["usual", "camera", "goal", "family"] },
+        "product_ids": { "type": "array", "items": { "type": "string" } },
+        "armed_at": { "type": "number", "description": "Unix seconds" },
+        "confirmed": { "type": "boolean" }
+      },
+      "required": ["kind", "product_ids", "armed_at", "confirmed"],
+      "additionalProperties": false
+    },
+    "Usage": {
+      "type": "object",
+      "properties": {
+        "audio_in_s": { "type": "number", "minimum": 0 },
+        "audio_out_s": { "type": "number", "minimum": 0 },
+        "video_in_s": { "type": "number", "minimum": 0 },
+        "tokens_in": { "type": "integer", "minimum": 0 },
+        "tokens_out": { "type": "integer", "minimum": 0 },
+        "est_cost_usd": { "type": "number", "minimum": 0 }
+      },
+      "required": ["audio_in_s", "audio_out_s", "video_in_s", "tokens_in", "tokens_out", "est_cost_usd"],
+      "additionalProperties": false
+    },
+    "Pace": { "type": "string", "enum": ["guided", "quick"] },
+    "MediaMode": { "type": "string", "enum": ["avatar", "audio_only"] },
+    "Session": {
+      "type": "object",
+      "properties": {
+        "session_id": { "type": "string" },
+        "shopper_id": { "type": "string" },
+        "pace": { "$ref": "#/$defs/Pace", "default": "guided" },
+        "language": { "type": "string", "enum": ["hi"], "default": "hi" },
+        "show_translation": { "type": "boolean", "default": true },
+        "cart_ref": { "type": ["string", "null"] },
+        "on_hand": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "health_consent": { "type": "boolean", "default": false },
+        "safety_hold": { "type": "boolean", "default": false },
+        "checkout_id": { "type": ["string", "null"] },
+        "checkout_ready": { "type": "boolean", "default": false },
+        "pending_confirmation": { "anyOf": [{ "$ref": "#/$defs/PendingConfirmation" }, { "type": "null" }] },
+        "pending_goal": { "anyOf": [{ "$ref": "#/$defs/GoalList" }, { "type": "null" }] },
+        "correction_count": { "type": "integer", "minimum": 0, "default": 0 },
+        "media_mode": { "$ref": "#/$defs/MediaMode", "default": "avatar" },
+        "started_at": { "type": "number" },
+        "ended_at": { "type": ["number", "null"] },
+        "usage": { "$ref": "#/$defs/Usage" }
+      },
+      "required": ["session_id", "shopper_id", "started_at", "usage"],
+      "additionalProperties": false
+    },
+    "FamilyContact": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "channel": { "type": "string", "enum": ["in_app"] }
+      },
+      "required": ["id", "name", "channel"],
+      "additionalProperties": false
+    },
+    "AddressForm": { "type": "string", "enum": ["respectful_male", "respectful_female", "neutral"] },
+    "Shopper": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "display_name": { "type": "string" },
+        "language": { "type": "string", "enum": ["hi"] },
+        "address_form": { "$ref": "#/$defs/AddressForm" }
+      },
+      "required": ["id", "display_name", "language", "address_form"],
+      "additionalProperties": false
+    },
+    "OrderLine": {
+      "type": "object",
+      "properties": {
+        "product_id": { "type": "string" },
+        "qty": { "type": "integer", "minimum": 1 }
+      },
+      "required": ["product_id", "qty"],
+      "additionalProperties": false
+    },
+    "Order": {
+      "type": "object",
+      "properties": {
+        "order_id": { "type": "string" },
+        "shopper_id": { "type": "string" },
+        "lines": { "type": "array", "items": { "$ref": "#/$defs/OrderLine" } },
+        "total_minor": { "type": "integer", "minimum": 0 },
+        "delivery_slot": { "$ref": "#/$defs/DeliverySlot" },
+        "placed_at": { "type": "string" },
+        "mode": { "type": "string", "enum": ["test"] }
+      },
+      "required": ["order_id", "shopper_id", "lines", "total_minor", "placed_at", "mode"],
+      "additionalProperties": false
+    }
+  }
+}
