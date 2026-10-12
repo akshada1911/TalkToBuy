@@ -193,16 +193,20 @@ class ConversationSession:
         if verdict.warning_sign:
             await hold.apply(rt, verdict)
         confirm.on_shopper_input(rt, so_far)
-        await rt.ui.send_json(CaptionMsg(type="caption", who="shopper", turn_id=self._turn_id("shopper"),
-                                         text_hi=so_far, text_en=None, final=final))
         if final:
-            await self._finish_turn("shopper")
+            await self._finish_turn("shopper")  # sends the single final caption
+        else:
+            await rt.ui.send_json(CaptionMsg(type="caption", who="shopper", turn_id=self._turn_id("shopper"),
+                                             text_hi=so_far, text_en=None, final=False))
 
     async def _assistant_text(self, text: str, *, final: bool) -> None:
         self._text["assistant"] += text
+        if final:
+            await self._finish_turn("assistant")  # sends the single final caption
+            return
         await self.rt.ui.send_json(CaptionMsg(type="caption", who="assistant",
                                               turn_id=self._turn_id("assistant"),
-                                              text_hi=self._text["assistant"], text_en=None, final=final))
+                                              text_hi=self._text["assistant"], text_en=None, final=False))
 
     async def _finish_turn(self, who: str) -> None:
         text = self._text[who].strip()

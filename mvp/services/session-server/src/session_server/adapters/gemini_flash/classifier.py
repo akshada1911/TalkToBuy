@@ -44,7 +44,8 @@ class FlashClassifier:
                 model=self.model,
                 contents=PROMPT.format(text=text),
                 config=types.GenerateContentConfig(
-                    temperature=0, response_mime_type="application/json", response_schema=SCHEMA
+                    temperature=0, response_mime_type="application/json", response_schema=SCHEMA,
+                    thinking_config=types.ThinkingConfig(thinking_budget=0),
                 ),
             )
             data = json.loads(resp.text or "{}")

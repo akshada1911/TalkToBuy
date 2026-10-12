@@ -26,7 +26,11 @@ class FlashTranslate:
             resp = await self.client.aio.models.generate_content(
                 model=self.model,
                 contents=PROMPT.format(text=text_hi),
-                config=types.GenerateContentConfig(temperature=0, max_output_tokens=200),
+                config=types.GenerateContentConfig(
+                    temperature=0, max_output_tokens=400,
+                    # 2.5 Flash "thinks" by default and that eats the output budget (captions were cut off).
+                    thinking_config=types.ThinkingConfig(thinking_budget=0),
+                ),
             )
             return (resp.text or "").strip() or None
         except Exception:
