@@ -116,6 +116,13 @@ export class TtbCaptions extends LitElement {
         flex-direction: column;
         gap: 4px;
       }
+      /* no bubble: the log variant's .assistant/.shopper backgrounds must not leak in */
+      .talk .t {
+        background: none;
+        max-width: none;
+        padding: 0;
+        align-self: stretch;
+      }
       .talk .t.old {
         position: absolute;
         width: 1px;
@@ -210,7 +217,7 @@ export class TtbCaptions extends LitElement {
           ? html`<p class="bot" lang=${this.language}>${tr(this.language, "नमस्ते! आज क्या मँगवाना है?", "Namaste! What would you like to order today?")}</p>`
           : this.turns.map(
               (t, i) => html`
-                <div class="t ${t.who} ${shown.has(i) ? "" : "old"} ${t.final ? "" : "partial"}" data-turn=${t.turn_id}>
+                <div class="t ${shown.has(i) ? "" : "old"} ${t.final ? "" : "partial"}" data-who=${t.who} data-turn=${t.turn_id}>
                   <p class=${t.who === "shopper" ? "you" : "bot"} lang=${this.language}>
                     <span class="sr-only">${t.who === "assistant" ? tr(this.language, "दुकानदार (AI): ", "Shopkeeper (AI): ") : tr(this.language, "आप: ", "You: ")}</span>${t.text_hi}${t.interrupted ? " …" : ""}
                   </p>

@@ -39,6 +39,9 @@ describe("<ttb-captions variant=talk>", () => {
     expect(turns.length).toBe(3);
     expect(turns.map((t) => t.classList.contains("old"))).toEqual([true, false, false]);
     expect(el.shadowRoot!.querySelector("[role=log][aria-live=polite]")).not.toBeNull();
+    // White text on the green page: none of the log bubbles' classes (they have light backgrounds).
+    expect(turns.every((t) => !t.classList.contains("assistant") && !t.classList.contains("shopper"))).toBe(true);
+    expect(turns.map((t) => t.getAttribute("data-who"))).toEqual(["assistant", "shopper", "assistant"]);
   });
 
   it("greets before the first turn", async () => {
