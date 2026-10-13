@@ -25,6 +25,8 @@ export default defineConfig({
         ...devices["Desktop Chrome"],
         permissions: ["microphone", "camera"],
         launchOptions: {
+          // Optional: run against an already-installed Chromium (e.g. when the bundled one is missing).
+          executablePath: process.env.PW_CHROME_PATH || undefined,
           args: ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream", "--autoplay-policy=no-user-gesture-required"],
         },
       },

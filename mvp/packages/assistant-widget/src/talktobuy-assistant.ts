@@ -19,12 +19,13 @@ import { NetQualityReporter } from "./protocol/net-quality";
 import { AudioPlayback } from "./audio/playback";
 import { CaptureStartError, MicCapture } from "./audio/capture";
 import { AvatarPlayer, type AvatarAudio } from "./avatar/avatar-player";
-import shopkeeperUrl from "./avatar/shopkeeper.svg?url";
+import shopkeeperUrl from "./avatar/shopkeeper.png?url";
 import { base, tokens } from "./styles/tokens";
 import { define } from "./define";
 import { tr } from "./i18n";
 import type { TtbCaptions } from "./captions/captions";
 import type { TtbCartView, Pace } from "./cards/cart-view";
+import type { TtbCamera } from "./camera/camera";
 import "./captions/captions";
 import "./captions/text-input";
 import "./cards/cart-view";
@@ -69,6 +70,12 @@ export interface PaymentResult {
 }
 
 type Phase = "idle" | "connecting" | "live" | "reconnecting" | "ended";
+export type WidgetPhase = Phase;
+/** "page" fills its container; "sheet" is the compact bottom-sheet layout (no cart panel). */
+export type WidgetLayout = "page" | "sheet";
+export interface PhaseDetail {
+  phase: Phase;
+}
 
 const boolAttr = {
   fromAttribute: (v: string | null) => v === null || v.toLowerCase() !== "false",
@@ -85,7 +92,8 @@ function fmtTime(s: number): string {
  * (specs/001-talktobuy-assistant/contracts/widget-protocol.md).
  *
  * Attributes: ticket, ticket-url, server-url, language, show-translation, media-mode, avatar-audio.
- * Events: ttb:cart-changed, ttb:payment-requested, ttb:payment-cancelled, ttb:order-placed, ttb:session-ended.
+ * Events: ttb:cart-changed, ttb:payment-requested, ttb:payment-cancelled, ttb:order-placed, ttb:session-ended,
+ * ttb:phase, ttb:open-cart.
  * Method: resolvePayment({checkout_id, approved, mandate}).
  */
 export class TalkToBuyAssistant extends LitElement {
@@ -95,92 +103,109 @@ export class TalkToBuyAssistant extends LitElement {
     css`
       :host {
         display: block;
-        background: var(--ttb-bg);
-        border-radius: var(--ttb-radius);
-        border: 2px solid var(--ttb-border);
-        padding: var(--ttb-space);
-        container-type: inline-size;
-      }
-      .bar {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: var(--ttb-space-small);
-        margin-bottom: var(--ttb-space);
-      }
-      .ai-label {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 4px 12px;
-        min-height: 36px;
-        border-radius: 999px;
-        background: var(--ttb-primary);
-        color: var(--ttb-on-primary);
-        font-weight: 800;
-        font-size: var(--ttb-font-body);
-      }
-      .badge {
-        display: inline-flex;
-        align-items: center;
-        min-height: 36px;
-        padding: 4px 12px;
-        border-radius: 999px;
-        border: 2px solid var(--ttb-border);
-        background: var(--ttb-surface);
-        font-weight: 700;
-        font-size: var(--ttb-font-body);
-      }
-      .spacer {
-        flex: 1;
-      }
-      .stage {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr);
-        gap: var(--ttb-space);
-      }
-      @container (min-width: 720px) {
-        .stage {
-          grid-template-columns: minmax(240px, 2fr) minmax(0, 3fr);
-          align-items: start;
-        }
-      }
-      .avatar {
         position: relative;
-        border-radius: var(--ttb-radius);
+        height: 100%;
+        min-height: 0;
         overflow: hidden;
-        background: var(--ttb-surface-alt);
-        aspect-ratio: 1 / 1;
-        max-width: 420px;
-        width: 100%;
-        justify-self: center;
+        background: var(--ttb-forest);
+        color: #ffffff;
       }
-      .avatar video,
-      .avatar img {
-        position: absolute;
-        inset: 0;
+      .root {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+      }
+      /* The scrolling part: orb + status, the conversation, any checkout panels, the cart. */
+      .scroller {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 58px 16px 8px;
+      }
+      .scroller::-webkit-scrollbar {
+        display: none;
+      }
+      .hero {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        padding-top: 6px;
+      }
+      .orb {
+        position: relative;
+        width: 120px;
+        height: 120px;
+        flex: none;
+        color: var(--ttb-amber);
+      }
+      .orb img,
+      .orb video {
+        position: relative;
         width: 100%;
         height: 100%;
+        display: block;
         object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid var(--ttb-amber);
+        background: var(--ttb-forest-2);
       }
-      .avatar video[hidden],
-      .avatar img[hidden] {
+      .orb video[hidden],
+      .orb img[hidden] {
         display: none;
+      }
+      .ring {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        border: 2px solid currentColor;
+        opacity: 0;
+      }
+      .orb.live .ring {
+        animation: ripple 2.1s ease-out infinite;
+      }
+      .orb.live .r2 {
+        animation-delay: 0.7s;
+      }
+      .orb.live .r3 {
+        animation-delay: 1.4s;
+      }
+      .orb.speak img {
+        animation: bob 1.2s ease-in-out infinite;
+      }
+      @keyframes ripple {
+        0% {
+          transform: scale(0.86);
+          opacity: 0.6;
+        }
+        100% {
+          transform: scale(1.55);
+          opacity: 0;
+        }
+      }
+      @keyframes bob {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-3px);
+        }
       }
       .working {
         position: absolute;
-        left: 8px;
-        right: 8px;
-        bottom: 8px;
-        padding: 8px 12px;
-        border-radius: var(--ttb-radius-small);
-        background: var(--ttb-surface);
-        color: var(--ttb-text);
+        left: -20px;
+        right: -20px;
+        bottom: -14px;
+        text-align: center;
+        font-size: 12px;
         font-weight: 700;
-        box-shadow: var(--ttb-shadow);
-        display: flex;
-        align-items: center;
-        gap: 10px;
+        color: var(--ttb-on-forest);
       }
       .dots::after {
         content: "…";
@@ -191,63 +216,315 @@ export class TalkToBuyAssistant extends LitElement {
           opacity: 0.2;
         }
       }
-      .side {
-        display: flex;
-        flex-direction: column;
-        gap: var(--ttb-space);
-        min-width: 0;
-      }
-      .start {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: var(--ttb-space);
+      .status {
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--ttb-on-forest);
         text-align: center;
       }
-      .start .avatar {
-        max-width: 280px;
-      }
-      button.start-btn {
-        min-height: 72px;
-        padding: 12px 28px;
-        font-size: var(--ttb-font-large);
-        border-radius: var(--ttb-radius);
-        display: inline-flex;
-        flex-direction: column;
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
         align-items: center;
+        justify-content: center;
+        gap: 6px;
       }
-      .start-btn .en {
-        font-size: var(--ttb-font-body);
-        font-weight: 600;
+      .ai-label,
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        min-height: 28px;
+        padding: 2px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.08);
       }
-      .hint {
-        margin: 0;
-        color: var(--ttb-muted);
-        max-width: 36em;
+      .ai-label {
+        border-color: var(--ttb-amber);
+        color: var(--ttb-amber);
       }
-      .banner {
-        padding: 10px 14px;
-        border-radius: var(--ttb-radius-small);
-        background: var(--ttb-warning-soft);
-        border: 2px solid var(--ttb-border);
-        margin: 0 0 var(--ttb-space);
+      button.end {
+        min-width: 0;
+        min-height: 28px;
+        padding: 2px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        background: transparent;
+        color: #ffffff;
+        font-size: 12px;
       }
-      .banner.error {
-        border-color: var(--ttb-danger);
+      .lines {
+        padding: 0 8px;
       }
-      .en {
-        color: var(--ttb-translation);
-        font-size: var(--ttb-font-small);
-      }
+      /* checkout panels and the cart are light cards on the green page */
       .panels {
         display: flex;
         flex-direction: column;
-        gap: var(--ttb-space);
-        margin-top: var(--ttb-space);
+        gap: 10px;
       }
-      button.end {
+      .panels > ttb-cart-view[hidden] {
+        display: none;
+      }
+      .panels > ttb-cart-view {
+        flex: 1;
+        min-height: 150px;
+        display: flex;
+        flex-direction: column;
+      }
+      .banner {
+        margin: 0;
+        padding: 8px 12px;
+        border-radius: var(--ttb-radius-small);
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.24);
+        font-size: 14px;
+      }
+      .banner.error {
         border-color: var(--ttb-danger);
-        color: var(--ttb-danger);
+        background: rgba(180, 35, 24, 0.25);
+      }
+      .banner button {
+        min-height: 32px;
+        margin-left: 8px;
+        padding: 2px 12px;
+        border-color: #ffffff;
+        background: transparent;
+        color: #ffffff;
+      }
+      .en {
+        color: var(--ttb-on-forest);
+        font-size: 13px;
+      }
+
+      /* the bottom dock: suggestion chips, the message box, and the three round controls */
+      .dock {
+        flex: none;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 8px 16px 14px;
+        padding-bottom: calc(14px + env(safe-area-inset-bottom));
+      }
+      .chips {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        margin: 0 -16px;
+        padding: 0 16px;
+      }
+      .chips::-webkit-scrollbar {
+        display: none;
+      }
+      .chips button {
+        flex: none;
+        min-width: 0;
+        min-height: 40px;
+        padding: 0 14px;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.08);
+        color: #ffffff;
+        font-size: 13px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .controls {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        align-items: center;
+        justify-items: center;
+      }
+      button.ctl {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        min-width: 0;
+        min-height: 60px;
+        padding: 0 6px;
+        border: 0;
+        background: none;
+        color: #ffffff;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      button.ctl .disc {
+        position: relative;
+        width: 46px;
+        height: 46px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.28);
+      }
+      button.ctl[aria-pressed="true"] .disc {
+        background: var(--ttb-amber);
+        color: var(--ttb-forest);
+      }
+      button.ctl .count {
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        min-width: 18px;
+        height: 18px;
+        padding: 0 4px;
+        border-radius: 9px;
+        background: var(--ttb-amber);
+        color: var(--ttb-forest);
+        font-size: 11px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      button.mic {
+        width: 76px;
+        height: 76px;
+        min-width: 0;
+        min-height: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        border-radius: 50%;
+        background: var(--ttb-amber);
+        color: var(--ttb-forest);
+      }
+      button.mic[aria-pressed="true"] {
+        background: rgba(255, 255, 255, 0.18);
+        color: #ffffff;
+      }
+      .eq {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        height: 28px;
+      }
+      .eq i {
+        display: block;
+        width: 4px;
+        height: 26px;
+        border-radius: 2px;
+        background: currentColor;
+        transform: scaleY(0.3);
+        animation: bars 0.9s ease-in-out infinite;
+      }
+      .eq i:nth-child(2) {
+        animation-delay: 0.15s;
+      }
+      .eq i:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+      .eq i:nth-child(4) {
+        animation-delay: 0.45s;
+      }
+      .eq i:nth-child(5) {
+        animation-delay: 0.6s;
+      }
+      @keyframes bars {
+        0%,
+        100% {
+          transform: scaleY(0.3);
+        }
+        50% {
+          transform: scaleY(1);
+        }
+      }
+
+      /* idle / ended: the start screen */
+      .start {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        padding: 58px 24px 24px;
+        text-align: center;
+      }
+      button.start-btn {
+        min-height: 60px;
+        padding: 0 28px;
+        border: 0;
+        border-radius: 30px;
+        background: var(--ttb-amber);
+        color: var(--ttb-forest);
+        font-size: 17px;
+      }
+      .hint {
+        margin: 0;
+        max-width: 28em;
+        font-size: 13px;
+        color: var(--ttb-on-forest);
+      }
+      .headline {
+        margin: 0;
+        font-family: var(--ttb-font-display);
+        font-weight: 600;
+        font-size: 21px;
+        line-height: 1.22;
+      }
+
+      /* layout="sheet": the compact bottom sheet (no cart panel; the shop's buttons sit top right) */
+      :host([layout="sheet"]) .scroller {
+        padding: 12px 16px 4px;
+        gap: 6px;
+      }
+      :host([layout="sheet"]) .hero {
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+        padding: 0 108px 0 0;
+      }
+      :host([layout="sheet"]) .orb {
+        width: 48px;
+        height: 48px;
+      }
+      :host([layout="sheet"]) .orb img,
+      :host([layout="sheet"]) .orb video {
+        border-width: 2px;
+      }
+      :host([layout="sheet"]) .hero-text {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        align-items: flex-start;
+        min-width: 0;
+      }
+      :host([layout="sheet"]) .status {
+        text-align: left;
+        font-size: 12px;
+      }
+      :host([layout="sheet"]) .meta {
+        justify-content: flex-start;
+      }
+      :host([layout="sheet"]) .lines {
+        --ttb-talk-min: 92px;
+        --ttb-talk-size: 19px;
+        text-align: left;
+        padding: 0 2px;
+      }
+      :host([layout="sheet"]) .start {
+        padding-top: 24px;
+      }
+      :host([layout="sheet"]) button.mic {
+        width: 64px;
+        height: 64px;
+      }
+      :host([layout="sheet"]) .dock {
+        gap: 8px;
+        padding-top: 4px;
+      }
+      :host([layout="sheet"]) button.ctl {
+        min-height: 52px;
       }
     `,
   ];
@@ -256,6 +533,11 @@ export class TalkToBuyAssistant extends LitElement {
   @property({ attribute: "ticket-url" }) ticketUrl: string | null = null;
   @property({ attribute: "server-url" }) serverUrl: string | null = null;
   @property() language = "hi";
+  @property({ reflect: true }) layout: WidgetLayout = "page";
+  /** The host has hidden the assistant: the microphone is muted so nothing is heard in the background. */
+  @property({ type: Boolean, reflect: true }) muted = false;
+  /** The shopper's preferred saved address id: highlighted when the assistant asks where to deliver. */
+  @property({ attribute: "preferred-address" }) preferredAddress: string | null = null;
   // Cost control: English captions and the avatar are opt-in (judges' screen / demo switch).
   @property({ attribute: "show-translation", converter: boolAttr, reflect: true }) showTranslation = false;
   @property({ attribute: "media-mode" }) mediaMode: MediaMode = "audio_only";
@@ -278,9 +560,14 @@ export class TalkToBuyAssistant extends LitElement {
   @state() private micProblem: "denied" | "unavailable" | "unsupported" | null = null;
   @state() private avatarFailed = false;
   @state() private avatarPlaying = false;
+  @state() private micOff = false;
+  @state() private hearing = false;
+  @state() private talking: "assistant" | "shopper" | null = null;
+  @state() private cameraOn = false;
 
   @query("ttb-captions") private captions?: TtbCaptions;
   @query("ttb-cart-view") private cartView?: TtbCartView;
+  @query("ttb-camera") private cameraEl?: TtbCamera;
   @query("video.avatar-video") private videoEl?: HTMLVideoElement;
 
   private client: SessionClient | null = null;
@@ -289,6 +576,7 @@ export class TalkToBuyAssistant extends LitElement {
   private avatar: AvatarPlayer | null = null;
   private net: NetQualityReporter | null = null;
   private tick: ReturnType<typeof setInterval> | null = null;
+  private hearTimer: ReturnType<typeof setInterval> | null = null;
   private endedEmitted = false;
   /** Messages/frames that arrive before the live view has rendered are held here. */
   private pending: Array<() => void> | null = null;
@@ -400,6 +688,8 @@ export class TalkToBuyAssistant extends LitElement {
       this.client?.send({ type: "set_translation", on: this.showTranslation });
     }
     if (changed.has("avatarAudio")) this.avatar?.setAudioMode(this.avatarAudio);
+    if ((changed as Map<PropertyKey, unknown>).has("muted") || (changed as Map<PropertyKey, unknown>).has("micOff")) this.applyMute();
+    if ((changed as Map<PropertyKey, unknown>).has("phase")) this.emit<PhaseDetail>("ttb:phase", { phase: this.phase });
   }
 
   // ---------------------------------------------------------------- session plumbing
@@ -435,7 +725,8 @@ export class TalkToBuyAssistant extends LitElement {
           q.forEach((f) => f());
         });
       }
-      this.mic?.setMuted(false);
+      this.applyMute();
+      this.startHearing();
       this.client?.send({ type: "set_translation", on: this.showTranslation });
       this.client?.send({ type: "set_media_mode", mode: this.effectiveMode });
       this.net?.stop();
@@ -499,11 +790,15 @@ export class TalkToBuyAssistant extends LitElement {
   /** Visible for tests: route one server message. */
   onServerMessage(msg: ServerMessage): void {
     routeServerMessage(msg, {
-      caption: (m) => this.captions?.upsert(m),
+      caption: (m) => {
+        this.captions?.upsert(m);
+        this.talking = m.final ? null : m.who;
+      },
       interrupted: (m) => {
         this.playback.flush();
         this.avatar?.flush();
         this.captions?.markInterrupted(m.turn_id);
+        this.talking = null;
       },
       cards: (m: CardsMsg) => this.cartView?.showCards(m),
       goal_list: (m) => (this.goal = m),
@@ -561,6 +856,20 @@ export class TalkToBuyAssistant extends LitElement {
     });
   }
 
+  /** The microphone is heard only while this is live, unmuted by the host and not switched off. */
+  private applyMute(): void {
+    this.mic?.setMuted(this.muted || this.micOff || this.phase !== "live");
+  }
+
+  /** Poll the voice detector so the orb and mic button can show "listening". */
+  private startHearing(): void {
+    if (this.hearTimer) return;
+    this.hearTimer = setInterval(() => {
+      const h = !!this.mic?.speaking && !this.muted && !this.micOff;
+      if (h !== this.hearing) this.hearing = h;
+    }, 150);
+  }
+
   private startTick(): void {
     if (this.tick) return;
     this.tick = setInterval(() => {
@@ -577,6 +886,11 @@ export class TalkToBuyAssistant extends LitElement {
     this.dropAvatar();
     if (this.tick) clearInterval(this.tick);
     this.tick = null;
+    if (this.hearTimer) clearInterval(this.hearTimer);
+    this.hearTimer = null;
+    this.hearing = false;
+    this.talking = null;
+    this.cameraOn = false;
     this.working = null;
     this.renderRoot.querySelector("ttb-camera")?.stop();
   }
@@ -609,11 +923,46 @@ export class TalkToBuyAssistant extends LitElement {
 
   // ---------------------------------------------------------------- render
 
-  private renderBar() {
+  private get isLive(): boolean {
+    return this.phase === "live" || this.phase === "reconnecting";
+  }
+
+  private get micIsOff(): boolean {
+    return this.micOff || this.muted;
+  }
+
+  private statusText(): string {
     const L = this.language;
-    const live = this.phase === "live" || this.phase === "reconnecting";
+    if (this.phase === "connecting") return tr(L, "जुड़ रहे हैं…", "Connecting…");
+    if (this.phase === "reconnecting") return tr(L, "फिर से जुड़ रहे हैं…", "Reconnecting…");
+    if (this.working) return tr(L, "सोच रहे हैं…", "Thinking…");
+    if (this.talking === "assistant") return tr(L, "दुकानदार बोल रहे हैं", "Shopkeeper is speaking");
+    if (this.micIsOff) return tr(L, "माइक बंद है", "Mic is off");
+    if (this.hearing || this.talking === "shopper") return tr(L, "सुन रहे हैं…", "Listening…");
+    return tr(L, "बोलिए, मैं सुन रहा हूँ", "Go ahead, I am listening");
+  }
+
+  /** Quick things to say, as chips above the message box. */
+  private hints(): string[] {
+    const L = this.language;
+    const empty = (this.cart?.item_count ?? 0) === 0;
+    return empty
+      ? [
+          tr(L, "दूध और ब्रेड डाल दीजिए", "Add milk and bread"),
+          tr(L, "आटा और प्याज़ डाल दीजिए", "Add atta and onions"),
+          tr(L, "पनीर और दही डाल दीजिए", "Add paneer and curd"),
+        ]
+      : [
+          tr(L, "मेरे कार्ट में क्या है?", "What is in my cart?"),
+          tr(L, "अंडे भी डाल दीजिए", "Add eggs too"),
+          tr(L, "बस, चेकआउट कर दीजिए", "That is all, check out"),
+        ];
+  }
+
+  private renderMeta(live: boolean) {
+    const L = this.language;
     return html`
-      <div class="bar">
+      <div class="meta">
         <span class="ai-label" role="note" aria-label=${tr(L, "AI सहायक — यह एक AI है, इंसान नहीं", "AI assistant, not a human")}>
           <span aria-hidden="true">🤖</span> ${tr(L, "AI सहायक", "AI assistant")}
         </span>
@@ -624,28 +973,27 @@ export class TalkToBuyAssistant extends LitElement {
           : nothing}
         ${live && this.remaining !== null
           ? html`<span class="badge" role="timer" aria-label=${`${tr(L, "बचा समय", "Time left")} ${fmtTime(this.remaining)}`}
-              >⏱ ${tr(L, "बचा समय", "Time left")} ${fmtTime(this.remaining)}</span
+              >⏱ ${fmtTime(this.remaining)}</span
             >`
           : nothing}
-        <span class="spacer"></span>
-        ${live
-          ? html`<button class="end" type="button" @click=${() => this.end()}>${tr(L, "बंद करें", "End")}</button>`
-          : nothing}
+        ${live ? html`<button class="end" type="button" @click=${() => this.end()}>${tr(L, "बातचीत खत्म", "End chat")}</button>` : nothing}
       </div>
     `;
   }
 
-  private renderAvatar() {
+  private renderOrb() {
     const L = this.language;
     const showVideo = this.effectiveMode === "avatar" && this.avatarPlaying;
+    const zone = this.talking === "assistant" ? "live speak" : this.hearing || this.talking === "shopper" ? "live" : "";
     return html`
-      <div class="avatar">
+      <div class="orb ${zone}">
+        <span class="ring"></span><span class="ring r2"></span><span class="ring r3"></span>
         <video class="avatar-video" ?hidden=${!showVideo} playsinline autoplay muted aria-label=${tr(L, "दुकानदार (AI अवतार)", "Shopkeeper (AI avatar)")}></video>
         <img src=${shopkeeperUrl} alt=${tr(L, "दुकानदार का चित्र", "Shopkeeper illustration")} ?hidden=${showVideo} />
         ${this.working
-          ? html`<div class="working" role="status" aria-live="polite">
-              <span lang=${L}>${L === "en" ? this.working.label_en || "Working…" : this.working.label_hi || "देख रहे हैं"}<span class="dots"></span></span>
-            </div>`
+          ? html`<span class="working" role="status" aria-live="polite" lang=${L}
+              >${L === "en" ? this.working.label_en || "Working…" : this.working.label_hi || "देख रहे हैं"}<span class="dots"></span></span
+            >`
           : nothing}
       </div>
     `;
@@ -656,10 +1004,10 @@ export class TalkToBuyAssistant extends LitElement {
     const ended = this.phase === "ended";
     return html`
       <div class="start">
-        <div class="avatar"><img src=${shopkeeperUrl} alt=${tr(L, "दुकानदार का चित्र", "Shopkeeper illustration")} /></div>
-        ${ended
-          ? html`<p class="hint" role="status">${tr(L, "बातचीत ख़त्म हुई। धन्यवाद!", "Conversation ended. Thank you!")}</p>`
-          : nothing}
+        ${this.renderMeta(false)} ${this.renderOrb()}
+        <p class="headline" lang=${L} role="status">
+          ${ended ? tr(L, "बातचीत ख़त्म हुई। धन्यवाद!", "Conversation ended. Thank you!") : tr(L, "नमस्ते! आज क्या मँगवाना है?", "Namaste! What would you like to order today?")}
+        </p>
         <button class="primary start-btn" type="button" ?disabled=${this.phase === "connecting"} @click=${() => void this.start()}>
           <span lang=${L}>${this.phase === "connecting" ? tr(L, "जुड़ रहे हैं…", "Connecting…") : tr(L, "दुकानदार से बात करें", "Talk to the shopkeeper")}</span>
         </button>
@@ -673,9 +1021,7 @@ export class TalkToBuyAssistant extends LitElement {
   private renderBanners() {
     const L = this.language;
     return html`
-      ${this.phase === "reconnecting"
-        ? html`<p class="banner" role="status">${tr(L, "फिर से जुड़ रहे हैं…", "Reconnecting…")}</p>`
-        : nothing}
+      ${this.phase === "reconnecting" ? html`<p class="banner" role="status">${tr(L, "फिर से जुड़ रहे हैं…", "Reconnecting…")}</p>` : nothing}
       ${this.micProblem && (this.phase === "live" || this.phase === "connecting")
         ? html`<p class="banner" role="status" lang=${L}>
             ${tr(L, "माइक नहीं मिला — नीचे लिखकर बात कीजिए।", "Microphone not available: please type below.")}
@@ -696,59 +1042,105 @@ export class TalkToBuyAssistant extends LitElement {
     `;
   }
 
+  private renderDock(L: string) {
+    const live = this.phase === "live";
+    const count = (this.cart?.lines ?? []).reduce((n, l) => n + l.qty, 0);
+    const micLabel = this.micIsOff ? tr(L, "माइक चालू करें", "Turn the microphone on") : tr(L, "माइक बंद करें", "Turn the microphone off");
+    return html`
+      <div class="dock">
+        ${live
+          ? html`<div class="chips" aria-label=${tr(L, "सुझाए गए वाक्य", "Things you can say")}>
+              ${this.hints().map((h) => html`<button type="button" @click=${() => this.sendText(h)}>${h}</button>`)}
+            </div>`
+          : nothing}
+        <ttb-text-input
+          tone="dark"
+          .language=${L}
+          ?disabled=${!live}
+          @ttb-text=${(e: CustomEvent<{ text: string }>) => this.sendText(e.detail.text)}
+        ></ttb-text-input>
+        <div class="controls">
+          <button class="ctl" type="button" aria-pressed=${this.cameraOn ? "true" : "false"} ?disabled=${!live} @click=${() => void this.cameraEl?.toggle()}>
+            <span class="disc"
+              ><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                ><path d="M4 8h3l1.5-2h7L17 8h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg
+            ></span>
+            ${tr(L, "दिखाइए", "Show item")}
+          </button>
+          <button class="mic" type="button" aria-pressed=${this.micIsOff ? "true" : "false"} aria-label=${micLabel} ?disabled=${this.muted} @click=${() => (this.micOff = !this.micOff)}>
+            ${this.hearing && !this.micIsOff
+              ? html`<span class="eq"><i></i><i></i><i></i><i></i><i></i></span>`
+              : html`<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                  ><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0M12 18v3"></path>${this.micIsOff ? html`<path d="M4 4l16 16"></path>` : nothing}</svg
+                >`}
+          </button>
+          <button class="ctl" type="button" @click=${() => this.emit<Record<string, never>>("ttb:open-cart", {})}>
+            <span class="disc"
+              ><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                ><path d="M3 4h2.2l2.3 11h10.3l2-8H6.3"></path><circle cx="9" cy="19" r="1.4"></circle><circle cx="17" cy="19" r="1.4"></circle></svg
+              >${count > 0 ? html`<span class="count">${count}</span>` : nothing}</span
+            >
+            ${tr(L, "पूरा कार्ट", "Full cart")}
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
   render() {
     const L = this.language === "en" ? "en" : "hi";
-    const live = this.phase === "live" || this.phase === "reconnecting";
+    const live = this.isLive;
+    if (!live) return html`<div class="root" lang=${L}>${this.renderIdle()}</div>`;
+    const sheet = this.layout === "sheet";
     return html`
-      <div lang=${L}>
-        ${this.renderBar()} ${this.renderBanners()}
-        ${live
-          ? html`
-              <div class="stage">
-                ${this.renderAvatar()}
-                <div class="side">
-                  <ttb-captions .showTranslation=${this.showTranslation && L === "hi"} .language=${L}></ttb-captions>
-                  <ttb-text-input
-                    .language=${L}
-                    ?disabled=${this.phase !== "live"}
-                    @ttb-text=${(e: CustomEvent<{ text: string }>) => this.sendText(e.detail.text)}
-                  ></ttb-text-input>
-                  <ttb-camera
-                    .language=${L}
-                    ?disabled=${this.phase !== "live"}
-                    @ttb-camera-active=${(e: CustomEvent<{ active: boolean }>) =>
-                      this.client?.send({ type: "camera", active: e.detail.active })}
-                    @ttb-camera-frame=${(e: CustomEvent<{ jpeg: ArrayBuffer }>) =>
-                      this.client?.sendBinary(FRAME.CAMERA_JPEG, e.detail.jpeg)}
-                  ></ttb-camera>
-                </div>
-              </div>
-              <div class="panels">
-                ${this.order || this.familyName
-                  ? html`<ttb-confirmation .order=${this.order} .familyName=${this.familyName} .language=${L}></ttb-confirmation>`
-                  : nothing}
-                ${this.addresses && !this.order
-                  ? html`<ttb-address-picker
-                      .addresses=${this.addresses}
-                      .language=${L}
-                      ?disabled=${this.phase !== "live"}
-                      @ttb-address-select=${(e: CustomEvent<{ id: string; label: string }>) => this.chooseAddress(e.detail)}
-                      @ttb-address-new=${(e: CustomEvent<{ fields: NewAddressFields }>) => this.addNewAddress(e.detail.fields)}
-                    ></ttb-address-picker>`
-                  : nothing}
-                ${this.readback && !this.order
-                  ? html`<ttb-readback
-                      .readback=${this.readback}
-                      .awaitingPayment=${!!this.pendingPayment}
-                      .showTranslation=${this.showTranslation}
-                      .language=${L}
-                    ></ttb-readback>`
-                  : nothing}
-                ${this.goal ? html`<ttb-goal-list .goal=${this.goal} .language=${L}></ttb-goal-list>` : nothing}
-                <ttb-cart-view .pace=${this.pace} .cart=${this.cart} .language=${L}></ttb-cart-view>
-              </div>
-            `
-          : this.renderIdle()}
+      <div class="root" lang=${L}>
+        <div class="scroller">
+          <div class="hero">
+            ${this.renderOrb()}
+            <div class="hero-text">
+              <span class="status">${this.statusText()}</span>
+              ${this.renderMeta(true)}
+            </div>
+          </div>
+          ${this.renderBanners()}
+          <ttb-captions class="lines" variant="talk" .showTranslation=${this.showTranslation && L === "hi"} .language=${L}></ttb-captions>
+          <div class="panels">
+            ${this.order || this.familyName
+              ? html`<ttb-confirmation .order=${this.order} .familyName=${this.familyName} .language=${L}></ttb-confirmation>`
+              : nothing}
+            ${this.addresses && !this.order
+              ? html`<ttb-address-picker
+                  .addresses=${this.addresses}
+                  .preferredId=${this.preferredAddress}
+                  .language=${L}
+                  ?disabled=${this.phase !== "live"}
+                  @ttb-address-select=${(e: CustomEvent<{ id: string; label: string }>) => this.chooseAddress(e.detail)}
+                  @ttb-address-new=${(e: CustomEvent<{ fields: NewAddressFields }>) => this.addNewAddress(e.detail.fields)}
+                ></ttb-address-picker>`
+              : nothing}
+            ${this.readback && !this.order
+              ? html`<ttb-readback
+                  .readback=${this.readback}
+                  .awaitingPayment=${!!this.pendingPayment}
+                  .showTranslation=${this.showTranslation}
+                  .language=${L}
+                ></ttb-readback>`
+              : nothing}
+            ${this.goal ? html`<ttb-goal-list .goal=${this.goal} .language=${L}></ttb-goal-list>` : nothing}
+            <ttb-cart-view ?hidden=${sheet} compact .pace=${this.pace} .cart=${this.cart} .language=${L}></ttb-cart-view>
+          </div>
+        </div>
+        ${this.renderDock(L)}
+        <ttb-camera
+          variant="overlay"
+          .language=${L}
+          ?disabled=${this.phase !== "live"}
+          @ttb-camera-active=${(e: CustomEvent<{ active: boolean }>) => {
+            this.cameraOn = e.detail.active;
+            this.client?.send({ type: "camera", active: e.detail.active });
+          }}
+          @ttb-camera-frame=${(e: CustomEvent<{ jpeg: ArrayBuffer }>) => this.client?.sendBinary(FRAME.CAMERA_JPEG, e.detail.jpeg)}
+        ></ttb-camera>
       </div>
     `;
   }
@@ -765,6 +1157,8 @@ declare global {
     "ttb:payment-requested": CustomEvent<PaymentRequestedDetail>;
     "ttb:order-placed": CustomEvent<OrderPlacedDetail>;
     "ttb:session-ended": CustomEvent<SessionEndedDetail>;
+    "ttb:phase": CustomEvent<PhaseDetail>;
+    "ttb:open-cart": CustomEvent<Record<string, never>>;
     "ttb:payment-cancelled": CustomEvent<Record<string, never>>;
   }
 }

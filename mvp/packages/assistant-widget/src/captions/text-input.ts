@@ -33,14 +33,52 @@ export class TtbTextInput extends LitElement {
         color: var(--ttb-text);
         min-width: 0;
       }
+      @media all {
+        form {
+          gap: 6px;
+        }
+        input {
+          font-size: 18px; /* at least 16 px, or phone browsers zoom the page on focus */
+          padding: 8px 12px;
+        }
+        button {
+          flex: none;
+          white-space: nowrap;
+          padding: 8px 16px;
+        }
+      }
       input::placeholder {
         color: var(--ttb-muted);
+      }
+      /* tone="dark": a pill field on the forest-green assistant page. */
+      :host([tone="dark"]) input {
+        min-height: 46px;
+        padding: 0 16px;
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        border-radius: 23px;
+        background: rgba(255, 255, 255, 0.08);
+        color: #ffffff;
+      }
+      :host([tone="dark"]) input::placeholder {
+        color: rgba(255, 255, 255, 0.65);
+      }
+      :host([tone="dark"]) button.primary {
+        min-height: 46px;
+        min-width: 64px;
+        border: 0;
+        border-radius: 23px;
+        background: #ffffff;
+        color: var(--ttb-forest);
+      }
+      :host([tone="dark"]) button.primary:disabled {
+        opacity: 0.55;
       }
     `,
   ];
 
   @property({ type: Boolean }) disabled = false;
   @property() language: Lang = "hi";
+  @property({ reflect: true }) tone: "light" | "dark" = "light";
   @state() private value = "";
 
   private submit(e: Event) {

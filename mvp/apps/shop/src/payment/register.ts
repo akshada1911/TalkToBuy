@@ -17,7 +17,12 @@ export async function registerCredential(shopperId: string): Promise<void> {
   if (!res?.ok) throw new Error("registration not accepted");
 }
 
-/** The assert/options endpoint answers 404 or 409 when no credential is registered yet. */
-export function needsRegistration(status: number): boolean {
-  return status === 404 || status === 409;
+/**
+ * The assert/options endpoint says no credential is registered yet with 404/409, or with the store's
+ * own error: 400 and the code NOT_REGISTERED.
+ */
+export function needsRegistration(status: number, body?: unknown): boolean {
+  if (status === 404 || status === 409) return true;
+  const messages = (body as { messages?: { code?: string }[] } | null)?.messages;
+  return messages?.[0]?.code === "NOT_REGISTERED";
 }

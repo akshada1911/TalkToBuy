@@ -6,9 +6,9 @@ declare const process: { env: Record<string, string | undefined> };
  * Seeded-mode smoke test (T104). Needs the full stack running: demo store and session server with
  * SEARCH_MODE=seeded, and the shop dev server (or SHOP_URL). Opt in with TTB_E2E=1.
  *
- * Flow: open the shop → start the assistant → drive the scripted list through the text box →
- * assert the cart cards and total → read-back → payment step with a WebAuthn virtual
- * authenticator → order confirmation.
+ * Flow: open the shop → open the shopkeeper → drive the scripted list through the text box →
+ * assert the cart panel and total → choose the delivery address → read-back → the shop's own
+ * payment screen with a WebAuthn virtual authenticator → order placed.
  */
 test.skip(process.env.TTB_E2E !== "1", "needs the backend running (set TTB_E2E=1)");
 
@@ -22,19 +22,15 @@ async function say(page: Page, text: string) {
 }
 
 async function cartLines(page: Page): Promise<number> {
-  return page.locator("ttb-cart-view ul.grid[aria-label*='कार्ट का सामान'] ttb-product-card").count();
+  return page.locator("ttb-cart-view ul.rows[aria-label*='कार्ट का सामान'] li").count();
 }
 
 test("scripted text session places a test-mode order", async ({ page }) => {
-  // Record cart events and payment requests for assertions.
+  // Record cart events and orders for assertions.
   await page.addInitScript(() => {
     const w = window as unknown as { __ttb: { carts: unknown[]; orders: unknown[] } };
     w.__ttb = { carts: [], orders: [] };
-    document.addEventListener(
-      "ttb:cart-changed",
-      (e) => w.__ttb.carts.push((e as CustomEvent).detail.cart),
-      true,
-    );
+    document.addEventListener("ttb:cart-changed", (e) => w.__ttb.carts.push((e as CustomEvent).detail.cart), true);
     document.addEventListener("ttb:order-placed", (e) => w.__ttb.orders.push((e as CustomEvent).detail), true);
   });
 
@@ -52,13 +48,13 @@ test("scripted text session places a test-mode order", async ({ page }) => {
     },
   });
 
-  await page.goto("/");
-  await page.getByRole("button", { name: /दुकानदार से बात करें/ }).click();
+  await page.goto("/?lang=hi");
+  await page.getByRole("button", { name: "TalkToBuy" }).click();
   await expect(page.getByText("AI सहायक")).toBeVisible();
 
   // Opening question: pace (quickstart row 0).
   await say(page, "धीरे-धीरे, एक-एक करके");
-  await expect(page.getByText(/धीरे-धीरे/)).toBeVisible({ timeout: TURN_TIMEOUT });
+  await expect(page.getByText(/धीरे-धीरे/).first()).toBeVisible({ timeout: TURN_TIMEOUT });
 
   // Row 1 (typed, row 9): milk and tomatoes are added; the usual atta is asked about first.
   await say(page, "दो लीटर दूध, पाव किलो टमाटर, और मेरा हमेशा वाला आटा");
@@ -73,11 +69,10 @@ test("scripted text session places a test-mode order", async ({ page }) => {
   });
   expect(cart.item_count).toBe(3);
   expect(cart.total).toBe(cart.lines.reduce((s, l) => s + l.line_total, 0));
-  await expect(page.locator("ttb-cart-view .summary")).toContainText(`₹${cart.total.toLocaleString("en-IN")}`);
+  await expect(page.locator("ttb-cart-view .sum")).toContainText(`₹${cart.total.toLocaleString("en-IN")}`);
 
-  // Row 5: read-back.
+  // Row 5: read-back. The assistant asks for the delivery address first; tap the saved "Home" one.
   await say(page, "बस, ऑर्डर कर दो");
-  // The assistant asks for the delivery address first; tap the saved "Home" address.
   const picker = page.locator("ttb-address-picker");
   await expect(picker).toBeVisible({ timeout: TURN_TIMEOUT });
   await picker.getByRole("button", { name: /यहाँ भेजें/ }).first().click();
@@ -85,15 +80,14 @@ test("scripted text session places a test-mode order", async ({ page }) => {
   await expect(readback).toBeVisible({ timeout: TURN_TIMEOUT });
   await expect(readback).toContainText(`₹${cart.total.toLocaleString("en-IN")}`);
 
-  // Row 6: yes → the shop's own payment step → fingerprint.
+  // Row 6: yes → the shop's own payment screen → fingerprint.
   await say(page, "हाँ");
-  const dialog = page.getByRole("dialog", { name: /भुगतान/ });
-  await expect(dialog).toBeVisible({ timeout: TURN_TIMEOUT });
-  await expect(dialog).toContainText("टेस्ट मोड");
-  await dialog.getByRole("button", { name: /फ़िंगरप्रिंट से/ }).click();
-  await expect(dialog).toBeHidden({ timeout: TURN_TIMEOUT });
+  await expect(page.getByRole("heading", { name: /भुगतान/ }).or(page.locator(".topbar-title b", { hasText: "भुगतान" }))).toBeVisible({ timeout: TURN_TIMEOUT });
+  await expect(page.getByText("टेस्ट मोड")).toBeVisible();
+  await page.getByRole("button", { name: /फ़िंगरप्रिंट से/ }).click();
 
-  await expect(page.getByText(/ऑर्डर हो गया/)).toBeVisible({ timeout: TURN_TIMEOUT });
+  // The order screen (tracking is a demo) shows the placed order.
+  await expect(page.getByText("ऑर्डर हो गया")).toBeVisible({ timeout: TURN_TIMEOUT });
   const orders = await page.evaluate(() => (window as unknown as { __ttb: { orders: unknown[] } }).__ttb.orders);
   expect(orders.length).toBe(1);
 });

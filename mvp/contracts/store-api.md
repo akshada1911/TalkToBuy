@@ -142,6 +142,9 @@ without an order.
 | `GET /demo/shoppers/{id}` | `Shopper` (domain schema): `{id:"u-ghanshyam", display_name:"Ghanshyam ji", language:"hi", address_form:"respectful_male"}` |
 | `GET /demo/shoppers/{id}/addresses` | `[{id, label, name, line1, area, city, pincode, phone}]`: saved addresses (seeded: "Home", "Rohit's place") plus any added |
 | `POST /demo/shoppers/{id}/addresses` | `{label?, name, line1, area, city, pincode (6 digits), phone (10-digit mobile)}` → 201 with the saved address and its `id`; 400 if invalid |
+| `GET /demo/catalog?category=&q=&limit=&offset=` | `{items:[{id, name, local_name, brand, size, price (whole ₹), image, image_credit, category, in_stock, description, usage}], total, limit, offset}`: the shop's browse list. In-stock first; `q` matches name, Hindi name, brand and synonyms; `limit` 1–100 (default 40) |
+| `GET /demo/catalog/categories` | `[{id, count}]` |
+| `GET /demo/catalog/{id}` | one product as above plus `similar` (up to 8 in-stock items of the same category), or 404 |
 | `GET /demo/shoppers/{id}/last-order` | `{"order_id":"…","lines":[{"product":Product,"qty":1}…]}` (seeded until a real order exists) |
 | `GET /demo/shoppers/{id}/family` | `FamilyContact` `{id, name:"Rohit (son)", channel:"in_app"}` or 404 |
 | `POST /demo/family/notifications` | `{shopper_id, message}` (≤ 280 chars) → `{delivered:true, contact_name}` |

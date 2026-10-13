@@ -70,6 +70,87 @@ export class TtbCartView extends LitElement {
         font-size: var(--ttb-font-card);
         margin: 0;
       }
+      /* compact: the assistant page's light cart panel (rows, not a card grid) */
+      .compact {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        min-height: 0;
+        padding: 12px 14px;
+        background: var(--ttb-bg);
+        color: var(--ttb-text);
+        border-radius: 24px;
+      }
+      .compact .head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+      }
+      .compact .head .title {
+        font-family: var(--ttb-font-display);
+        font-weight: 700;
+        font-size: 16px;
+      }
+      .compact .head .title small {
+        font-family: var(--ttb-font);
+        font-weight: 500;
+        font-size: 13px;
+        color: var(--ttb-muted);
+      }
+      .compact .head .sum {
+        font-family: var(--ttb-font-display);
+        font-weight: 800;
+        font-size: 22px;
+      }
+      .compact ul.rows {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        min-height: 0;
+        overflow-y: auto;
+      }
+      .compact li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .compact li.suggest {
+        opacity: 0.85;
+      }
+      .compact .thumb {
+        width: 38px;
+        height: 38px;
+        flex: none;
+        border-radius: 12px;
+        background: #ffffff;
+        object-fit: contain;
+      }
+      .compact .what {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      .compact .what b {
+        font-weight: 600;
+        font-size: 14px;
+      }
+      .compact .what small {
+        font-size: 12px;
+        color: var(--ttb-muted);
+      }
+      .compact .price {
+        font-weight: 700;
+        font-size: 14px;
+      }
+      .compact h4 {
+        margin: 6px 0 0;
+        font-size: 13px;
+        color: var(--ttb-muted);
+      }
       @keyframes pop {
         from {
           transform: scale(0.92);
@@ -85,6 +166,8 @@ export class TtbCartView extends LitElement {
 
   @property({ attribute: false }) cart: UiCart | null = null;
   @property() pace: Pace = "guided";
+  /** The assistant page's compact list (rows) instead of the card grid. */
+  @property({ type: Boolean }) compact = false;
   @property() language: Lang = "hi";
   @state() private suggestions: UiProduct[] = [];
   @state() private spotlight: UiProduct | null = null;
@@ -147,7 +230,53 @@ export class TtbCartView extends LitElement {
     }
   }
 
+  private renderCompact() {
+    const cart = this.cart;
+    const L = this.language;
+    const lines = cart?.lines ?? [];
+    const count = lines.reduce((n, l) => n + l.qty, 0);
+    const name = (p: UiProduct) => (L === "en" ? p.name : p.local_name || p.name);
+    return html`
+      <section class="compact" aria-label=${tr(L, "आपका कार्ट", "Your cart")}>
+        <div class="head" aria-live="polite">
+          <span class="title">${tr(L, "आपका कार्ट", "Your cart")} <small>${count === 1 ? tr(L, "1 सामान", "1 item") : tr(L, `${count} सामान`, `${count} items`)}</small></span>
+          <span class="sum">${rupees(cart?.total ?? 0)}</span>
+        </div>
+        ${this.spotlight
+          ? html`<div class="spotlight" role="status">
+              <p class="added">✓ ${tr(L, "कार्ट में जोड़ा", "Added to cart")}</p>
+              <ttb-product-card variant="spotlight" .product=${this.spotlight} .qty=${lines.find((l) => l.product.id === this.spotlight?.id)?.qty ?? 1} .language=${L}></ttb-product-card>
+            </div>`
+          : nothing}
+        ${lines.length === 0 && !this.spotlight
+          ? html`<p class="empty">${tr(L, "अभी कुछ नहीं। बोलकर बताइए, या नीचे सुझाव दबाइए।", "Nothing yet. Say what you need, or tap a suggestion below.")}</p>`
+          : html`<ul class="rows" aria-label=${tr(L, "कार्ट का सामान", "Cart items")}>
+              ${lines.map(
+                (l) => html`<li>
+                  ${l.product.image ? html`<img class="thumb" src=${l.product.image} alt="" loading="lazy" />` : html`<span class="thumb"></span>`}
+                  <span class="what"><b>${name(l.product)}</b><small>${l.product.size} · ×${l.qty}</small></span>
+                  <span class="price">${rupees(l.line_total)}</span>
+                </li>`,
+              )}
+            </ul>`}
+        ${this.suggestions.length
+          ? html`<h4>${tr(L, "सुझाव (अभी कार्ट में नहीं)", "Suggestions (not in cart yet)")}</h4>
+              <ul class="rows" aria-label=${tr(L, "सुझाव", "Suggestions")}>
+                ${this.suggestions.map(
+                  (p) => html`<li class="suggest">
+                    ${p.image ? html`<img class="thumb" src=${p.image} alt="" loading="lazy" />` : html`<span class="thumb"></span>`}
+                    <span class="what"><b>${name(p)}</b><small>${p.size}</small></span>
+                    <span class="price">${rupees(p.price)}</span>
+                  </li>`,
+                )}
+              </ul>`
+          : nothing}
+      </section>
+    `;
+  }
+
   render() {
+    if (this.compact) return this.renderCompact();
     const cart = this.cart;
     const count = cart?.item_count ?? 0;
     const qtyOf = (id: string) => cart?.lines.find((l) => l.product.id === id)?.qty ?? 1;

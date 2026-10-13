@@ -1,5 +1,5 @@
 import { fileURLToPath } from "node:url";
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 
 // Local dev proxies; in production Firebase Hosting rewrites the same paths (infra/firebase.json).
@@ -14,6 +14,7 @@ export default defineConfig({
   },
   // Only VITE_PUBLIC_* variables may reach the bundle, and only public URLs belong there.
   envPrefix: "VITE_PUBLIC_",
+  test: { environment: "happy-dom", include: ["src/**/*.test.{ts,tsx}"] },
   server: {
     port: 5173,
     proxy: {

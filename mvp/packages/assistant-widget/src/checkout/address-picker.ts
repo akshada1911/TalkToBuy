@@ -74,6 +74,17 @@ export class TtbAddressPicker extends LitElement {
       .text {
         color: var(--ttb-muted);
       }
+      .tag {
+        display: inline-block;
+        margin-left: 6px;
+        padding: 0 8px;
+        border-radius: 8px;
+        background: var(--ttb-warning-soft);
+        color: var(--ttb-text);
+        font-size: 11px;
+        font-weight: 700;
+        vertical-align: middle;
+      }
       button {
         min-height: var(--ttb-tap);
       }
@@ -110,6 +121,32 @@ export class TtbAddressPicker extends LitElement {
       [hidden] {
         display: none !important;
       }
+      @media all {
+        section {
+          padding: 12px;
+        }
+        h3 {
+          font-size: 22px;
+        }
+        li {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .addr {
+          flex: none; /* in a column, the 220px row basis would become a height */
+        }
+        li button,
+        .new,
+        .actions button {
+          width: 100%;
+        }
+        .actions {
+          flex-direction: column;
+        }
+        input {
+          font-size: 18px; /* at least 16 px, or phone browsers zoom the page on focus */
+        }
+      }
       .err {
         margin: 0;
         color: var(--ttb-danger);
@@ -119,6 +156,8 @@ export class TtbAddressPicker extends LitElement {
   ];
 
   @property({ attribute: false }) addresses: UiAddress[] = [];
+  /** The shopper's default address: listed first and marked. */
+  @property({ attribute: false }) preferredId: string | null = null;
   @property() language: Lang = "hi";
   @property({ type: Boolean }) disabled = false;
   @state() private adding = false;
@@ -186,11 +225,11 @@ export class TtbAddressPicker extends LitElement {
       <section role="region" aria-label=${tr(L, "डिलीवरी का पता", "Delivery address")} lang=${L}>
         <h3>${tr(L, "किस पते पर भेजें?", "Where should we deliver?")}</h3>
         <ul>
-          ${this.addresses.map(
+          ${[...this.addresses].sort((x, y) => Number(y.id === this.preferredId) - Number(x.id === this.preferredId)).map(
             (a) => html`
               <li>
                 <div class="addr">
-                  <div class="label">${a.label}</div>
+                  <div class="label">${a.label}${a.id === this.preferredId ? html` <span class="tag">${tr(L, "डिफ़ॉल्ट", "Default")}</span>` : nothing}</div>
                   <div class="text">${a.text}</div>
                 </div>
                 <button class="primary" type="button" ?disabled=${this.disabled} @click=${() => this.select(a)}>

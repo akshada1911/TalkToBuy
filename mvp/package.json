@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "build": "npm run build -w packages/assistant-widget && npm run build -w apps/shop",
-    "test": "npm run test -w packages/assistant-widget",
+    "test": "npm run test -w packages/assistant-widget && npm run test -w apps/shop",
     "test:e2e": "npm run test:e2e -w apps/shop",
     "gen-types:ts": "json2ts -i contracts/domain.schema.json -o packages/assistant-widget/src/types/domain.generated.ts --no-additionalProperties && json2ts -i contracts/widget-messages.schema.json -o packages/assistant-widget/src/types/messages.generated.ts --no-additionalProperties"
   },

@@ -53,6 +53,18 @@ export class TtbReadback extends LitElement {
         margin: var(--ttb-space-small) 0 0;
         font-size: var(--ttb-font-card);
       }
+      @media all {
+        section {
+          padding: 12px;
+        }
+        dl {
+          font-size: 20px;
+          gap: 4px 12px;
+        }
+        .big {
+          font-size: 26px;
+        }
+      }
       .pay {
         margin: var(--ttb-space) 0 0;
         padding: 10px 14px;

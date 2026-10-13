@@ -63,12 +63,127 @@ export class TtbCamera extends LitElement {
         font-size: var(--ttb-font-small);
         color: var(--ttb-translation);
       }
+      /* variant="overlay": a viewfinder over the assistant page (the dock has its own button). */
+      .overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 20;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+        padding: 24px;
+        text-align: center;
+        color: #ffffff;
+        background: rgba(8, 26, 19, 0.95);
+        animation: fade 0.25s ease both;
+      }
+      .finder {
+        position: relative;
+        width: min(240px, 60vw);
+        aspect-ratio: 1;
+      }
+      .finder .corner {
+        position: absolute;
+        width: 44px;
+        height: 44px;
+        border: 0 solid var(--ttb-amber);
+      }
+      .finder .tl {
+        left: 0;
+        top: 0;
+        border-left-width: 4px;
+        border-top-width: 4px;
+        border-top-left-radius: 14px;
+      }
+      .finder .tr {
+        right: 0;
+        top: 0;
+        border-right-width: 4px;
+        border-top-width: 4px;
+        border-top-right-radius: 14px;
+      }
+      .finder .bl {
+        left: 0;
+        bottom: 0;
+        border-left-width: 4px;
+        border-bottom-width: 4px;
+        border-bottom-left-radius: 14px;
+      }
+      .finder .br {
+        right: 0;
+        bottom: 0;
+        border-right-width: 4px;
+        border-bottom-width: 4px;
+        border-bottom-right-radius: 14px;
+      }
+      .finder .inner {
+        position: absolute;
+        inset: 12px;
+        overflow: hidden;
+        border-radius: 10px;
+        background: #000;
+      }
+      .finder video {
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        border-radius: 0;
+        object-fit: cover;
+      }
+      .scanbar {
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: var(--ttb-amber);
+        box-shadow: 0 0 14px var(--ttb-amber);
+        animation: scan 1.2s ease-in-out infinite alternate;
+      }
+      .overlay h3 {
+        margin: 0;
+        font-family: var(--ttb-font-display);
+        font-weight: 700;
+        font-size: 22px;
+      }
+      .overlay p {
+        margin: 0;
+        font-size: 14px;
+        color: var(--ttb-on-forest);
+      }
+      button.cancel {
+        height: 46px;
+        padding: 0 24px;
+        border-radius: 23px;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        background: transparent;
+        color: #ffffff;
+      }
+      @keyframes scan {
+        from {
+          top: 4%;
+        }
+        to {
+          top: 92%;
+        }
+      }
+      @keyframes fade {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
     `,
   ];
 
   /** Disable while the session is not connected. */
   @property({ type: Boolean }) disabled = false;
   @property() language: Lang = "hi";
+  /** "default": a button plus a preview. "overlay": a full viewfinder, opened by `toggle()`. */
+  @property() variant: "default" | "overlay" = "default";
   @state() private cam: CamState = "off";
   private stream: MediaStream | null = null;
   private timer: ReturnType<typeof setInterval> | null = null;
@@ -125,6 +240,12 @@ export class TtbCamera extends LitElement {
     if (wasOn) this.emit("ttb-camera-active", { active: false });
   }
 
+  /** Close the viewfinder, including after "camera not available". */
+  close(): void {
+    this.stop();
+    this.cam = "off";
+  }
+
   disconnectedCallback(): void {
     super.disconnectedCallback();
     this.stop();
@@ -162,7 +283,31 @@ export class TtbCamera extends LitElement {
     this.dispatchEvent(new CustomEvent(name, { detail, bubbles: true, composed: true }));
   }
 
+  private renderOverlay() {
+    const L = this.language;
+    if (this.cam === "off") return nothing;
+    const problem = this.cam === "denied" || this.cam === "unavailable";
+    return html`
+      <div class="overlay" role="dialog" aria-modal="true" aria-label=${tr(L, "कैमरा", "Camera")} lang=${L}>
+        ${problem
+          ? html`<h3>${tr(L, "कैमरा नहीं मिला", "Camera not available")}</h3>
+              <p role="status">${tr(L, "बोलकर बताइए — कौन-सा सामान चाहिए।", "Please describe the item by voice.")}</p>`
+          : html`<div class="finder">
+                <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+                <div class="inner">
+                  <video muted playsinline autoplay aria-label=${tr(L, "कैमरा का दृश्य", "Camera preview")}></video>
+                  <span class="scanbar"></span>
+                </div>
+              </div>
+              <h3>${tr(L, "सामान को कैमरे के सामने रखिए", "Hold the item up to the camera")}</h3>
+              <p>${tr(L, "दुकानदार पैकेट पढ़कर आपसे पूछेगा।", "The shopkeeper reads the packet and asks before adding it.")}</p>`}
+        <button class="cancel" type="button" @click=${() => this.close()}>${tr(L, "रद्द करें", "Cancel")}</button>
+      </div>
+    `;
+  }
+
   render() {
+    if (this.variant === "overlay") return this.renderOverlay();
     if (this.cam === "denied" || this.cam === "unavailable") {
       return html`<p class="note" role="status" lang=${this.language}>
         ${tr(this.language, "बोलकर बताइए — कौन-सा सामान चाहिए।", "Camera not available: please describe the item by voice.")}

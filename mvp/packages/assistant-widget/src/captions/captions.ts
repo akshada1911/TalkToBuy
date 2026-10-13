@@ -101,11 +101,60 @@ export class TtbCaptions extends LitElement {
         color: var(--ttb-muted);
         margin: 0;
       }
+      /* "talk" variant: the latest lines of the conversation, centred on the green page. Earlier
+         turns stay in the DOM (for screen readers) but are not drawn. */
+      .talk {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-height: var(--ttb-talk-min, 108px);
+        text-align: center;
+        color: #ffffff;
+      }
+      .talk .t {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .talk .t.old {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+      }
+      .talk p {
+        margin: 0;
+      }
+      .talk .you {
+        font-size: 15px;
+        line-height: 1.35;
+        font-style: italic;
+        color: var(--ttb-on-forest);
+      }
+      .talk .bot {
+        font-family: var(--ttb-font-display);
+        font-weight: 600;
+        font-size: var(--ttb-talk-size, 21px);
+        line-height: 1.22;
+        letter-spacing: -0.01em;
+        text-wrap: balance;
+      }
+      .talk .t.partial .bot {
+        opacity: 0.88;
+      }
+      .talk .tr {
+        font-size: 13px;
+        font-style: italic;
+        color: var(--ttb-on-forest);
+      }
     `,
   ];
 
   @property({ type: Boolean, attribute: "show-translation" }) showTranslation = true;
   @property() language: Lang = "hi";
+  /** "log": every turn as a bubble. "talk": only the latest lines, centred (the assistant page). */
+  @property() variant: "log" | "talk" = "log";
   @state() private turns: Turn[] = [];
 
   /** Add or update a caption. */
@@ -149,7 +198,34 @@ export class TtbCaptions extends LitElement {
     if (log) log.scrollTop = log.scrollHeight;
   }
 
+  private renderTalk() {
+    const lastOf = (who: string) => {
+      for (let i = this.turns.length - 1; i >= 0; i--) if (this.turns[i].who === who) return i;
+      return -1;
+    };
+    const shown = new Set([lastOf("assistant"), lastOf("shopper")]);
+    return html`
+      <div class="talk" role="log" aria-live="polite" aria-relevant="additions text" aria-label=${tr(this.language, "बातचीत के कैप्शन", "Conversation captions")}>
+        ${this.turns.length === 0
+          ? html`<p class="bot" lang=${this.language}>${tr(this.language, "नमस्ते! आज क्या मँगवाना है?", "Namaste! What would you like to order today?")}</p>`
+          : this.turns.map(
+              (t, i) => html`
+                <div class="t ${t.who} ${shown.has(i) ? "" : "old"} ${t.final ? "" : "partial"}" data-turn=${t.turn_id}>
+                  <p class=${t.who === "shopper" ? "you" : "bot"} lang=${this.language}>
+                    <span class="sr-only">${t.who === "assistant" ? tr(this.language, "दुकानदार (AI): ", "Shopkeeper (AI): ") : tr(this.language, "आप: ", "You: ")}</span>${t.text_hi}${t.interrupted ? " …" : ""}
+                  </p>
+                  ${this.showTranslation && t.text_en
+                    ? html`<p class="tr" lang="en" aria-label=${`English translation: ${t.text_en}`}><span aria-hidden="true">EN: ${t.text_en}</span></p>`
+                    : nothing}
+                </div>
+              `,
+            )}
+      </div>
+    `;
+  }
+
   render() {
+    if (this.variant === "talk") return this.renderTalk();
     return html`
       <div class="log" role="log" aria-live="polite" aria-relevant="additions text" aria-label=${tr(this.language, "बातचीत के कैप्शन", "Conversation captions")}>
         ${this.turns.length === 0

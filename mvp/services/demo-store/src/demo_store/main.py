@@ -14,6 +14,7 @@ from demo_store.catalog.routes import router as catalog_router
 from demo_store.catalog.search import get_searcher
 from demo_store.checkout.routes import router as checkout_router
 from demo_store.config import SERVICE_DIR, get_settings
+from demo_store.demo.browse import router as browse_router
 from demo_store.demo.routes import router as demo_router
 from demo_store.demo.routes import seed
 from demo_store.discovery.manifest import router as discovery_router
@@ -69,6 +70,7 @@ app.include_router(catalog_router)
 app.include_router(checkout_router)
 app.include_router(payment_router)
 app.include_router(demo_router)
+app.include_router(browse_router)
 app.mount("/static", StaticFiles(directory=SERVICE_DIR / "static"), name="static")
 
 

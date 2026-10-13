@@ -6,6 +6,9 @@ type AssistantAttrs = DetailedHTMLProps<HTMLAttributes<TalkToBuyAssistant>, Talk
   "ticket-url"?: string;
   "server-url"?: string;
   language?: string;
+  layout?: "page" | "sheet";
+  muted?: "";
+  "preferred-address"?: string;
   "show-translation"?: "true" | "false";
   "media-mode"?: "avatar" | "audio_only";
   "avatar-audio"?: "muxed" | "separate";
