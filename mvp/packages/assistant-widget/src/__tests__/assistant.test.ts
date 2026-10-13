@@ -40,7 +40,7 @@ describe("<talktobuy-assistant>", () => {
     el.onServerMessage({ type: "payment_request", checkout_id: "chk_1", item_count: 10, total: 1016, currency: "INR", delivery });
     el.onServerMessage({ type: "order", order_id: "ord_1", delivery });
     expect(seen.map((s) => s[0])).toEqual(["ttb:cart-changed", "ttb:payment-requested", "ttb:order-placed"]);
-    expect(seen[0][1]).toEqual({ cart: { lines: [], item_count: 0, total: 0 } });
+    expect(seen[0][1]).toEqual({ cart: { lines: [], item_count: 0, total: 0 }, cart_id: null });
     expect(seen[1][1]).toEqual({ checkout_id: "chk_1", total: 1016, currency: "INR", item_count: 10, delivery });
     expect(seen[2][1]).toEqual({ order_id: "ord_1", delivery });
     // No session yet: resolvePayment cannot send.

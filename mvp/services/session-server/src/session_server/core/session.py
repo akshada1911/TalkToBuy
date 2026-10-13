@@ -14,6 +14,7 @@ import re
 from typing import Any
 
 from session_server.core import confirm, pace
+from session_server.core.cart import sync_cart
 from session_server.core.cost import estimate_usd
 from session_server.core.runtime import Runtime
 from session_server.core.safety import detector, hold
@@ -171,7 +172,7 @@ class ConversationSession:
     async def on_client_json(self, msg: dict[str, Any]) -> None:
         kind = msg.get("type")
         s = self.rt.session
-        if kind in ("text", "payment_result", "camera", "audio_pause"):
+        if kind in ("text", "payment_result", "camera", "audio_pause", "cart_sync"):
             self._shopper_active()
         if kind == "audio_pause":
             await self.rt.live.send_audio_end()
@@ -196,6 +197,9 @@ class ConversationSession:
             fut = self.rt.payment_future
             if fut is not None and not fut.done() and msg.get("checkout_id") == s.checkout_id:
                 fut.set_result({"approved": bool(msg.get("approved")), "mandate": msg.get("mandate")})
+        elif kind == "cart_sync":
+            # The shop changed the cart by tapping: re-read it from the store and show it.
+            await sync_cart(self.rt, push=True)
         elif kind == "end":
             await self.end("shopper_closed")
 

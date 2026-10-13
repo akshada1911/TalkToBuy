@@ -11,11 +11,13 @@ from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from pydantic import BaseModel
 
 from session_server.config import Settings, get_settings
-from session_server.core.prompts import build_system_instruction
+from session_server.core.cart import adopt_cart
+from session_server.core.prompts import build_system_instruction, cart_note
 from session_server.core.runtime import Runtime
 from session_server.core.session import ConversationSession
 from session_server.core.tool_router import ToolRouter, load_tool_specs
 from session_server.core.tools import HANDLERS
+from session_server.core.ui import cart_msg, rupees
 from session_server.http.tickets import registry, verify_ticket
 from session_server.logging import get_logger
 from session_server.models.domain import Session, Usage
@@ -70,7 +72,7 @@ def build_adapters(settings: Settings) -> dict[str, Any]:
 
 
 @router.websocket("/v1/session")
-async def session_ws(ws: WebSocket, ticket: str = "", media_mode: str = "", language: str = "hi") -> None:
+async def session_ws(ws: WebSocket, ticket: str = "", media_mode: str = "", language: str = "hi", cart: str = "") -> None:
     settings = get_settings()
     await ws.accept()
     ui = WsUi(ws)
@@ -107,15 +109,32 @@ async def session_ws(ws: WebSocket, ticket: str = "", media_mode: str = "", lang
         )
         rt = Runtime(session=session, shopper=shopper, commerce=commerce, live=ports["live"], ui=ui,
                      settings=settings)
+        # A cart the shopper already filled in the shop is this session's cart too (one cart).
+        cart_text = None
+        if cart:
+            try:
+                if await adopt_cart(rt, cart) and rt.cart and rt.cart.lines:
+                    cart_text = cart_note(
+                        [(l.product_id, rt.products[l.product_id].name if l.product_id in rt.products else l.product_id, l.qty)
+                         for l in rt.cart.lines],
+                        rupees(rt.cart.total_minor),
+                    )
+            except Exception:  # a cart that cannot be picked up must never stop the conversation
+                log.exception("cart_adopt_failed")
+                rt.session.cart_ref = rt.session.checkout_id = None
+                rt.cart = None
         usual = await commerce.last_order(shopper_id)
         vocabulary = BASE_VOCABULARY + [w for p, _ in (usual.lines if usual else []) for w in (p.name, p.local_name)]
         await rt.live.connect(LiveConfig(
-            system_instruction=build_system_instruction(shopper, session.pace, language=session.language),
+            system_instruction=build_system_instruction(shopper, session.pace, language=session.language, cart=cart_text),
             tools=load_tool_specs(), media_mode=session.media_mode, vocabulary=vocabulary,
             language_code=LANGUAGE_CODES[session.language],
         ))
         convo = ConversationSession(rt, ToolRouter(rt, HANDLERS), ports["state"],
                                     translate=ports["translate"], classifier=ports["classifier"])
+
+        if rt.cart is not None:
+            await ui.send_json(cart_msg(rt.cart, rt.products))
 
         async def pump_client() -> None:
             with contextlib.suppress(WebSocketDisconnect):

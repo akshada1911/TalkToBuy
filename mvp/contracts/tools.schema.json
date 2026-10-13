@@ -117,7 +117,7 @@
     },
     {
       "name": "cancel_order",
-      "description": "Cancel the order in progress: empties the whole cart, closes any open payment step and drops the chosen address. Call it when the shopper says to cancel or drop the order. An order that is already placed cannot be cancelled here.",
+      "description": "Cancel the order in progress: empties the whole cart, closes any open payment step and drops the chosen address. Call it when the shopper says to cancel or drop the order, or to clear or empty the cart. An order that is already placed cannot be cancelled here.",
       "parameters": { "type": "object", "properties": {}, "additionalProperties": false },
       "returns": {
         "type": "object",

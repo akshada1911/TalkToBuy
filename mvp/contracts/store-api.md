@@ -145,6 +145,11 @@ without an order.
 | `GET /demo/catalog?category=&q=&limit=&offset=` | `{items:[{id, name, local_name, brand, size, price (whole ₹), image, image_credit, category, in_stock, description, usage}], total, limit, offset}`: the shop's browse list. In-stock first; `q` matches name, Hindi name, brand and synonyms; `limit` 1–100 (default 40) |
 | `GET /demo/catalog/categories` | `[{id, count}]` |
 | `GET /demo/catalog/{id}` | one product as above plus `similar` (up to 8 in-stock items of the same category), or 404 |
+| `POST /demo/carts` | `{lines:[{product_id, qty}]}` → the cart view `{id, status, lines:[{product, qty, line_total}], item_count, total, slot, address, order}`. The cart IS the checkout session (`chk_…`), so the shop and the assistant share one cart |
+| `GET /demo/carts/{id}` | the cart view, or 404 |
+| `PUT /demo/carts/{id}` | `{lines, slot_id?, address_id?}` replaces the lines (`{}` empties the cart); 409 if the cart is already ordered or cancelled |
+| `POST /demo/carts/{id}/complete` | `{checkout_mandate, payment_mandate}` → completes the order after the fingerprint approval |
+| `GET /demo/slots` | `[{id, label_hi, label_en}]`: delivery slots, earliest first |
 | `GET /demo/shoppers/{id}/last-order` | `{"order_id":"…","lines":[{"product":Product,"qty":1}…]}` (seeded until a real order exists) |
 | `GET /demo/shoppers/{id}/family` | `FamilyContact` `{id, name:"Rohit (son)", channel:"in_app"}` or 404 |
 | `POST /demo/family/notifications` | `{shopper_id, message}` (≤ 280 chars) → `{delivered:true, contact_name}` |

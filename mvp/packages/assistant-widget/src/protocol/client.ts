@@ -53,6 +53,7 @@ export function sessionUrl(
   loc: Location = location,
   mediaMode?: string | null,
   language?: string | null,
+  cartId?: string | null,
 ): string {
   let base: URL;
   if (serverUrl && serverUrl.trim()) {
@@ -70,6 +71,8 @@ export function sessionUrl(
   if (mediaMode) base.searchParams.set("media_mode", mediaMode);
   // Conversation language chosen by the shopper (hi = Hindi, en = English).
   if (language) base.searchParams.set("language", language);
+  // A cart already filled in the shop is this conversation's cart too (one cart).
+  if (cartId) base.searchParams.set("cart", cartId);
   return base.toString();
 }
 
@@ -83,6 +86,8 @@ export interface ClientOptions {
   getMediaMode?: () => string | null;
   /** Conversation language to start in: "hi" or "en". */
   getLanguage?: () => string | null;
+  /** The store cart (checkout session) the shop already has, if any. */
+  getCartId?: () => string | null;
   onMessage?: (msg: ServerMessage) => void;
   onBinary?: (type: FrameType, payload: Uint8Array) => void;
   onStatus?: (status: ClientStatus, detail?: { code?: number; reason?: string }) => void;
@@ -127,7 +132,7 @@ export class SessionClient {
     }
     if (this.stopped) return;
     const Impl = this.opts.WebSocketImpl ?? WebSocket;
-    const ws = new Impl(sessionUrl(this.opts.serverUrl, ticket, location, this.opts.getMediaMode?.() ?? null, this.opts.getLanguage?.() ?? null));
+    const ws = new Impl(sessionUrl(this.opts.serverUrl, ticket, location, this.opts.getMediaMode?.() ?? null, this.opts.getLanguage?.() ?? null, this.opts.getCartId?.() ?? null));
     ws.binaryType = "arraybuffer";
     this.ws = ws;
     this.openedAt = performance.now();

@@ -47,7 +47,18 @@ def _read(name: str, root: Path) -> str:
     return re.sub(r"<!--.*?-->", "", text, flags=re.DOTALL).strip()
 
 
-def build_system_instruction(shopper: Shopper, pace: str, root: Path = PROMPTS, language: str = "hi") -> str:
+def cart_note(lines: list[tuple[str, str, int]], total: int) -> str:
+    """Tell the model about items the shopper already put in the cart by tapping (id, name, qty)."""
+    items = "; ".join(f"{qty} × {name} ({pid})" for pid, name, qty in lines)
+    return (
+        "The shopper has already put these in the cart on screen, so do not add them again and do not "
+        f"announce them unless it helps: {items}. Cart total so far: ₹{total}. The cart can also change on "
+        "screen while you talk; the cart in a tool result is always the current one."
+    )
+
+
+def build_system_instruction(shopper: Shopper, pace: str, root: Path = PROMPTS, language: str = "hi",
+                             cart: str | None = None) -> str:
     pace_file = "pace_guided.md" if pace == "guided" else "pace_quick.md"
     template = _read("system.hi.md", root)
     name = shopper.display_name
@@ -65,4 +76,4 @@ def build_system_instruction(shopper: Shopper, pace: str, root: Path = PROMPTS, 
     }
     for key, value in parts.items():
         template = template.replace("{" + key + "}", value)
-    return template
+    return f"{template}\n\n{cart}" if cart else template

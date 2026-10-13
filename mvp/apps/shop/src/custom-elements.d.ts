@@ -9,6 +9,7 @@ type AssistantAttrs = DetailedHTMLProps<HTMLAttributes<TalkToBuyAssistant>, Talk
   layout?: "page" | "sheet";
   muted?: "";
   "preferred-address"?: string;
+  "cart-id"?: string;
   "show-translation"?: "true" | "false";
   "media-mode"?: "avatar" | "audio_only";
   "avatar-audio"?: "muxed" | "separate";

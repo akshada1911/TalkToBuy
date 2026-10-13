@@ -1,5 +1,5 @@
-import { useState } from "react";
-import type { UiProduct } from "@talktobuy/assistant-widget";
+import { useEffect, useRef, useState } from "react";
+import type { UiCartLine, UiProduct } from "@talktobuy/assistant-widget";
 import type { CatalogProduct } from "../api";
 import { displayName } from "../catalog";
 import { ProductImage } from "../components/ProductImage";
@@ -47,12 +47,54 @@ export function couponValue(c: Coupon | undefined, item: number): number {
 }
 
 export function Cart() {
-  const { lang, t, go, openTalk, cart, count, total, preferred, demo, setDemo, isPending, requestInc, requestDec, requestCheckout, requestCancel, checkoutPending } =
+  const { lang, t, go, openTalk, cart, count, total, preferred, demo, setDemo, isPending, incItem, decItem, requestCheckout, checkoutPending, clearCart, clearedTick } =
     useApp();
   const [couponOpen, setCouponOpen] = useState(false);
   const lines = cart?.lines ?? [];
+
+  // When the cart empties (the Clear button, or "cancel my order" / "clear my cart" said to the
+  // assistant), the items fade out and a "Cart cleared" confirmation shows for a moment.
+  const lastLines = useRef<UiCartLine[]>([]);
+  if (lines.length > 0) lastLines.current = lines;
+  const [leaving, setLeaving] = useState<UiCartLine[] | null>(null);
+  useEffect(() => {
+    if (clearedTick === 0) return;
+    setLeaving(lastLines.current);
+    const id = setTimeout(() => setLeaving(null), 1800);
+    return () => clearTimeout(id);
+  }, [clearedTick]);
   const applied = COUPONS.find((c) => c.code === demo.coupon);
   const saving = couponValue(applied, total);
+
+  if (count === 0 && leaving && leaving.length > 0) {
+    return (
+      <div className="screen">
+        <TopBar title={t("cartTitle")} sub={t("itemCount", { n: 0 })} right={<VoiceButton />} />
+        <div className="scroll grow stack gap12" style={{ padding: "12px 16px" }}>
+          <div className="lines" aria-hidden="true">
+            {leaving.map((l, i) => (
+              <div className="cline leaving" key={l.product.id} style={{ animationDelay: `${i * 70}ms` }}>
+                <span className="thumb" style={{ background: "var(--sand-2)" }}>
+                  <ProductImage product={{ image: l.product.image, category: "home", name: l.product.name }} size={34} />
+                </span>
+                <div className="stack gap2" style={{ flex: 1, minWidth: 0 }}>
+                  <span className="clamp2" style={{ fontWeight: 600, fontSize: 14 }}>{displayName(asCatalog(l.product), lang)}</span>
+                  <span style={{ fontWeight: 700, fontSize: 15 }}>₹{l.line_total}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="cleared-note pop" role="status">
+            <span className="cleared-check">
+              <Icon name="i-check" size={22} stroke={3} />
+            </span>
+            <b>{t("cartCleared")}</b>
+            <span>{t("cartClearedHint")}</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (count === 0) {
     return (
@@ -107,7 +149,7 @@ export function Cart() {
                   <span className="psub">{p.size}</span>
                   <span style={{ fontWeight: 700, fontSize: 15 }}>₹{l.line_total}</span>
                 </div>
-                <Stepper size="compact" qty={l.qty} name={name} busy={isPending(p.id)} onDec={() => requestDec(p)} onInc={() => requestInc(p)} />
+                <Stepper size="compact" qty={l.qty} name={name} busy={isPending(p.id)} onDec={() => decItem(p)} onInc={() => incItem(p)} />
               </div>
             );
           })}
@@ -184,8 +226,9 @@ export function Cart() {
         <span className="note" style={{ padding: "0 4px" }}>
           {t("billNote")}
         </span>
-        <button type="button" className="btn-link" style={{ alignSelf: "flex-start", color: "var(--danger)" }} onClick={requestCancel}>
-          {t("cancelOrder")}
+        <button type="button" className="btn btn-clear" onClick={clearCart}>
+          <Icon name="i-close" size={18} stroke={2.4} />
+          {t("clearCart")}
         </button>
       </div>
 
@@ -204,17 +247,14 @@ export function Cart() {
             ₹{total}
           </span>
         </button>
-        <button type="button" className="btn btn-forest" onClick={requestCheckout} disabled={checkoutPending}>
-          {checkoutPending ? (
-            <>
-              <span className="spinner" /> {t("checkingOut")}
-            </>
-          ) : (
-            <>
-              {t("checkOut")} <Icon name="i-chev" size={20} />
-            </>
-          )}
-        </button>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "stretch", gap: 2, flex: "none" }}>
+          <button type="button" className="btn btn-forest" onClick={() => go({ screen: "checkout" })}>
+            {t("checkOut")} <Icon name="i-chev" size={20} />
+          </button>
+          <button type="button" className="btn-link" style={{ minHeight: 32, fontSize: 12 }} onClick={requestCheckout} disabled={checkoutPending}>
+            {checkoutPending ? t("checkingOut") : t("checkoutVoice")}
+          </button>
+        </div>
       </div>
 
       {couponOpen && <CouponSheet total={total} onClose={() => setCouponOpen(false)} />}

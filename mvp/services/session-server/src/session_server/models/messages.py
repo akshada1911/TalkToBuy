@@ -138,6 +138,17 @@ class AudioPauseMsg(BaseModel):
     type: Literal['audio_pause']
 
 
+class CartSyncMsg(BaseModel):
+    """
+    The shop changed the cart (tapping, not voice): the server re-reads it from the store and sends a fresh `cart` message.
+    """
+
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    type: Literal['cart_sync']
+
+
 class EndMsg(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -192,6 +203,10 @@ class CartMsg(BaseModel):
     )
     type: Literal['cart']
     cart: UiCart
+    cart_id: str | None = Field(
+        None,
+        description='The store cart (checkout session) this is; null when there is no cart any more (emptied by cancel, or ordered).',
+    )
 
 
 class AddressesMsg(BaseModel):
@@ -291,6 +306,7 @@ class WidgetMessages(BaseModel):
         | NetQualityMsg
         | EndMsg
         | AudioPauseMsg
+        | CartSyncMsg
         | None
     ) = None
     server: (

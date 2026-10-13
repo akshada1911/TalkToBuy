@@ -174,3 +174,31 @@ async def test_warning_sign_does_not_stop_shopping_and_family_told_only_after_ye
     assert result["contact_name"].startswith("Rohit")
     feed = (await http.get("/demo/family/notifications", params={"shopper_id": "u-ghanshyam"})).json()
     assert feed and feed[-1]["message"] == msg["message"]
+
+
+async def test_a_cart_filled_in_the_shop_is_the_assistants_cart(env) -> None:
+    """One cart against the real store: tapped in the shop, picked up and extended by voice, then the
+    assistant checks it out; a tap after the read-back voids it."""
+    from session_server.core.cart import adopt_cart, sync_cart
+
+    rt, tool, http = env
+    shop = (await http.post("/demo/carts", json={"lines": [{"product_id": "p-0001", "qty": 2}]})).json()
+    assert await adopt_cart(rt, shop["id"])
+    assert rt.cart.item_count == 1 and rt.session.cart_ref == shop["id"]
+
+    # The shopper taps eggs in the shop while the assistant is running; then asks for tomatoes by voice.
+    await http.put(f"/demo/carts/{shop['id']}", json={"lines": [{"product_id": "p-0001", "qty": 2}, {"product_id": "p-0621", "qty": 1}]})
+    ok(await tool("add_to_cart", {"product_id": "p-0002", "qty": 1, "source": "named"}))
+    cart = (await http.get(f"/demo/carts/{shop['id']}")).json()
+    assert {l["product"]["id"]: l["qty"] for l in cart["lines"]} == {"p-0001": 2, "p-0621": 1, "p-0002": 1}
+
+    readback = ok(await tool("start_checkout", {"delivery_slot": "earliest", "address_id": "addr-home"}))
+    assert readback["checkout_id"] == shop["id"]
+    assert (await http.get(f"/demo/carts/{shop['id']}")).json()["status"] == "ready_for_complete"
+
+    # A tap after the read-back means the read-back no longer matches the cart.
+    await http.put(f"/demo/carts/{shop['id']}", json={"lines": [{"product_id": "p-0001", "qty": 1}], "slot_id": "earliest", "address_id": "addr-home"})
+    await http.put(f"/demo/carts/{shop['id']}", json={"lines": [{"product_id": "p-0001", "qty": 3}]})
+    await sync_cart(rt)
+    assert rt.session.checkout_ready is False
+    assert rt.ui.of("cart")[-1]["cart_id"] == shop["id"]

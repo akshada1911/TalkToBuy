@@ -16,7 +16,7 @@ from typing import Any
 from jsonschema import Draft202012Validator
 
 from session_server.config import MVP_ROOT
-from session_server.core.cart import duplicate_add
+from session_server.core.cart import duplicate_add, sync_cart
 from session_server.core.guards import GUARDS, Guard
 from session_server.core.runtime import Runtime
 from session_server.logging import get_logger
@@ -27,6 +27,8 @@ log = get_logger(__name__)
 
 TOOLS_SCHEMA = MVP_ROOT / "contracts" / "tools.schema.json"
 HOLDING_AFTER_S = 2.0
+# Tools that read or change the cart: the shop may have changed it by tapping, so re-read it first.
+CART_TOOLS = {"add_to_cart", "update_cart", "start_checkout", "confirm_checkout", "cancel_order"}
 
 
 class ToolError(Exception):
@@ -77,6 +79,11 @@ class ToolRouter:
         errors = sorted(self.validators[name].iter_errors(args), key=str)
         if errors:
             return _error(f"Invalid arguments: {errors[0].message}"), "WHEN_IDLE"
+        if name in CART_TOOLS:
+            try:
+                await sync_cart(self.rt)
+            except Exception:  # never let a refresh problem break a tool call
+                log.exception("cart_sync_failed")
         if name == "add_to_cart" and not self.rt.session.safety_hold:
             duplicate = duplicate_add(self.rt, args)  # a pure repeat adds nothing: skip approval
             if duplicate is not None:

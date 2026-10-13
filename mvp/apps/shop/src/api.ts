@@ -1,3 +1,4 @@
+import type { UiCartLine } from "@talktobuy/assistant-widget";
 import { SHOPPER_ID } from "./config";
 
 /** A product as the shop's browse screens see it (from the demo store's /demo/catalog). */
@@ -91,4 +92,69 @@ export function shortAddress(a: SavedAddress): string {
 
 export function fullAddress(a: SavedAddress): string {
   return `${a.line1}, ${a.area}, ${a.city} ${a.pincode}`;
+}
+
+// ------------------------------------------------------------------ the cart (one cart, in the store)
+
+/** A request to the store that was answered with an error status. */
+export class ApiError extends Error {
+  constructor(readonly status: number, readonly body: unknown) {
+    super(`HTTP ${status}`);
+  }
+}
+
+export interface DeliverySlot {
+  id: string;
+  label_hi: string;
+  label_en: string;
+  start: string;
+  end: string;
+}
+
+/** The store's cart: the same checkout session the assistant uses, in the shop's terms (whole rupees). */
+export interface StoreCart {
+  id: string;
+  status: "incomplete" | "ready_for_complete" | "complete_in_progress" | "completed" | "canceled" | string;
+  lines: UiCartLine[];
+  item_count: number;
+  total: number;
+  slot: { id: string; label_hi: string; label_en: string } | null;
+  address: { id: string; label: string; text: string } | null;
+  order: { id: string; delivery: { id: string; label_hi: string; label_en: string } | null; address: { id: string; label: string; text: string } | null } | null;
+}
+
+async function sendJson<T>(method: string, path: string, body?: unknown): Promise<T> {
+  const res = await fetch(path, {
+    method,
+    headers: body === undefined ? undefined : { "Content-Type": "application/json" },
+    body: body === undefined ? undefined : JSON.stringify(body),
+  });
+  const text = await res.text();
+  let data: unknown = null;
+  try {
+    data = text ? JSON.parse(text) : null;
+  } catch {
+    data = text;
+  }
+  if (!res.ok) throw new ApiError(res.status, data);
+  return data as T;
+}
+
+const toBody = (lines: Record<string, number>, extra?: { slot_id?: string; address_id?: string }) => ({
+  lines: Object.entries(lines).map(([product_id, qty]) => ({ product_id, qty })),
+  shopper_id: SHOPPER_ID,
+  ...extra,
+});
+
+export const createCart = (lines: Record<string, number> = {}) => sendJson<StoreCart>("POST", "/demo/carts", toBody(lines));
+export const getCart = (id: string) => sendJson<StoreCart>("GET", `/demo/carts/${encodeURIComponent(id)}`);
+export const putCart = (id: string, lines: Record<string, number>, extra?: { slot_id?: string; address_id?: string }) =>
+  sendJson<StoreCart>("PUT", `/demo/carts/${encodeURIComponent(id)}`, toBody(lines, extra));
+export const completeCart = (id: string, mandate: { checkout_mandate: string; payment_mandate: string }) =>
+  sendJson<StoreCart>("POST", `/demo/carts/${encodeURIComponent(id)}/complete`, { mandate });
+export const listSlots = () => sendJson<DeliverySlot[]>("GET", "/demo/slots");
+
+/** product id → quantity, for a cart's lines. */
+export function linesOf(cart: { lines: UiCartLine[] } | null): Record<string, number> {
+  return Object.fromEntries((cart?.lines ?? []).map((l) => [l.product.id, l.qty]));
 }

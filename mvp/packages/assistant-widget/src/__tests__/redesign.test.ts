@@ -192,3 +192,36 @@ describe("<talktobuy-assistant> app layout", () => {
     expect((el.shadowRoot!.querySelector("button.mic") as HTMLButtonElement).disabled).toBe(true);
   });
 });
+
+describe("one cart: the widget shares the shop's cart", async () => {
+  const { sessionUrl } = await import("../protocol/client");
+  const loc = { origin: "http://localhost:5173", href: "http://localhost:5173/" } as Location;
+
+  it("passes the cart id when connecting, and leaves the URL as it was without one", () => {
+    expect(sessionUrl("", "tk", loc, "audio_only", "en", "chk_1")).toContain("cart=chk_1");
+    const plain = sessionUrl("", "tk", loc, "audio_only", "en");
+    expect(plain).not.toContain("cart=");
+    expect(sessionUrl("", "tk", loc, "audio_only", "en", null)).toBe(plain);
+  });
+
+  it("reports the cart id with every cart change, and null when there is no cart any more", async () => {
+    const el = document.createElement("talktobuy-assistant") as TalkToBuyAssistant;
+    document.body.appendChild(el);
+    await el.updateComplete;
+    const seen: Array<{ cart_id: string | null }> = [];
+    el.addEventListener("ttb:cart-changed", (e) => seen.push((e as CustomEvent).detail));
+    el.onServerMessage({ type: "cart", cart: { lines: [], item_count: 0, total: 0 }, cart_id: "chk_9" });
+    el.onServerMessage({ type: "cart", cart: { lines: [], item_count: 0, total: 0 } });
+    el.onServerMessage({ type: "cart", cart: { lines: [], item_count: 0, total: 0 }, cart_id: null });
+    expect(seen.map((s) => s.cart_id)).toEqual(["chk_9", null, null]);
+  });
+
+  it("syncCart asks the server to re-read the cart, and says no when not connected", async () => {
+    const el = document.createElement("talktobuy-assistant") as TalkToBuyAssistant;
+    el.setAttribute("cart-id", "chk_1");
+    document.body.appendChild(el);
+    await el.updateComplete;
+    expect(el.cartId).toBe("chk_1");
+    expect(el.syncCart()).toBe(false);
+  });
+});

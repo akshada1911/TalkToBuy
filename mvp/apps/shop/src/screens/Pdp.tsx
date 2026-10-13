@@ -9,7 +9,7 @@ import { useLoad } from "../hooks";
 import { useApp } from "../state";
 
 export function Pdp() {
-  const { lang, t, route, go, count, qtyOf, isPending, requestAdd, requestInc, requestDec } = useApp();
+  const { lang, t, route, go, count, qtyOf, isPending, addItem, incItem, decItem } = useApp();
   const id = route.pdpId ?? "";
   const { data: p, loading, error, reload } = useLoad(() => productDetail(id), [id]);
 
@@ -136,12 +136,12 @@ export function Pdp() {
             {t("outOfStock")}
           </button>
         ) : qty === 0 ? (
-          <button type="button" className="btn btn-forest" style={{ flex: 1 }} onClick={() => requestAdd(p)} disabled={busy}>
+          <button type="button" className="btn btn-forest" style={{ flex: 1 }} onClick={() => addItem(p)} disabled={busy}>
             {busy ? <span className="spinner" /> : t("addToCart")}
           </button>
         ) : (
           <div style={{ flex: 1 }}>
-            <Stepper size="big" qty={qty} label={t("inCart", { n: qty })} name={name} busy={busy} onDec={() => requestDec(p)} onInc={() => requestInc(p)} />
+            <Stepper size="big" qty={qty} label={t("inCart", { n: qty })} name={name} busy={busy} onDec={() => decItem(p)} onInc={() => incItem(p)} />
           </div>
         )}
       </div>

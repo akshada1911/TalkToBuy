@@ -41,6 +41,8 @@ export type MediaMode = "avatar" | "audio_only";
 
 export interface CartChangedDetail {
   cart: UiCart;
+  /** The store cart this is (null when there is no cart any more: cancelled or ordered). */
+  cart_id: string | null;
 }
 export interface PaymentRequestedDetail {
   checkout_id: string;
@@ -534,6 +536,8 @@ export class TalkToBuyAssistant extends LitElement {
   @property({ attribute: "server-url" }) serverUrl: string | null = null;
   @property() language = "hi";
   @property({ reflect: true }) layout: WidgetLayout = "page";
+  /** The store cart (checkout session) the shop already has: the conversation uses the same cart. */
+  @property({ attribute: "cart-id" }) cartId: string | null = null;
   /** The host has hidden the assistant: the microphone is muted so nothing is heard in the background. */
   @property({ type: Boolean, reflect: true }) muted = false;
   /** The shopper's preferred saved address id: highlighted when the assistant asks where to deliver. */
@@ -628,6 +632,7 @@ export class TalkToBuyAssistant extends LitElement {
       getTicket: () => this.getTicket(),
       getMediaMode: () => this.effectiveMode,
       getLanguage: () => (this.language === "en" ? "en" : "hi"),
+      getCartId: () => this.cartId,
       onMessage: (m) => this.gate(() => this.onServerMessage(m)),
       onBinary: (t, p) => {
         if (this.pending) {
@@ -651,6 +656,11 @@ export class TalkToBuyAssistant extends LitElement {
     this.teardown();
     this.phase = "ended";
     this.emitEnded(reason);
+  }
+
+  /** The shop changed the cart by tapping: ask the conversation to re-read it. False if not connected. */
+  syncCart(): boolean {
+    return this.client?.send({ type: "cart_sync" }) ?? false;
   }
 
   /** Send a typed message (FR-003). */
@@ -805,7 +815,7 @@ export class TalkToBuyAssistant extends LitElement {
       cart: (m) => {
         this.cart = m.cart;
         this.cartView?.setCart(m.cart);
-        this.emit<CartChangedDetail>("ttb:cart-changed", { cart: m.cart });
+        this.emit<CartChangedDetail>("ttb:cart-changed", { cart: m.cart, cart_id: m.cart_id ?? null });
         if (m.cart.item_count === 0 && !this.order) {
           // The order was cancelled (or the cart emptied): close the checkout steps.
           if (this.pendingPayment) this.emit<Record<string, never>>("ttb:payment-cancelled", {});

@@ -8,7 +8,7 @@ import { useApp } from "../state";
  * and elsewhere it is hidden (and its microphone muted, so nothing is heard in the background).
  */
 export function AssistantHost() {
-  const { lang, t, route, voiceOpen, closeVoice, endTalk, go, widgetRef, preferred } = useApp();
+  const { lang, t, route, voiceOpen, closeVoice, endTalk, go, widgetRef, preferred, cartId } = useApp();
   const layout = route.screen === "talk" ? "page" : voiceOpen ? "sheet" : "hidden";
   const visible = layout !== "hidden";
   return (
@@ -47,6 +47,7 @@ export function AssistantHost() {
           layout={layout === "sheet" ? "sheet" : "page"}
           muted={visible ? undefined : ""}
           preferred-address={preferred?.id}
+          cart-id={cartId ?? undefined}
           show-translation={SHOW_ENGLISH && lang === "hi" ? "true" : "false"}
           media-mode="audio_only"
           avatar-audio="muxed"

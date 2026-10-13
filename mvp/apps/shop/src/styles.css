@@ -1479,3 +1479,72 @@ p {
   font-weight: 600;
   animation: rise 0.3s ease both;
 }
+
+/* ---------------------------------------------------------------- pressed feedback + clearing the cart */
+.btn,
+.btn-link,
+.add-btn,
+.chip,
+.choice,
+.stepper button {
+  transition: transform 0.08s ease;
+}
+.btn:active,
+.btn-link:active,
+.add-btn:active,
+.chip:active,
+.choice:active,
+.stepper button:active {
+  transform: scale(0.95);
+}
+.btn-clear {
+  align-self: flex-start;
+  height: 44px;
+  padding: 0 16px;
+  border: 1.5px solid var(--danger);
+  border-radius: 14px;
+  background: #fff;
+  color: var(--danger);
+  font-size: 14px;
+}
+.btn-clear:active {
+  background: #fdecea;
+}
+.cline.leaving {
+  animation: leave 0.7s ease forwards;
+}
+@keyframes leave {
+  0% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-36px) scale(0.96);
+  }
+}
+.cleared-note {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 20px 12px;
+  text-align: center;
+  background: var(--mint);
+  color: var(--mint-ink);
+  border-radius: 20px;
+}
+.cleared-note b {
+  font-family: var(--font-display);
+  font-size: 20px;
+}
+.cleared-check {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--green);
+  color: #fff;
+}

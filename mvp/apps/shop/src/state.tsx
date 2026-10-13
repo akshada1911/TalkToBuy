@@ -17,12 +17,16 @@ import type {
   UiCartLine,
   WidgetPhase,
 } from "@talktobuy/assistant-widget";
-import { listAddresses, type CatalogProduct, type SavedAddress } from "./api";
+import { completeCart, linesOf, listAddresses, putCart, type CatalogProduct, type SavedAddress, type StoreCart } from "./api";
+import { useShopCart } from "./shopCart";
 import { LangContext, translate, type StringKey } from "./i18n";
 import { URL_LANG } from "./config";
 import type { Lang } from "./lang";
 
-export type Screen = "home" | "list" | "pdp" | "cart" | "pay" | "track" | "settings" | "family" | "address" | "talk";
+export type Screen = "home" | "list" | "pdp" | "cart" | "checkout" | "pay" | "track" | "settings" | "family" | "address" | "talk";
+
+/** A payment to approve with the fingerprint. `manual`: the shop's own checkout (no assistant involved). */
+export type PaymentRequest = PaymentRequestedDetail & { manual?: boolean };
 
 export interface Route {
   screen: Screen;
@@ -99,21 +103,28 @@ export interface AppApi {
   ask: (text: string) => Promise<boolean>;
   toast: string | null;
 
-  // the cart is the assistant's cart (mirrored from its events)
+  // the one cart: filled by tapping in the shop or by voice (same cart in the store)
   cart: UiCart | null;
+  cartId: string | null;
   count: number;
   total: number;
   qtyOf: (productId: string) => number;
   isPending: (productId: string) => boolean;
-  requestAdd: (p: CatalogProduct) => void;
-  requestInc: (p: CatalogProduct) => void;
-  requestDec: (p: CatalogProduct) => void;
+  addItem: (p: Pick<CatalogProduct, "id">) => void;
+  incItem: (p: Pick<CatalogProduct, "id">) => void;
+  decItem: (p: Pick<CatalogProduct, "id">) => void;
+  clearCart: () => void;
+  /** Counts up each time the cart goes from full to empty (for the "cleared" effect). */
+  clearedTick: number;
+  /** Check out by voice (the assistant reads it back). */
   requestCheckout: () => void;
   requestCancel: () => void;
   checkoutPending: boolean;
+  /** Check out by tapping: choose the slot and address, then pay. Resolves false if it could not start. */
+  startManualCheckout: (slotId: string, addressId: string) => Promise<boolean>;
 
   // payment + order
-  paymentRequest: PaymentRequestedDetail | null;
+  paymentRequest: PaymentRequest | null;
   resolvePayment: (r: PaymentResult) => void;
   order: PlacedOrder | null;
   ordersBadge: boolean;
@@ -153,13 +164,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [voiceOpen, setVoiceOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
 
-  const [cart, setCart] = useState<UiCart | null>(null);
-  const cartRef = useRef<UiCart | null>(null);
-  const [pending, setPending] = useState<Record<string, number>>({});
   const [checkoutPending, setCheckoutPending] = useState(false);
-  const [bump, setBump] = useState(0);
+  const skipClearedToast = useRef(false);
 
-  const [paymentRequest, setPaymentRequest] = useState<PaymentRequestedDetail | null>(null);
+  const [paymentRequest, setPaymentRequest] = useState<PaymentRequest | null>(null);
+  const paymentRef = useRef<PaymentRequest | null>(null);
+  paymentRef.current = paymentRequest;
   const [order, setOrder] = useState<PlacedOrder | null>(null);
   const lastPaymentRef = useRef<PaymentRequestedDetail | null>(null);
   const approvalTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -222,16 +232,22 @@ export function AppProvider({ children }: { children: ReactNode }) {
     toastTimer.current = setTimeout(() => setToast(null), 4000);
   }, []);
 
+  // ------------------------------------------------------------ the one cart
+  const shop = useShopCart({
+    widgetRef,
+    onCleared: () => {
+      if (!skipClearedToast.current) showToast(translate(langRef.current, "cartCleared"));
+    },
+    onError: () => showToast(translate(langRef.current, "cartSaveFailed")),
+  });
+
   // ------------------------------------------------------------ the assistant's events
   useEffect(() => {
     const el = widgetRef.current;
     if (!el) return;
-    // A fresh assistant (language change) is a fresh conversation and an empty cart.
-    setCart(null);
-    cartRef.current = null;
-    setPending({});
+    // A fresh assistant (language change) is a fresh conversation; the cart stays (it is in the store).
     setCheckoutPending(false);
-    setPaymentRequest(null);
+    if (!paymentRef.current?.manual) setPaymentRequest(null);
     phaseRef.current = "idle";
     setPhase("idle");
 
@@ -244,12 +260,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
         waiters.current.splice(0).forEach((w) => w(false));
       }
     };
-    const onCart = (e: CustomEvent<{ cart: UiCart }>) => {
-      cartRef.current = e.detail.cart;
-      setCart(e.detail.cart);
-      setPending({});
+    const onCart = (e: CustomEvent<{ cart: UiCart; cart_id?: string | null }>) => {
+      shop.fromAssistant(e.detail.cart, e.detail.cart_id ?? null);
       setCheckoutPending(false);
-      setBump((n) => n + 1);
     };
     const onPay = (e: CustomEvent<PaymentRequestedDetail>) => {
       lastPaymentRef.current = e.detail;
@@ -259,13 +272,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setStack((s) => (s[s.length - 1].screen === "pay" ? s : [...s.filter((r) => r.screen !== "talk"), { screen: "pay" }]));
     };
     const onPayCancelled = () => {
+      if (paymentRef.current?.manual) return; // the shop's own payment is not the assistant's to cancel
       clearApprovalTimer();
       setPaymentRequest(null);
       setStack((s) => (s[s.length - 1].screen === "pay" ? s.slice(0, -1) : s));
     };
     const onOrder = (e: CustomEvent<OrderPlacedDetail>) => {
       clearApprovalTimer();
-      const snapshot = cartRef.current;
+      const snapshot = shop.cartRef.current;
       const placed: PlacedOrder = {
         id: e.detail.order_id,
         slot: { label_hi: e.detail.delivery.label_hi, label_en: e.detail.delivery.label_en },
@@ -274,6 +288,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         addressText: lastPaymentRef.current?.address_text ?? "",
         placedAt: Date.now(),
       };
+      shop.forget(); // the order used the cart: it is over, so the next item starts a new one
       setOrder(placed);
       setPaymentRequest(null);
       setVoiceOpen(false);
@@ -281,9 +296,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     };
     const onEnded = () => {
       clearApprovalTimer();
-      setPaymentRequest(null);
+      if (!paymentRef.current?.manual) setPaymentRequest(null);
       setCheckoutPending(false);
-      setPending({});
     };
     const onOpenCart = () => {
       setVoiceOpen(false);
@@ -355,48 +369,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setStack((s) => (s[s.length - 1].screen === "talk" ? s.slice(0, -1) : s));
   }, []);
 
-  // ------------------------------------------------------------ cart requests (look-and-ask)
-  const markPending = useCallback((id: string) => {
-    setPending((p) => ({ ...p, [id]: Date.now() }));
-    setTimeout(() => {
-      setPending((p) => {
-        if (!p[id] || Date.now() - p[id] < ASK_TIMEOUT_MS - 100) return p;
-        const { [id]: _drop, ...rest } = p;
-        return rest;
-      });
-    }, ASK_TIMEOUT_MS);
-  }, []);
-
-  const qtyOf = useCallback(
-    (productId: string) => cart?.lines.find((l) => l.product.id === productId)?.qty ?? 0,
-    [cart],
-  );
-
-  const requestAdd = useCallback(
-    (p: CatalogProduct) => {
-      markPending(p.id);
-      setVoiceOpen(true);
-      void ask(translate(lang, "addAsk", { name: `${p.name} (${p.size})` }));
-    },
-    [ask, lang, markPending],
-  );
-  const requestInc = useCallback(
-    (p: CatalogProduct) => {
-      markPending(p.id);
-      setVoiceOpen(true);
-      void ask(translate(lang, "addOneAsk", { name: `${p.name} (${p.size})` }));
-    },
-    [ask, lang, markPending],
-  );
-  const requestDec = useCallback(
-    (p: CatalogProduct) => {
-      markPending(p.id);
-      setVoiceOpen(true);
-      const only = (cartRef.current?.lines.find((l) => l.product.id === p.id)?.qty ?? 0) <= 1;
-      void ask(translate(lang, only ? "removeAllAsk" : "removeOneAsk", { name: `${p.name} (${p.size})` }));
-    },
-    [ask, lang, markPending],
-  );
+  // ------------------------------------------------------------ checkout and cancel by voice
   const requestCheckout = useCallback(() => {
     setCheckoutPending(true);
     setVoiceOpen(true);
@@ -410,7 +383,75 @@ export function AppProvider({ children }: { children: ReactNode }) {
     void ask(translate(lang, "cancelAsk"));
   }, [ask, lang]);
 
+  // ------------------------------------------------------------ checkout by tapping (no assistant)
+  const startManualCheckout = useCallback(
+    async (slotId: string, addressId: string): Promise<boolean> => {
+      const id = shop.idRef.current;
+      const cur = shop.cartRef.current;
+      if (!id || !cur || cur.lines.length === 0) return false;
+      try {
+        const view = await putCart(id, linesOf(cur), { slot_id: slotId, address_id: addressId });
+        if (view.status !== "ready_for_complete" || !view.slot || !view.address) throw new Error("not ready");
+        setPaymentRequest({
+          checkout_id: view.id,
+          total: view.total,
+          currency: "INR",
+          item_count: view.item_count,
+          delivery: { id: view.slot.id, label_hi: view.slot.label_hi, label_en: view.slot.label_en },
+          address_text: `${view.address.label}: ${view.address.text}`,
+          manual: true,
+        });
+        setStack((s) => [...s, { screen: "pay" }]);
+        return true;
+      } catch {
+        showToast(translate(langRef.current, "checkoutFailed"));
+        return false;
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [showToast],
+  );
+
+  /** The store completed the shop's own order. */
+  const placeManualOrder = useCallback(
+    (view: StoreCart) => {
+      const o = view.order;
+      skipClearedToast.current = true; // an order is not "clearing the cart"
+      shop.forget();
+      widgetRef.current?.syncCart(); // a running conversation learns the cart is finished
+      setPaymentRequest(null);
+      setOrder({
+        id: o?.id ?? "",
+        slot: { label_hi: o?.delivery?.label_hi ?? "", label_en: o?.delivery?.label_en ?? "" },
+        lines: view.lines,
+        total: view.total,
+        addressText: o?.address ? `${o.address.label}: ${o.address.text}` : "",
+        placedAt: Date.now(),
+      });
+      setStack([{ screen: "home" }, { screen: "track" }]);
+      setTimeout(() => (skipClearedToast.current = false), 500);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+
   const resolvePayment = useCallback((r: PaymentResult) => {
+    const req = paymentRef.current;
+    if (req?.manual) {
+      const leave = () => {
+        setPaymentRequest(null);
+        setStack((s) => (s[s.length - 1].screen === "pay" ? s.slice(0, -1) : s));
+      };
+      if (!r.approved || !r.mandate) return leave();
+      // The store checks the signatures, the amount and the address the shopper approved.
+      completeCart(req.checkout_id, { checkout_mandate: r.mandate.checkout_mandate, payment_mandate: r.mandate.payment_mandate })
+        .then(placeManualOrder)
+        .catch(() => {
+          leave();
+          showToast(translate(langRef.current, "payErrFailed"));
+        });
+      return;
+    }
     widgetRef.current?.resolvePayment(r);
     if (!r.approved) {
       setPaymentRequest(null);
@@ -426,7 +467,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         showToast(translate(langRef.current, "payErrFailed"));
       }, APPROVAL_TIMEOUT_MS);
     }
-  }, [showToast]);
+  }, [showToast, placeManualOrder]);
 
   // ------------------------------------------------------------ addresses
   const reloadAddresses = useCallback(async () => {
@@ -471,17 +512,21 @@ export function AppProvider({ children }: { children: ReactNode }) {
     endTalk,
     ask,
     toast,
-    cart,
-    count: cart?.lines.reduce((n, l) => n + l.qty, 0) ?? 0,
-    total: cart?.total ?? 0,
-    qtyOf,
-    isPending: (id) => id in pending,
-    requestAdd,
-    requestInc,
-    requestDec,
+    cart: shop.cart,
+    cartId: shop.cartId,
+    count: shop.count,
+    total: shop.total,
+    qtyOf: shop.qtyOf,
+    isPending: shop.isPending,
+    addItem: (p) => shop.add(p.id),
+    incItem: (p) => shop.inc(p.id),
+    decItem: (p) => shop.dec(p.id),
+    clearCart: shop.clear,
+    clearedTick: shop.clearedTick,
     requestCheckout,
     requestCancel,
     checkoutPending,
+    startManualCheckout,
     paymentRequest,
     resolvePayment,
     order,
@@ -494,7 +539,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     demo,
     setDemo,
     widgetRef,
-    bump,
+    bump: shop.bump,
   };
 
   return (

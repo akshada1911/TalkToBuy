@@ -2,6 +2,7 @@ import { AssistantHost } from "./components/AssistantHost";
 import { Sprite } from "./design/Icon";
 import { Address } from "./screens/Address";
 import { Cart } from "./screens/Cart";
+import { Checkout } from "./screens/Checkout";
 import { Family } from "./screens/Family";
 import { Home } from "./screens/Home";
 import { List } from "./screens/List";
@@ -21,6 +22,8 @@ function Screens() {
       return <Pdp key={`pdp-${route.pdpId}`} />;
     case "cart":
       return <Cart />;
+    case "checkout":
+      return <Checkout />;
     case "pay":
       return <Pay />;
     case "track":

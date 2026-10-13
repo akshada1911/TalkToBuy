@@ -51,7 +51,7 @@ def ui_cart(view: CheckoutView, products: dict[str, Product]) -> UiCart:
 
 
 def cart_msg(view: CheckoutView, products: dict[str, Product]) -> CartMsg:
-    return CartMsg(type="cart", cart=ui_cart(view, products))
+    return CartMsg(type="cart", cart=ui_cart(view, products), cart_id=view.id or None)
 
 
 def cards_msg(products: list[Product], mode: str) -> CardsMsg:

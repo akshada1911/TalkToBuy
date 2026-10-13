@@ -1,7 +1,7 @@
 {
  "generated_at": "2026-10-12T06:02:47+00:00",
  "source": "Open Food Facts (ODbL; images CC BY-SA) + TalkToBuy hand-added items",
- "count": 500,
+ "count": 525,
  "products": [
   {
    "id": "p-0001",
@@ -16615,6 +16615,753 @@
     "ram bandhu achaar",
     "ram bandhu achar",
     "ram bandhu pickle"
+   ],
+   "in_stock": true
+  },
+  {
+   "id": "p-0601",
+   "barcode": null,
+   "name": "Palak (Spinach) 250 g",
+   "local_name": "पालक 250 ग्राम",
+   "brand": null,
+   "size": "250 g",
+   "unit_qty": 250.0,
+   "unit": "g",
+   "price_minor": 2000,
+   "currency": "INR",
+   "image": "/static/products/p-0601.svg",
+   "image_credit": "TalkToBuy placeholder illustration",
+   "category": "produce",
+   "source_categories": [
+    "talktobuy:hand-added"
+   ],
+   "listing": {
+    "description": "Fresh spinach leaves, 250 g.",
+    "usage": "For palak paneer, dal and parathas."
+   },
+   "synonyms": [
+    "palak",
+    "spinach",
+    "पालक"
+   ],
+   "in_stock": true
+  },
+  {
+   "id": "p-0602",
+   "barcode": null,
+   "name": "Garlic 100 g",
+   "local_name": "लहसुन 100 ग्राम",
+   "brand": null,
+   "size": "100 g",
+   "unit_qty": 100.0,
+   "unit": "g",
+   "price_minor": 2500,
+   "currency": "INR",
+   "image": "/static/products/p-0602.svg",
+   "image_credit": "TalkToBuy placeholder illustration",
+   "category": "produce",
+   "source_categories": [
+    "talktobuy:hand-added"
+   ],
+   "listing": {
+    "description": "Fresh garlic bulbs, 100 g.",
+    "usage": "For tadka, curries and chutneys."
+   },
+   "synonyms": [
+    "lahsun",
+    "lasun",
+    "garlic",
+    "लहसुन"
+   ],
+   "in_stock": true
+  },
+  {
+   "id": "p-0603",
+   "barcode": null,
+   "name": "Green Chillies 100 g",
+   "local_name": "हरी मिर्च 100 ग्राम",
+   "brand": null,
+   "size": "100 g",
+   "unit_qty": 100.0,
+   "unit": "g",
+   "price_minor": 1500,
+   "currency": "INR",
+   "image": "/static/products/p-0603.svg",
+   "image_credit": "TalkToBuy placeholder illustration",
+   "category": "produce",
+   "source_categories": [
+    "talktobuy:hand-added"
+   ],
+   "listing": {
+    "description": "Fresh green chillies, 100 g.",
+    "usage": "For curries, tadka and chutneys."
+   },
+   "synonyms": [
+    "hari mirch",
+    "green chilli",
+    "green chillies",
+    "mirchi",
+    "हरी मिर्च"
+   ],
+   "in_stock": true
+  },
+  {
+   "id": "p-0604",
+   "barcode": null,
+   "name": "Coriander 100 g",
+   "local_name": "हरा धनिया 100 ग्राम",
+   "brand": null,
+   "size": "100 g",
+   "unit_qty": 100.0,
+   "unit": "g",
+   "price_minor": 1500,
+   "currency": "INR",
+   "image": "/static/products/p-0604.svg",
+   "image_credit": "TalkToBuy placeholder illustration",
+   "category": "produce",
+   "source_categories": [
+    "talktobuy:hand-added"
+   ],
+   "listing": {
+    "description": "Fresh coriander leaves, 100 g.",
+    "usage": "For garnish, chutneys and curries."
+   },
+   "synonyms": [
+    "dhania",
+    "hara dhania",
+    "coriander",
+    "cilantro",
+    "धनिया",
+    "हरा धनिया"
+   ],
+   "in_stock": true
+  },
+  {
+   "id": "p-0605",
+   "barcode": null,
+   "name": "Lemons 4 pcs",
+   "local_name": "नींबू 4 पीस",
+   "brand": null,
+   "size": "4 pcs",
+   "unit_qty": 4.0,
+   "unit": "piece",
+   "price_minor": 2000,
+   "currency": "INR",
+   "image": "/static/products/p-0605.svg",
+   "image_credit": "TalkToBuy placeholder illustration",
+   "category": "produce",
+   "source_categories": [
+    "talktobuy:hand-added"
+   ],
+   "listing": {
+    "description": "Fresh lemons, pack of 4.",
+    "usage": "For nimbu pani, salads and pickles."
+   },
+   "synonyms": [
+    "nimbu",
+    "lemon",
+    "lemons",
+    "नींबू"
+   ],
+   "in_stock": true
+  },
+  {
+   "id": "p-0606",
+   "barcode": null,
+   "name": "Carrots 500 g",
+   "local_name": "गाजर 500 ग्राम",
+   "brand": null,
+   "size": "500 g",
+   "unit_qty": 500.0,
+   "unit": "g",
+   "price_minor": 3500,
+   "currency": "INR",
+   "image": "/static/products/p-0606.svg",
+   "image_credit": "TalkToBuy placeholder illustration",
+   "category": "produce",
+   "source_categories": [
+    "talktobuy:hand-added"
+   ],
+   "listing": {
+    "description": "Fresh carrots, 500 g.",
+    "usage": "For salads, sabzi, halwa and soups."
+   },
+   "synonyms": [
+    "gajar",
+    "carrot",
+    "carrots",
+    "गाजर"
+   ],
+   "in_stock": true
+  },
+  {
+   "id": "p-0607",
+   "barcode": null,
+   "name": "Cauliflower 1 pc",
+   "local_name": "फूलगोभी 1 पीस",
+   "brand": null,
+   "size": "1 pc",
+   "unit_qty": 1.0,
+   "unit": "piece",
+   "price_minor": 4000,
+   "currency": "INR",
+   "image": "/static/products/p-0607.svg",
+   "image_credit": "TalkToBuy placeholder illustration",
+   "category": "produce",
+   "source_categories": [
+    "talktobuy:hand-added"
+   ],
+   "listing": {
+    "description": "Fresh cauliflower, one head.",
+    "usage": "For sabzi, parathas and pakoras."
+   },
+   "synonyms": [
+    "gobhi",
+    "phool gobhi",
+    "phoolgobhi",
+    "cauliflower",
+    "फूलगोभी",
+    "गोभी"
+   ],
+   "in_stock": true
+  },
+  {
+   "id": "p-0608",
+   "barcode": null,
+   "name": "Cucumber 500 g",
+   "local_name": "खीरा 500 ग्राम",
+   "brand": null,
+   "size": "500 g",
+   "unit_qty": 500.0,
+   "unit": "g",
+   "price_minor": 3000,
+   "currency": "INR",
+   "image": "/static/products/p-0608.svg",
+   "image_credit": "TalkToBuy placeholder illustration",
+   "category": "produce",
+   "source_categories": [
+    "talktobuy:hand-added"
+   ],
+   "listing": {
+    "description": "Fresh cucumbers, 500 g.",
+    "usage": "For salads and raita."
+   },
+   "synonyms": [
+    "kheera",
+    "kakdi",
+    "cucumber",
+    "खीरा"
+   ],
+   "in_stock": true
+  },
+  {
+   "id": "p-0609",
+   "barcode": null,
+   "name": "Capsicum 250 g",
+   "local_name": "शिमला मिर्च 250 ग्राम",
+   "brand": null,
+   "size": "250 g",
+   "unit_qty": 250.0,
+   "unit": "g",
+   "price_minor": 3000,
+   "currency": "INR",
+   "image": "/static/products/p-0609.svg",
+   "image_credit": "TalkToBuy placeholder illustration",
+   "category": "produce",
+   "source_categories": [
+    "talktobuy:hand-added"
+   ],
+   "listing": {
+    "description": "Fresh green capsicum, 250 g.",
+    "usage": "For sabzi, pulao and salads."
+   },
+   "synonyms": [
+    "shimla mirch",
+    "capsicum",
+    "bell pepper",
+    "शिमला मिर्च"
+   ],
+   "in_stock": true
+  },
+  {
+   "id": "p-0610",
+   "barcode": null,
+   "name": "Bananas 6 pcs",
+   "local_name": "केले 6 पीस",
+   "brand": null,
+   "size": "6 pcs",
+   "unit_qty": 6.0,
+   "unit": "piece",
+   "price_minor": 4000,
+   "currency": "INR",
+   "image": "/static/products/p-0610.svg",
+   "image_credit": "TalkToBuy placeholder illustration",
+   "category": "produce",
+   "source_categories": [
+    "talktobuy:hand-added"
+   ],
+   "listing": {
+    "description": "Ripe bananas, pack of 6.",
+    "usage": "Eat as they are, or for shakes and cakes."
+   },
+   "synonyms": [
+    "kela",
+    "kele",
+    "banana",
+    "bananas",
+    "केला",
+    "केले"
+   ],
+   "in_stock": true
+  },
+  {
+   "id": "p-0611",
+   "barcode": null,
+   "name": "Apples 4 pcs",
+   "local_name": "सेब 4 पीस",
+   "brand": null,
+   "size": "4 pcs",
+   "unit_qty": 4.0,
+   "unit": "piece",
+   "price_minor": 12000,
+   "currency": "INR",
+   "image": "/static/products/p-0611.svg",
+   "image_credit": "TalkToBuy placeholder illustration",
+   "category": "produce",
+   "source_categories": [
+    "talktobuy:hand-added"
+   ],
+   "listing": {
+    "description": "Fresh red apples, pack of 4.",
+    "usage": "Eat as they are, or for salads and desserts."
+   },
+   "synonyms": [
+    "seb",
+    "apple",
+    "apples",
+    "सेब"
+   ],
+   "in_stock": true
+  },
+  {
+   "id": "p-0612",
+   "barcode": null,
+   "name": "Oranges 4 pcs",
+   "local_name": "संतरे 4 पीस",
+   "brand": null,
+   "size": "4 pcs",
+   "unit_qty": 4.0,
+   "unit": "piece",
+   "price_minor": 6000,
+   "currency": "INR",
+   "image": "/static/products/p-0612.svg",
+   "image_credit": "TalkToBuy placeholder illustration",
+   "category": "produce",
+   "source_categories": [
+    "talktobuy:hand-added"
+   ],
+   "listing": {
+    "description": "Juicy oranges, pack of 4.",
+    "usage": "Eat as they are, or for juice."
+   },
+   "synonyms": [
+    "santra",
+    "santre",
+    "orange",
+    "oranges",
+    "संतरा",
+    "संतरे"
+   ],
+   "in_stock": true
+  },
+  {
+   "id": "p-0613",
+   "barcode": null,
+   "name": "Pomegranate 2 pcs",
+   "local_name": "अनार 2 पीस",
+   "brand": null,
+   "size": "2 pcs",
+   "unit_qty": 2.0,
+   "unit": "piece",
+   "price_minor": 9000,
+   "currency": "INR",
+   "image": "/static/products/p-0613.svg",
+   "image_credit": "TalkToBuy placeholder illustration",
+   "category": "produce",
+   "source_categories": [
+    "talktobuy:hand-added"
+   ],
+   "listing": {
+    "description": "Fresh pomegranates, pack of 2.",
+    "usage": "Eat the seeds, or use for juice and raita."
+   },
+   "synonyms": [
+    "anar",
+    "pomegranate",
+    "अनार"
+   ],
+   "in_stock": true
+  },
+  {
+   "id": "p-0614",
+   "barcode": null,
+   "name": "Green Peas 500 g",
+   "local_name": "हरी मटर 500 ग्राम",
+   "brand": null,
+   "size": "500 g",
+   "unit_qty": 500.0,
+   "unit": "g",
+   "price_minor": 5000,
+   "currency": "INR",
+   "image": "/static/products/p-0614.svg",
+   "image_credit": "TalkToBuy placeholder illustration",
+   "category": "produce",
+   "source_categories": [
+    "talktobuy:hand-added"
+   ],
+   "listing": {
+    "description": "Fresh green peas in pods, 500 g.",
+    "usage": "For pulao, curries and samosas."
+   },
+   "synonyms": [
+    "matar",
+    "hari matar",
+    "green peas",
+    "peas",
+    "मटर",
+    "हरी मटर"
+   ],
+   "in_stock": true
+  },
+  {
+   "id": "p-0615",
+   "barcode": null,
+   "name": "Brinjal 500 g",
+   "local_name": "बैंगन 500 ग्राम",
+   "brand": null,
+   "size": "500 g",
+   "unit_qty": 500.0,
+   "unit": "g",
+   "price_minor": 3000,
+   "currency": "INR",
+   "image": "/static/products/p-0615.svg",
+   "image_credit": "TalkToBuy placeholder illustration",
+   "category": "produce",
+   "source_categories": [
+    "talktobuy:hand-added"
+   ],
+   "listing": {
+    "description": "Fresh brinjal, 500 g.",
+    "usage": "For bharta, sabzi and sambar."
+   },
+   "synonyms": [
+    "baingan",
+    "brinjal",
+    "eggplant",
+    "बैंगन"
+   ],
+   "in_stock": true
+  },
+  {
+   "id": "p-0616",
+   "barcode": null,
+   "name": "Cabbage 1 pc",
+   "local_name": "पत्ता गोभी 1 पीस",
+   "brand": null,
+   "size": "1 pc",
+   "unit_qty": 1.0,
+   "unit": "piece",
+   "price_minor": 3000,
+   "currency": "INR",
+   "image": "/static/products/p-0616.svg",
+   "image_credit": "TalkToBuy placeholder illustration",
+   "category": "produce",
+   "source_categories": [
+    "talktobuy:hand-added"
+   ],
+   "listing": {
+    "description": "Fresh cabbage, one head.",
+    "usage": "For sabzi, salads and parathas."
+   },
+   "synonyms": [
+    "patta gobhi",
+    "band gobhi",
+    "cabbage",
+    "पत्ता गोभी"
+   ],
+   "in_stock": true
+  },
+  {
+   "id": "p-0620",
+   "barcode": null,
+   "name": "Farm Eggs 6 pcs",
+   "local_name": "अंडे 6 पीस",
+   "brand": null,
+   "size": "6 pcs",
+   "unit_qty": 6.0,
+   "unit": "piece",
+   "price_minor": 5400,
+   "currency": "INR",
+   "image": "/static/products/p-0620.svg",
+   "image_credit": "TalkToBuy placeholder illustration",
+   "category": "dairy",
+   "source_categories": [
+    "talktobuy:hand-added"
+   ],
+   "listing": {
+    "description": "Farm eggs, tray of 6.",
+    "usage": "Keep cool. Boil, fry or bake."
+   },
+   "synonyms": [
+    "anda",
+    "ande",
+    "egg",
+    "eggs",
+    "अंडा",
+    "अंडे"
+   ],
+   "in_stock": true
+  },
+  {
+   "id": "p-0621",
+   "barcode": null,
+   "name": "Farm Eggs 12 pcs",
+   "local_name": "अंडे 12 पीस",
+   "brand": null,
+   "size": "12 pcs",
+   "unit_qty": 12.0,
+   "unit": "piece",
+   "price_minor": 9600,
+   "currency": "INR",
+   "image": "/static/products/p-0621.svg",
+   "image_credit": "TalkToBuy placeholder illustration",
+   "category": "dairy",
+   "source_categories": [
+    "talktobuy:hand-added"
+   ],
+   "listing": {
+    "description": "Farm eggs, tray of 12.",
+    "usage": "Keep cool. Boil, fry or bake."
+   },
+   "synonyms": [
+    "anda",
+    "ande",
+    "egg",
+    "eggs",
+    "dozen eggs",
+    "अंडा",
+    "अंडे"
+   ],
+   "in_stock": true
+  },
+  {
+   "id": "p-0622",
+   "barcode": null,
+   "name": "Farm Eggs 30 pcs",
+   "local_name": "अंडे 30 पीस",
+   "brand": null,
+   "size": "30 pcs",
+   "unit_qty": 30.0,
+   "unit": "piece",
+   "price_minor": 21500,
+   "currency": "INR",
+   "image": "/static/products/p-0622.svg",
+   "image_credit": "TalkToBuy placeholder illustration",
+   "category": "dairy",
+   "source_categories": [
+    "talktobuy:hand-added"
+   ],
+   "listing": {
+    "description": "Farm eggs, tray of 30.",
+    "usage": "Keep cool. Boil, fry or bake."
+   },
+   "synonyms": [
+    "anda",
+    "ande",
+    "egg",
+    "eggs",
+    "tray eggs",
+    "अंडा",
+    "अंडे"
+   ],
+   "in_stock": true
+  },
+  {
+   "id": "p-0630",
+   "barcode": null,
+   "name": "Brown Bread 400 g",
+   "local_name": "ब्राउन ब्रेड 400 ग्राम",
+   "brand": null,
+   "size": "400 g",
+   "unit_qty": 400.0,
+   "unit": "g",
+   "price_minor": 4800,
+   "currency": "INR",
+   "image": "/static/products/p-0630.svg",
+   "image_credit": "TalkToBuy placeholder illustration",
+   "category": "staples",
+   "source_categories": [
+    "talktobuy:hand-added"
+   ],
+   "listing": {
+    "description": "Whole wheat brown bread, 400 g loaf.",
+    "usage": "For toast and sandwiches. Eat within 3 days."
+   },
+   "synonyms": [
+    "bread",
+    "brown bread",
+    "ब्रेड",
+    "ब्राउन ब्रेड"
+   ],
+   "in_stock": true
+  },
+  {
+   "id": "p-0631",
+   "barcode": null,
+   "name": "White Sandwich Bread 400 g",
+   "local_name": "सैंडविच ब्रेड 400 ग्राम",
+   "brand": null,
+   "size": "400 g",
+   "unit_qty": 400.0,
+   "unit": "g",
+   "price_minor": 4000,
+   "currency": "INR",
+   "image": "/static/products/p-0631.svg",
+   "image_credit": "TalkToBuy placeholder illustration",
+   "category": "staples",
+   "source_categories": [
+    "talktobuy:hand-added"
+   ],
+   "listing": {
+    "description": "Soft white sandwich bread, 400 g loaf.",
+    "usage": "For toast and sandwiches. Eat within 3 days."
+   },
+   "synonyms": [
+    "bread",
+    "white bread",
+    "sandwich bread",
+    "ब्रेड",
+    "सैंडविच ब्रेड"
+   ],
+   "in_stock": true
+  },
+  {
+   "id": "p-0632",
+   "barcode": null,
+   "name": "Pav 6 pcs",
+   "local_name": "पाव 6 पीस",
+   "brand": null,
+   "size": "6 pcs",
+   "unit_qty": 6.0,
+   "unit": "piece",
+   "price_minor": 3000,
+   "currency": "INR",
+   "image": "/static/products/p-0632.svg",
+   "image_credit": "TalkToBuy placeholder illustration",
+   "category": "staples",
+   "source_categories": [
+    "talktobuy:hand-added"
+   ],
+   "listing": {
+    "description": "Soft pav buns, pack of 6.",
+    "usage": "For pav bhaji and vada pav. Eat within 2 days."
+   },
+   "synonyms": [
+    "pav",
+    "paav",
+    "bun",
+    "buns",
+    "पाव"
+   ],
+   "in_stock": true
+  },
+  {
+   "id": "p-0640",
+   "barcode": null,
+   "name": "Toor Dal 1 kg",
+   "local_name": "अरहर दाल 1 किलो",
+   "brand": null,
+   "size": "1 kg",
+   "unit_qty": 1000.0,
+   "unit": "g",
+   "price_minor": 18000,
+   "currency": "INR",
+   "image": "/static/products/p-0640.svg",
+   "image_credit": "TalkToBuy placeholder illustration",
+   "category": "staples",
+   "source_categories": [
+    "talktobuy:hand-added"
+   ],
+   "listing": {
+    "description": "Split pigeon peas (arhar dal), 1 kg.",
+    "usage": "Rinse and cook for dal, sambar and khichdi."
+   },
+   "synonyms": [
+    "dal",
+    "toor dal",
+    "arhar dal",
+    "tuvar dal",
+    "दाल",
+    "अरहर दाल"
+   ],
+   "in_stock": true
+  },
+  {
+   "id": "p-0641",
+   "barcode": null,
+   "name": "Moong Dal 500 g",
+   "local_name": "मूंग दाल 500 ग्राम",
+   "brand": null,
+   "size": "500 g",
+   "unit_qty": 500.0,
+   "unit": "g",
+   "price_minor": 8500,
+   "currency": "INR",
+   "image": "/static/products/p-0641.svg",
+   "image_credit": "TalkToBuy placeholder illustration",
+   "category": "staples",
+   "source_categories": [
+    "talktobuy:hand-added"
+   ],
+   "listing": {
+    "description": "Split yellow moong dal, 500 g.",
+    "usage": "Rinse and cook for dal and khichdi."
+   },
+   "synonyms": [
+    "moong dal",
+    "mung dal",
+    "dal",
+    "मूंग दाल",
+    "दाल"
+   ],
+   "in_stock": true
+  },
+  {
+   "id": "p-0642",
+   "barcode": null,
+   "name": "Poha 500 g",
+   "local_name": "पोहा 500 ग्राम",
+   "brand": null,
+   "size": "500 g",
+   "unit_qty": 500.0,
+   "unit": "g",
+   "price_minor": 4500,
+   "currency": "INR",
+   "image": "/static/products/p-0642.svg",
+   "image_credit": "TalkToBuy placeholder illustration",
+   "category": "staples",
+   "source_categories": [
+    "talktobuy:hand-added"
+   ],
+   "listing": {
+    "description": "Flattened rice (poha), 500 g.",
+    "usage": "Rinse and cook for breakfast poha."
+   },
+   "synonyms": [
+    "poha",
+    "pohe",
+    "flattened rice",
+    "पोहा"
    ],
    "in_stock": true
   }

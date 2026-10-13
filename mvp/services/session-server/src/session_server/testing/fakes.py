@@ -95,6 +95,8 @@ class FakeCommerce:
         return self._view(cid)
 
     async def get_cart(self, cart_id):
+        if cart_id not in self.carts:  # like the store: an unknown cart is a 404
+            raise CommerceError("RESOURCE_NOT_FOUND", f"checkout {cart_id} not found", 404)
         return self._view(cart_id)
 
     async def put_cart(self, cart_id, lines, slot_id=None, address_id=None, shopper_id=None):

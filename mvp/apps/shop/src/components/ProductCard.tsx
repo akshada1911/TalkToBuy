@@ -10,7 +10,7 @@ interface Props {
 }
 
 export function ProductCard({ product: p, variant }: Props) {
-  const { lang, t, go, qtyOf, isPending, requestAdd, requestInc, requestDec } = useApp();
+  const { lang, t, go, qtyOf, isPending, addItem, incItem, decItem } = useApp();
   const qty = qtyOf(p.id);
   const busy = isPending(p.id);
   const name = displayName(p, lang);
@@ -31,11 +31,11 @@ export function ProductCard({ product: p, variant }: Props) {
           {t("outOfStock")}
         </button>
       ) : qty === 0 ? (
-        <button type="button" className="add-btn" onClick={() => requestAdd(p)} disabled={busy} aria-label={t("addTo", { name })}>
+        <button type="button" className="add-btn" onClick={() => addItem(p)} disabled={busy} aria-label={t("addTo", { name })}>
           {busy ? <span className="spinner" /> : t("add")}
         </button>
       ) : (
-        <Stepper qty={qty} name={name} busy={busy} onDec={() => requestDec(p)} onInc={() => requestInc(p)} />
+        <Stepper qty={qty} name={name} busy={busy} onDec={() => decItem(p)} onInc={() => incItem(p)} />
       )}
     </div>
   );

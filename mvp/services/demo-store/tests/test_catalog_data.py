@@ -22,7 +22,7 @@ def test_every_product_validates_with_unique_ids():
     products = [Product.model_validate(p) for p in CATALOG]
     ids = [p.id for p in products]
     assert len(ids) == len(set(ids))
-    assert 300 <= len(products) <= 500
+    assert 300 <= len(products) <= 600  # spec: 300–500 core items, plus the hand-added menu
 
 
 def test_demo_items_complete():

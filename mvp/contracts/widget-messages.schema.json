@@ -75,12 +75,13 @@
     "PaymentResultMsg": { "type": "object", "properties": { "type": { "const": "payment_result" }, "checkout_id": { "type": "string" }, "approved": { "type": "boolean" }, "mandate": { "type": ["object", "null"], "description": "Test-mode AP2 mandates from the payment step: {checkout_mandate, payment_mandate}" } }, "required": ["type", "checkout_id", "approved"], "additionalProperties": false },
     "NetQualityMsg": { "type": "object", "properties": { "type": { "const": "net_quality" }, "downlink_kbps": { "type": ["number", "null"] }, "rtt_ms": { "type": ["number", "null"] }, "underruns": { "type": "integer", "minimum": 0 } }, "required": ["type"], "additionalProperties": false },
     "AudioPauseMsg": { "type": "object", "description": "Browser voice detection: the shopper stopped speaking, so mic audio stops until they speak again (cost control). The server flushes the model's audio stream.", "properties": { "type": { "const": "audio_pause" } }, "required": ["type"], "additionalProperties": false },
+    "CartSyncMsg": { "type": "object", "description": "The shop changed the cart (tapping, not voice): the server re-reads it from the store and sends a fresh `cart` message.", "properties": { "type": { "const": "cart_sync" } }, "required": ["type"], "additionalProperties": false },
     "EndMsg": { "type": "object", "properties": { "type": { "const": "end" } }, "required": ["type"], "additionalProperties": false },
     "ClientMessage": {
       "oneOf": [
         { "$ref": "#/$defs/TextMsg" }, { "$ref": "#/$defs/SetMediaModeMsg" }, { "$ref": "#/$defs/SetTranslationMsg" },
         { "$ref": "#/$defs/CameraMsg" }, { "$ref": "#/$defs/PaymentResultMsg" }, { "$ref": "#/$defs/NetQualityMsg" },
-        { "$ref": "#/$defs/EndMsg" }, { "$ref": "#/$defs/AudioPauseMsg" }
+        { "$ref": "#/$defs/EndMsg" }, { "$ref": "#/$defs/AudioPauseMsg" }, { "$ref": "#/$defs/CartSyncMsg" }
       ]
     },
 
@@ -88,7 +89,7 @@
     "InterruptedMsg": { "type": "object", "properties": { "type": { "const": "interrupted" }, "turn_id": { "type": ["string", "null"] } }, "required": ["type"], "additionalProperties": false },
     "CardsMsg": { "type": "object", "properties": { "type": { "const": "cards" }, "mode": { "type": "string", "enum": ["suggest", "added"] }, "products": { "type": "array", "items": { "$ref": "#/$defs/UiProduct" } } }, "required": ["type", "mode", "products"], "additionalProperties": false },
     "GoalListMsg": { "type": "object", "properties": { "type": { "const": "goal_list" }, "goal_id": { "type": "string" }, "goal_text": { "type": "string" }, "items": { "type": "array", "items": { "$ref": "#/$defs/UiGoalItem" } } }, "required": ["type", "goal_id", "goal_text", "items"], "additionalProperties": false },
-    "CartMsg": { "type": "object", "properties": { "type": { "const": "cart" }, "cart": { "$ref": "#/$defs/UiCart" } }, "required": ["type", "cart"], "additionalProperties": false },
+    "CartMsg": { "type": "object", "properties": { "type": { "const": "cart" }, "cart": { "$ref": "#/$defs/UiCart" }, "cart_id": { "type": ["string", "null"], "description": "The store cart (checkout session) this is; null when there is no cart any more (emptied by cancel, or ordered)." } }, "required": ["type", "cart"], "additionalProperties": false },
     "AddressesMsg": { "type": "object", "properties": { "type": { "const": "addresses" }, "addresses": { "type": "array", "items": { "$ref": "#/$defs/UiAddress" } } }, "required": ["type", "addresses"], "additionalProperties": false },
     "ReadbackMsg": { "type": "object", "properties": { "type": { "const": "readback" }, "checkout_id": { "type": "string" }, "item_count": { "type": "integer" }, "total": { "type": "integer" }, "delivery": { "$ref": "#/$defs/UiDelivery" }, "address_text": { "type": "string" }, "text_hi": { "type": "string" }, "text_en": { "type": "string" } }, "required": ["type", "checkout_id", "item_count", "total", "delivery", "text_hi", "text_en"], "additionalProperties": false },
     "PaymentRequestMsg": { "type": "object", "properties": { "type": { "const": "payment_request" }, "checkout_id": { "type": "string" }, "item_count": { "type": "integer" }, "total": { "type": "integer" }, "currency": { "const": "INR" }, "delivery": { "$ref": "#/$defs/UiDelivery" }, "address_text": { "type": "string" } }, "required": ["type", "checkout_id", "item_count", "total", "currency", "delivery"], "additionalProperties": false },
