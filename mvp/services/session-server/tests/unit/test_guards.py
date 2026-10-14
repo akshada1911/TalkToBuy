@@ -128,3 +128,15 @@ async def test_problem_suggestions_capped_at_three() -> None:
     assert res["status"] == "refused"
     res = await _call(router, "show_products", {"ids": ["p-0112", "p-0007"], "purpose": "problem"}, "q")
     assert res["status"] == "ok"
+
+
+async def test_a_yes_after_a_long_list_reading_still_counts() -> None:
+    """Reading a 50-person dish aloud takes minutes; the shopper's yes after it must not be lost."""
+    clock = Clock()
+    rt = make_runtime(clock=clock)
+    router = ToolRouter(rt, HANDLERS)
+    await _call(router, "get_usual_order", {}, "u")
+    clock.t += 150  # the assistant is still reading the list
+    confirm.on_shopper_input(rt, "हाँ चलेगा")
+    res = await _call(router, "add_to_cart", {"usual": True}, "a")
+    assert res["status"] == "ok"

@@ -9,10 +9,16 @@ import re
 from session_server.core.runtime import Runtime
 from session_server.models.domain import PendingConfirmation
 
-EXPIRY_S = 60.0
+EXPIRY_S = 60.0  # a "yes" must be acted on within this long
+# Reading a long list aloud (a dish for 50 people) takes minutes, and the shopper's "yes" comes after
+# it: the wait for the answer must outlive the reading, or the yes is thrown away.
+ASK_EXPIRY_S = 300.0
 
 _AFFIRMATIVE = re.compile(
     r"(^|\s)(हाँ|हां|हा|हाँजी|हांजी|जी\s*हाँ|ठीक\s*है|कर\s*दो|डाल\s*दो|जोड़\s*दो|बिल्कुल|"
+    r"चलेगा|चलिए|चलो|चलता\s*है|करिए|कीजिए|डालिए|जोड़िए|अच्छा|सही\s*है|ज़रूर|जरूर|वही|"
+    r"chalega|chalo|chaliye|kariye|kijiye|daaliye|achha|accha|sahi\s*hai|zaroor|jarur|"
+    r"go\s*ahead|add\s*(it|them|all)|that'?s\s*(fine|right|good)|fine|correct|right|"
     r"haan|haa|han|ha|haanji|ji\s*haan|theek\s*hai|thik\s*hai|kar\s*do|daal\s*do|dal\s*do|"
     r"jod\s*do|bilkul|yes|yeah|yep|ok|okay|sure|please\s*add)(?=$|\s|[,.!?।])",
     re.IGNORECASE,
@@ -46,7 +52,7 @@ def arm(rt: Runtime, kind: str, product_ids: list[str]) -> None:
 
 
 def _expired(rt: Runtime, pc: PendingConfirmation) -> bool:
-    return rt.clock() - pc.armed_at > EXPIRY_S
+    return rt.clock() - pc.armed_at > (EXPIRY_S if pc.confirmed else ASK_EXPIRY_S)
 
 
 def on_shopper_input(rt: Runtime, text: str) -> None:

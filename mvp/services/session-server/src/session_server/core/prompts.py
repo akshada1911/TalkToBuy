@@ -47,6 +47,16 @@ def _read(name: str, root: Path) -> str:
     return re.sub(r"<!--.*?-->", "", text, flags=re.DOTALL).strip()
 
 
+def opening_note(shopper: Shopper, language: str = "hi") -> str:
+    """The model only speaks when spoken to, so the server asks it to open the conversation."""
+    greeting = f"Hello {shopper.display_name}" if language == "en" else f"नमस्ते {shopper.display_name}"
+    return (
+        "[SERVER NOTE] The session has just started and the shopper has not spoken yet. Speak first: "
+        f'greet them by name in one short sentence ("{greeting}!"), then ask the opening question once. '
+        "Do not wait for them to say something first."
+    )
+
+
 def cart_note(lines: list[tuple[str, str, int]], total: int) -> str:
     """Tell the model about items the shopper already put in the cart by tapping (id, name, qty)."""
     items = "; ".join(f"{qty} × {name} ({pid})" for pid, name, qty in lines)

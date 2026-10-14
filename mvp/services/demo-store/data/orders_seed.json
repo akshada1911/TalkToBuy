@@ -1,9 +1,9 @@
 {
-  "_comment": "Seeded demo data (T023). Ghanshyam ji's last order contains the usual atta (p-0003). address_form is seeded, never inferred (FR-008); there is no age field.",
+  "_comment": "Seeded demo data (T023). Vaibhav's last order contains the usual atta (p-0003). address_form is seeded, never inferred (FR-008); there is no age field.",
   "shoppers": [
     {
       "id": "u-ghanshyam",
-      "display_name": "Ghanshyam ji",
+      "display_name": "Vaibhav",
       "language": "hi",
       "address_form": "respectful_male"
     }

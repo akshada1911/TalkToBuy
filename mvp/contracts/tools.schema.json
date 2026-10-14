@@ -61,7 +61,7 @@
                   "properties": {
                     "need": { "type": "string" },
                     "product_id": { "type": ["string", "null"] },
-                    "qty": { "type": "integer", "minimum": 1 },
+                    "qty": { "type": "integer", "minimum": 1, "maximum": 20, "description": "NUMBER OF PACKS of product_id (from search_catalog pack_plans), never servings or people. Pick a bigger pack when many are needed." },
                     "struck": { "type": "boolean" },
                     "struck_reason": { "enum": ["on_hand", "in_cart", null] }
                   },

@@ -53,7 +53,7 @@ def test_idempotency_key_required_on_post(client):
 
 def test_shopper_profile(client):
     body = client.raw.get("/demo/shoppers/u-ghanshyam").json()
-    assert body == {"id": "u-ghanshyam", "display_name": "Ghanshyam ji", "language": "hi",
+    assert body == {"id": "u-ghanshyam", "display_name": "Vaibhav", "language": "hi",
                     "address_form": "respectful_male"}
     Shopper.model_validate(body)
     assert client.raw.get("/demo/shoppers/u-nobody").status_code == 404

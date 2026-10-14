@@ -12,7 +12,7 @@ from pydantic import BaseModel
 
 from session_server.config import Settings, get_settings
 from session_server.core.cart import adopt_cart
-from session_server.core.prompts import build_system_instruction, cart_note
+from session_server.core.prompts import build_system_instruction, cart_note, opening_note
 from session_server.core.runtime import Runtime
 from session_server.core.session import ConversationSession
 from session_server.core.tool_router import ToolRouter, load_tool_specs
@@ -135,6 +135,7 @@ async def session_ws(ws: WebSocket, ticket: str = "", media_mode: str = "", lang
 
         if rt.cart is not None:
             await ui.send_json(cart_msg(rt.cart, rt.products))
+        await rt.live.send_text(opening_note(shopper, session.language), role="system_note")  # greet first
 
         async def pump_client() -> None:
             with contextlib.suppress(WebSocketDisconnect):

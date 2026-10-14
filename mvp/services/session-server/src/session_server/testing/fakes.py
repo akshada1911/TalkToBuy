@@ -136,7 +136,7 @@ class FakeCommerce:
         return self._view(cart_id)
 
     async def shopper(self, shopper_id):
-        return Shopper(id=shopper_id, display_name="Ghanshyam ji", language="hi", address_form="respectful_male")
+        return Shopper(id=shopper_id, display_name="Vaibhav", language="hi", address_form="respectful_male")
 
     async def addresses(self, shopper_id):
         return list(self.saved_addresses)
@@ -237,7 +237,7 @@ def make_runtime(commerce: FakeCommerce | None = None, *, pace: str = "guided",
                 usage=Usage(audio_in_s=0, audio_out_s=0, video_in_s=0, tokens_in=0, tokens_out=0, est_cost_usd=0))
     rt = Runtime(
         session=s,
-        shopper=Shopper(id="u-ghanshyam", display_name="Ghanshyam ji", language="hi", address_form="respectful_male"),
+        shopper=Shopper(id="u-ghanshyam", display_name="Vaibhav", language="hi", address_form="respectful_male"),
         commerce=commerce or FakeCommerce(), live=FakeLive(), ui=FakeUi(),
         settings=settings or Settings(_env_file=None, payment_timeout_s=2),
     )

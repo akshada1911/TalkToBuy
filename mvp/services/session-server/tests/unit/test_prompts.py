@@ -5,13 +5,13 @@ from session_server.models.domain import Shopper
 
 
 def _shopper(form: str) -> Shopper:
-    return Shopper(id="u", display_name="Ghanshyam ji", language="hi", address_form=form)
+    return Shopper(id="u", display_name="Vaibhav", language="hi", address_form=form)
 
 
 def test_all_placeholders_are_filled() -> None:
     text = build_system_instruction(_shopper("respectful_male"), "guided")
     assert "{" not in text and "}" not in text
-    assert "Ghanshyam ji" in text and "GUIDED" in text
+    assert "Vaibhav" in text and "GUIDED" in text
     for must in ("OTP", "`readback`", "notify_family", "amount_phrase", "goal_id", "camera"):
         assert must in text
 
@@ -34,3 +34,29 @@ def test_english_session_speaks_english_without_hindi_grammar_rules() -> None:
     assert "Speak only simple, polite Indian English" in en and "Shall we go step by step" in en
     assert "masculine forms for them" not in en and "{" not in en
     assert "Speak only simple, respectful, natural Hindi" in hi and "हम एक-एक करके चलें" in hi
+
+
+def test_opening_note_asks_the_model_to_greet_first_by_name() -> None:
+    from session_server.core.prompts import opening_note
+
+    assert "नमस्ते Vaibhav" in opening_note(_shopper("neutral"), "hi")
+    assert "Hello Vaibhav" in opening_note(_shopper("neutral"), "en")
+
+
+def test_natural_yes_answers_confirm_a_proposed_list() -> None:
+    from session_server.core.confirm import is_affirmative
+
+    for said in ("चलेगा", "हाँ चलेगा", "ठीक है", "go ahead", "chalega"):
+        assert is_affirmative(said), said
+    assert not is_affirmative("नहीं चलेगा")
+
+
+def test_a_goal_item_cannot_ask_for_dozens_of_packs() -> None:
+    from session_server.core.tool_router import load_tool_specs
+    from jsonschema import Draft202012Validator
+
+    spec = next(s for s in load_tool_specs() if s["name"] == "show_products")
+    item = {"need": "rice", "product_id": "p-1", "qty": 50, "struck": False}
+    errors = list(Draft202012Validator(spec["parameters"]).iter_errors(
+        {"goal_list": {"goal_text": "veg biryani for 50", "items": [item]}}))
+    assert errors and "50" in errors[0].message
