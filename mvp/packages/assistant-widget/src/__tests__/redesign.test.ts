@@ -224,4 +224,20 @@ describe("one cart: the widget shares the shop's cart", async () => {
     expect(el.cartId).toBe("chk_1");
     expect(el.syncCart()).toBe(false);
   });
+
+  it("tells the conversation which cart the shop is showing, and again when the shop starts a new one", async () => {
+    const el = document.createElement("talktobuy-assistant") as TalkToBuyAssistant;
+    document.body.appendChild(el);
+    await el.updateComplete;
+    const sent: unknown[] = [];
+    (el as unknown as { client: { send: (m: unknown) => boolean } }).client = { send: (m) => (sent.push(m), true) };
+    el.cartId = "chk_7"; // the shop created a cart by tapping, after the conversation began
+    await el.updateComplete;
+    expect(sent).toContainEqual({ type: "cart_sync", cart_id: "chk_7" });
+    sent.length = 0;
+    el.onServerMessage({ type: "cart", cart: { lines: [], item_count: 0, total: 0 }, cart_id: "chk_8" });
+    el.cartId = "chk_8"; // the conversation itself made this cart: no need to ask again
+    await el.updateComplete;
+    expect(sent).toEqual([]);
+  });
 });

@@ -1,0 +1,21 @@
+# What is NOT uploaded to Cloud Build (this file replaces the default ignore rules).
+.git
+.gitignore
+.env
+.env.*
+.venv/
+.cache/
+node_modules/
+**/node_modules/
+**/dist/
+**/__pycache__/
+**/*.pyc
+**/test-results/
+**/playwright-report/
+**/.pytest_cache/
+tests/
+services/*/tests/
+apps/shop/tests/
+packages/*/src/__tests__/
+services/demo-store/data/runtime/
+deployment/.generated/

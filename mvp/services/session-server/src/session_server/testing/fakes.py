@@ -11,6 +11,7 @@ from session_server.config import Settings
 from session_server.core.runtime import Runtime
 from session_server.models.domain import FamilyContact, Listing, Product, Session, Shopper, Usage
 from session_server.ports import live as L
+from session_server.ports.planner import DishPlan, PlannedItem
 from session_server.ports.commerce import (
     Address,
     CartLineView,
@@ -229,6 +230,19 @@ class FakeUi:
         return [m for m in self.messages if m.get("type") == kind]
 
 
+class FakePlanner:
+    """Plans a dish from a small table; anything else is 'unavailable'."""
+
+    def __init__(self, plans: dict[str, list[PlannedItem] | DishPlan] | None = None):
+        self.plans = plans or {}
+        self.calls: list[tuple[str, str | None]] = []
+
+    async def plan(self, dish, notes):
+        self.calls.append((dish, notes))
+        plan = self.plans.get(dish.lower())
+        return DishPlan(plan) if isinstance(plan, list) else plan
+
+
 def make_runtime(commerce: FakeCommerce | None = None, *, pace: str = "guided",
                  clock=None, settings: Settings | None = None) -> Runtime:
     import time
@@ -241,6 +255,7 @@ def make_runtime(commerce: FakeCommerce | None = None, *, pace: str = "guided",
         commerce=commerce or FakeCommerce(), live=FakeLive(), ui=FakeUi(),
         settings=settings or Settings(_env_file=None, payment_timeout_s=2),
     )
+    rt.planner = FakePlanner()
     if clock is not None:
         rt.clock = clock
     return rt

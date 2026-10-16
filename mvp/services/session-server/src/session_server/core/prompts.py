@@ -17,9 +17,19 @@ LANGUAGE_RULES = {
 }
 
 OPENING_QUESTION = {
-    "hi": '"नमस्ते {name}! हम एक-एक करके चलें, या जल्दी-जल्दी?"',
-    "en": '"Namaste {name}! Shall we go step by step, or quickly?"',
+    "hi": '"नमस्ते {name}! आज क्या मँगवाना है?"',
+    "en": '"Namaste {name}! What would you like today?"',
 }
+
+OPENING_LIVE = (
+    'Opening: greet briefly using their name ("नमस्ते {display_name}।" or "Hello {display_name}"), then ask once '
+    "{opening_question} Never ask about pace (step by step or quickly) and never ask their age."
+)
+OPENING_DONE = (
+    'Opening: the app has ALREADY greeted the shopper aloud by name and asked what they would like ("{greeting}"). '
+    "Do NOT greet again and do NOT ask it again. Wait for the shopper to speak, then help with what they ask. "
+    "Never ask about pace (step by step or quickly) and never ask their age."
+)
 
 ENGLISH_ADDRESS = (
     "Address them respectfully as '{name}'. In English, use polite forms (please, would you like)."
@@ -47,12 +57,17 @@ def _read(name: str, root: Path) -> str:
     return re.sub(r"<!--.*?-->", "", text, flags=re.DOTALL).strip()
 
 
+def opening_text(shopper: Shopper, language: str = "hi") -> str:
+    """The greeting plus the opening question, as it is spoken."""
+    return OPENING_QUESTION[language].format(name=shopper.display_name).strip('"')
+
+
 def opening_note(shopper: Shopper, language: str = "hi") -> str:
     """The model only speaks when spoken to, so the server asks it to open the conversation."""
     greeting = f"Hello {shopper.display_name}" if language == "en" else f"नमस्ते {shopper.display_name}"
     return (
         "[SERVER NOTE] The session has just started and the shopper has not spoken yet. Speak first: "
-        f'greet them by name in one short sentence ("{greeting}!"), then ask the opening question once. '
+        f'greet them by name in one short sentence ("{greeting}!"), then ask what they would like, once. '
         "Do not wait for them to say something first."
     )
 
@@ -68,14 +83,15 @@ def cart_note(lines: list[tuple[str, str, int]], total: int) -> str:
 
 
 def build_system_instruction(shopper: Shopper, pace: str, root: Path = PROMPTS, language: str = "hi",
-                             cart: str | None = None) -> str:
+                             cart: str | None = None, greeted: str | None = None) -> str:
     pace_file = "pace_guided.md" if pace == "guided" else "pace_quick.md"
     template = _read("system.hi.md", root)
     name = shopper.display_name
     address = ENGLISH_ADDRESS if language == "en" else ADDRESS_RULES[shopper.address_form]
     parts = {
         "language_rules": LANGUAGE_RULES[language],
-        "opening_question": OPENING_QUESTION[language].format(name=name),
+        "opening": (OPENING_DONE.format(greeting=greeted) if greeted else
+                    OPENING_LIVE.format(display_name=name, opening_question=OPENING_QUESTION[language].format(name=name))),
         "display_name": name,
         "address_rules": address.format(name=name),
         "pace_block": _read(pace_file, root),

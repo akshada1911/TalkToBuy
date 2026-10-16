@@ -147,6 +147,10 @@ class CartSyncMsg(BaseModel):
         extra='forbid',
     )
     type: Literal['cart_sync']
+    cart_id: str | None = Field(
+        None,
+        description='The store cart the shop is showing. A cart the shop started after the conversation began is adopted, so voice and taps always share one cart.',
+    )
 
 
 class EndMsg(BaseModel):

@@ -1,4 +1,6 @@
 import { AssistantHost } from "./components/AssistantHost";
+import { DeviceFrame } from "./components/DeviceFrame";
+import { PayFx } from "./components/PayFx";
 import { Sprite } from "./design/Icon";
 import { Address } from "./screens/Address";
 import { Cart } from "./screens/Cart";
@@ -54,12 +56,15 @@ function Toast() {
 export function App() {
   return (
     <AppProvider>
-      <div className="phone">
-        <Sprite />
-        <Screens />
-        <AssistantHost />
-        <Toast />
-      </div>
+      <DeviceFrame>
+        <div className="phone">
+          <Sprite />
+          <Screens />
+          <AssistantHost />
+          <PayFx />
+          <Toast />
+        </div>
+      </DeviceFrame>
     </AppProvider>
   );
 }

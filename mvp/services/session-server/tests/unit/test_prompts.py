@@ -31,9 +31,9 @@ def test_prompt_never_asks_age() -> None:
 def test_english_session_speaks_english_without_hindi_grammar_rules() -> None:
     en = build_system_instruction(_shopper("respectful_male"), "guided", language="en")
     hi = build_system_instruction(_shopper("respectful_male"), "guided", language="hi")
-    assert "Speak only simple, polite Indian English" in en and "Shall we go step by step" in en
+    assert "Speak only simple, polite Indian English" in en and "What would you like today" in en
     assert "masculine forms for them" not in en and "{" not in en
-    assert "Speak only simple, respectful, natural Hindi" in hi and "हम एक-एक करके चलें" in hi
+    assert "Speak only simple, respectful, natural Hindi" in hi and "आज क्या मँगवाना है" in hi
 
 
 def test_opening_note_asks_the_model_to_greet_first_by_name() -> None:

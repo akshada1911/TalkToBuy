@@ -11,13 +11,14 @@ from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from pydantic import BaseModel
 
 from session_server.config import Settings, get_settings
+from session_server.core import greeting
 from session_server.core.cart import adopt_cart
-from session_server.core.prompts import build_system_instruction, cart_note, opening_note
+from session_server.core.prompts import build_system_instruction, cart_note, opening_note, opening_text
 from session_server.core.runtime import Runtime
 from session_server.core.session import ConversationSession
 from session_server.core.tool_router import ToolRouter, load_tool_specs
 from session_server.core.tools import HANDLERS
-from session_server.core.ui import cart_msg, rupees
+from session_server.core.ui import cart_msg, rupees, state_msg
 from session_server.http.tickets import registry, verify_ticket
 from session_server.logging import get_logger
 from session_server.models.domain import Session, Usage
@@ -51,6 +52,7 @@ class WsUi:
 def build_adapters(settings: Settings) -> dict[str, Any]:
     """Google adapters only with an explicit TalkToBuy project (never the gcloud default)."""
     from session_server.adapters.gemini_flash.classifier import FlashClassifier
+    from session_server.adapters.gemini_flash.planner import FlashPlanner
     from session_server.adapters.gemini_flash.translate import FlashTranslate
     from session_server.adapters.gemini_live.session import GeminiLive
     from session_server.adapters.memory.state import MemoryState
@@ -68,6 +70,7 @@ def build_adapters(settings: Settings) -> dict[str, Any]:
         "state": state,
         "translate": FlashTranslate(settings),
         "classifier": FlashClassifier(settings),
+        "planner": FlashPlanner(settings),
     }
 
 
@@ -108,7 +111,21 @@ async def session_ws(ws: WebSocket, ticket: str = "", media_mode: str = "", lang
             usage=Usage(audio_in_s=0, audio_out_s=0, video_in_s=0, tokens_in=0, tokens_out=0, est_cost_usd=0),
         )
         rt = Runtime(session=session, shopper=shopper, commerce=commerce, live=ports["live"], ui=ui,
-                     settings=settings)
+                     settings=settings, planner=ports.get("planner"))
+        convo = ConversationSession(rt, ToolRouter(rt, HANDLERS), ports["state"],
+                                    translate=ports["translate"], classifier=ports["classifier"])
+
+        # Say hello at once. Connecting to the live model takes several seconds, so the opening line is
+        # recorded ahead of time and played now; the live model carries on from the shopper's answer.
+        # (If it is not recorded yet, the live model says it, a little later.)
+        opening = opening_text(shopper, session.language)
+        recorded = greeting.get(settings, opening, session.language) if settings.greeting_enabled else None
+        if recorded:
+            await ui.send_json(state_msg(rt))
+            await convo.play_greeting(opening, recorded)
+        elif settings.greeting_enabled:
+            rt.spawn(greeting.ensure(settings, opening, session.language))  # ready for the next session
+
         # A cart the shopper already filled in the shop is this session's cart too (one cart).
         cart_text = None
         if cart:
@@ -126,16 +143,15 @@ async def session_ws(ws: WebSocket, ticket: str = "", media_mode: str = "", lang
         usual = await commerce.last_order(shopper_id)
         vocabulary = BASE_VOCABULARY + [w for p, _ in (usual.lines if usual else []) for w in (p.name, p.local_name)]
         await rt.live.connect(LiveConfig(
-            system_instruction=build_system_instruction(shopper, session.pace, language=session.language, cart=cart_text),
+            system_instruction=build_system_instruction(shopper, session.pace, language=session.language, cart=cart_text,
+                                                        greeted=opening if recorded else None),
             tools=load_tool_specs(), media_mode=session.media_mode, vocabulary=vocabulary,
             language_code=LANGUAGE_CODES[session.language],
         ))
-        convo = ConversationSession(rt, ToolRouter(rt, HANDLERS), ports["state"],
-                                    translate=ports["translate"], classifier=ports["classifier"])
-
         if rt.cart is not None:
             await ui.send_json(cart_msg(rt.cart, rt.products))
-        await rt.live.send_text(opening_note(shopper, session.language), role="system_note")  # greet first
+        if not recorded:
+            await rt.live.send_text(opening_note(shopper, session.language), role="system_note")  # greet first
 
         async def pump_client() -> None:
             with contextlib.suppress(WebSocketDisconnect):

@@ -1,12 +1,16 @@
 """Server-side tool guards. They run before every handler and are what the tests rely on —
 the prompt alone is never trusted for approval or safety (Principles I and II)."""
 
+import re
 from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
 
 from session_server.core import confirm
 from session_server.core.runtime import Runtime
+from session_server.logging import get_logger
+
+log = get_logger(__name__)
 
 
 @dataclass(frozen=True)
@@ -38,6 +42,34 @@ def add_form_guard(rt: Runtime, name: str, args: dict[str, Any]) -> Refusal | No
     return None
 
 
+SOLO_WORDS = ("just me", "myself", "only me", "alone", "अकेला", "अकेले", "अकेली", "sirf main", "सिर्फ मैं", "सिर्फ़ मैं")
+
+
+def _heard_number(text: str, n: int) -> bool:
+    """Did this text say the number n, in digits or in words (English or Hindi)?"""
+    from session_server.units.lexicon import DEVANAGARI_DIGITS, NUMBERS
+
+    t = text.lower().translate(DEVANAGARI_DIGITS)
+    if any(int(d) == n for d in re.findall(r"\d+", t)):
+        return True
+    if any(NUMBERS.get(w) == n for w in re.findall(r"[^\s,.!?।]+", t)):
+        return True
+    return n == 1 and any(w in t for w in SOLO_WORDS)
+
+
+def people_guard(rt: Runtime, name: str, args: dict[str, Any]) -> Refusal | None:
+    """The number of people must come from the shopper, not from a guess (it sets every quantity)."""
+    if name != "plan_dish" or not args.get("people"):
+        return None  # (no number yet: the dish is only being prepared)
+    dish = " ".join(re.findall(r"[\w']+", args["dish"].lower()))
+    if (dish, int(args["people"])) in rt.dish_confirmed:
+        return None  # a repeat of a plan the shopper already heard (e.g. with items they have at home)
+    if any(_heard_number(t, int(args["people"])) for t in rt.shopper_history[-3:]):
+        return None
+    return Refusal("The shopper has not told you the number of people. Ask 'how many people?', wait for their "
+                   "answer, then call plan_dish with that number. Never guess it.")
+
+
 def approval_guard(rt: Runtime, name: str, args: dict[str, Any]) -> Refusal | None:
     """Inferred items need the shopper's yes before they are added (FR-015)."""
     ask_first = (
@@ -56,7 +88,10 @@ def approval_guard(rt: Runtime, name: str, args: dict[str, Any]) -> Refusal | No
         if goal is None:
             return Refusal("Unknown goal_id; show the goal list first with show_products.")
         ids = [i.product_id for i in goal.items if not i.struck and i.product_id]
-        return None if confirm.allows(rt, "goal", ids) else Refusal(ask_first)
+        if confirm.allows(rt, "goal", ids):
+            return None
+        log.info("approval_missing", goal=args["goal_id"], why=confirm.why_not(rt, "goal", ids))
+        return Refusal(ask_first)
     if args.get("usual"):
         return None if confirm.allows(rt, "usual", []) else Refusal(ask_first)
     source = args.get("source", "named")
@@ -68,4 +103,4 @@ def approval_guard(rt: Runtime, name: str, args: dict[str, Any]) -> Refusal | No
     return None
 
 
-GUARDS: list[Guard] = [problem_limit_guard, add_form_guard, approval_guard]
+GUARDS: list[Guard] = [problem_limit_guard, add_form_guard, approval_guard, people_guard]

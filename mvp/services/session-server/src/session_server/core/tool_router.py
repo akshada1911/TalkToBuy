@@ -16,6 +16,7 @@ from typing import Any
 from jsonschema import Draft202012Validator
 
 from session_server.config import MVP_ROOT
+from session_server.core import confirm
 from session_server.core.cart import duplicate_add, sync_cart
 from session_server.core.guards import GUARDS, Guard
 from session_server.core.runtime import Runtime
@@ -84,6 +85,17 @@ class ToolRouter:
                 await sync_cart(self.rt)
             except Exception:  # never let a refresh problem break a tool call
                 log.exception("cart_sync_failed")
+        if name == "add_to_cart":
+            # The model may name an older list of the same dish (after "I have X at home" it is re-planned);
+            # the shopper agreed to the latest one.
+            rt = self.rt
+            gid = args.get("goal_id")
+            if (gid and rt.latest_goal_id and gid != rt.latest_goal_id and gid in rt.goals
+                    and rt.latest_goal_id in rt.goals
+                    and rt.goals[gid].goal_text == rt.goals[rt.latest_goal_id].goal_text):
+                args["goal_id"] = rt.latest_goal_id
+            if gid or args.get("usual") or args.get("source", "named") != "named":
+                await confirm.grace(rt)  # let the transcript of a just-spoken "yes" catch up
         if name == "add_to_cart" and not self.rt.session.safety_hold:
             duplicate = duplicate_add(self.rt, args)  # a pure repeat adds nothing: skip approval
             if duplicate is not None:

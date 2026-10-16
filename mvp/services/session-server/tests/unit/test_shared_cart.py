@@ -133,3 +133,25 @@ def test_the_model_is_told_about_items_already_in_the_cart() -> None:
     without = build_system_instruction(shopper, "guided")
     assert with_cart.startswith(without) and note in with_cart
     assert "p-0112" not in without  # no shop cart: the instruction is exactly as before
+
+
+async def test_a_cart_the_shop_starts_after_the_chat_began_is_adopted_and_can_be_cleared() -> None:
+    """Open the assistant first, then tap items in the shop: 'clear the cart' must clear THOSE items."""
+    from session_server.adapters.memory.state import MemoryState
+    from session_server.core.session import ConversationSession
+    from session_server.core.tool_router import ToolRouter
+    from session_server.core.tools import HANDLERS
+    from session_server.ports.live import ToolCall
+
+    rt = make_runtime()
+    convo = ConversationSession(rt, ToolRouter(rt, HANDLERS), MemoryState())
+    assert rt.session.cart_ref is None  # the chat began with no cart
+    shop_cart = await rt.commerce.create_cart({"p-0112": 2})  # the shop created this one by tapping
+    await convo.on_client_json({"type": "cart_sync", "cart_id": shop_cart.id})
+    assert rt.session.cart_ref == shop_cart.id and rt.cart is not None and rt.cart.item_count == 1
+    assert rt.ui.of("cart")[-1]["cart_id"] == shop_cart.id
+
+    await ToolRouter(rt, HANDLERS).handle(ToolCall("c1", "cancel_order", {}))
+    assert rt.live.response_for("c1")["result"]["status"] == "cancelled"
+    assert rt.commerce.carts[shop_cart.id]["status"] == "canceled"
+    assert rt.ui.of("cart")[-1]["cart"]["item_count"] == 0

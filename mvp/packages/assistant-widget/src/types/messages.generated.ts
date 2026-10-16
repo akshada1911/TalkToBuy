@@ -63,6 +63,10 @@ export interface EndMsg {
  */
 export interface CartSyncMsg {
   type: "cart_sync";
+  /**
+   * The store cart the shop is showing. A cart the shop started after the conversation began is adopted, so voice and taps always share one cart.
+   */
+  cart_id?: string | null;
 }
 export interface AudioPauseMsg {
   type: "audio_pause";

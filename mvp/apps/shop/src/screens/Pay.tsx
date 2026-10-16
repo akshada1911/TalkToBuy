@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import type { StringKey } from "../i18n";
 import { Icon } from "../design/Icon";
 import { useFingerprint } from "../payment/useFingerprint";
+import { payFx } from "../components/PayFx";
 import { BackButton } from "../components/TopBar";
 import { useApp, type PayMethod } from "../state";
 
@@ -25,6 +26,11 @@ export function Pay() {
     return () => window.removeEventListener("keydown", onKey);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [req]);
+
+  // The fingerprint picture stops when the payment does not go through (cancelled, failed).
+  useEffect(() => {
+    if (fp.error) payFx.stop();
+  }, [fp.error]);
 
   if (!req) {
     return (
@@ -114,7 +120,12 @@ export function Pay() {
           <small>{t("payTotal")}</small>
           <b>{total}</b>
         </div>
-        <button type="button" className="btn btn-forest" style={{ flex: 1 }} onClick={() => void fp.approve()} disabled={fp.busy}>
+        <button type="button" className="btn btn-forest" style={{ flex: 1 }} onClick={() => {
+            payFx.start();
+            void fp.approve();
+          }}
+          disabled={fp.busy}
+        >
           <span aria-hidden="true">☝️</span>
           {fp.status === "registering" ? t("paySettingUp") : fp.busy ? t("payWait") : t("payFingerprint", { x: total })}
         </button>

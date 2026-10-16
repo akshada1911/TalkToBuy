@@ -139,3 +139,16 @@ async def test_camera_frames_only_forwarded_while_active() -> None:
     await convo.on_client_json({"type": "camera", "active": True})
     await convo.on_client_bytes(bytes([0x02]) + b"jpeg")
     assert rt.live.video == [b"jpeg"]
+
+
+async def test_an_off_topic_ramble_is_cut_where_it_starts_and_the_audio_stops() -> None:
+    rt, _, convo = _setup()
+    rt.live.emit(L.OutputTranscript("How many people is this for?", False), L.OutputTranscript(" **Ingredients:** 1. stone", False),
+                 L.AudioOut(b"\x00" * 100), L.OutputTranscript(" more babble", False), L.TurnComplete(),
+                 L.OutputTranscript("Next question.", True))
+    await _drain(convo, rt)
+    captions = [(c["text_hi"], c["final"]) for c in rt.ui.of("caption") if c["who"] == "assistant"]
+    assert ("How many people is this for?", True) in captions
+    assert not any("stone" in t or "babble" in t or "**" in t for t, _ in captions)
+    assert rt.ui.of("interrupted") and not rt.ui.frames  # the babble's audio never reached the shopper
+    assert ("Next question.", True) in captions  # the next turn is normal again

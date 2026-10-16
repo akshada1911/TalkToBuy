@@ -178,6 +178,9 @@ const DICT = {
   payTotal: { en: "Total", hi: "कुल" },
   payFingerprint: { en: "Pay {x} with fingerprint", hi: "फ़िंगरप्रिंट से {x} दें" },
   payWait: { en: "Please wait…", hi: "रुकिए…" },
+  payFxScanning: { en: "Checking your fingerprint…", hi: "फ़िंगरप्रिंट जाँची जा रही है…" },
+  payFxHint: { en: "Keep your finger on the sensor", hi: "उंगली सेंसर पर रखिए" },
+  payFxDone: { en: "Payment approved", hi: "भुगतान हो गया" },
   paySettingUp: { en: "Setting up fingerprint…", hi: "फ़िंगरप्रिंट जोड़ रहे हैं…" },
   payTestMode: { en: "Test mode", hi: "टेस्ट मोड" },
   payErrCancelled: {

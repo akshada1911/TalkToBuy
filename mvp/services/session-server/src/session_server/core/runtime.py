@@ -41,6 +41,11 @@ class Runtime:
     usual: UsualOrder | None = None
     goal_problems: dict[str, list[str]] = field(default_factory=dict)
     goal_removed: dict[str, list[str]] = field(default_factory=dict)
+    planner: Any = None  # DishPlannerPort: works out what a dish needs (None = not available)
+    dish_plans: dict[tuple, Any] = field(default_factory=dict)  # (dish, notes) -> DishPlan
+    dish_tasks: dict[tuple, Any] = field(default_factory=dict)  # (dish, notes) -> the plan being prepared
+    dish_candidates: dict[str, list] = field(default_factory=dict)  # ingredient name -> matching products
+    dish_confirmed: set[tuple] = field(default_factory=set)  # (dish, people) the shopper has heard a plan for
     # add_to_cart calls already applied for the current shopper request (cleared on each new one);
     # stops the model double-adding when it repeats a tool call (seen in live rehearsal).
     turn_adds: set[tuple] = field(default_factory=set)
@@ -50,6 +55,9 @@ class Runtime:
     payment_future: asyncio.Future | None = None
     address: Address | None = None  # delivery address chosen for the current checkout
     shopper_turn_text: str = ""
+    last_shopper_signal: float = 0.0  # when the shopper last spoke (mic audio), typed or tapped
+    latest_goal_id: str = ""  # the most recent goal list shown
+    shopper_history: list[str] = field(default_factory=list)  # the last few things the shopper said
     background: set[asyncio.Task] = field(default_factory=set)
 
     def spawn(self, coro: Awaitable[Any]) -> asyncio.Task:

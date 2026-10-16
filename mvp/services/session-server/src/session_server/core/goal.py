@@ -86,6 +86,7 @@ async def build(rt: Runtime, goal_args: dict[str, Any]) -> GoalList:
     goal = GoalList(goal_id=f"g{len(rt.goals) + 1}", goal_text=goal_args["goal_text"],
                     questions_asked=0, items=items, status="proposed")
     rt.goals[goal.goal_id] = goal
+    rt.latest_goal_id = goal.goal_id
     rt.goal_problems[goal.goal_id] = problems
     if unrelated:
         rt.goal_removed[goal.goal_id] = unrelated

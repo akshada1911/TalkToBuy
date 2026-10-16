@@ -29,6 +29,10 @@ class Settings(BaseSettings):
     translate_model: str = "gemini-2.5-flash-lite"
     avatar_name: str = "Kai"
     voice_name: str = "Charon"
+    # The opening line is recorded ahead of time (same voice) so it plays at once while the live model connects.
+    greeting_enabled: bool = True
+    greeting_tts_model: str = "gemini-2.5-flash-tts"
+    greeting_cache_dir: str = str(MVP_ROOT / ".cache" / "greetings")
     firestore_database: str = "(default)"
 
     store_base_url: str = "http://localhost:3000"

@@ -554,6 +554,7 @@ export class TalkToBuyAssistant extends LitElement {
   @state() private remaining: number | null = null;
   @state() private working: { label_hi?: string; label_en?: string } | null = null;
   @state() private cart: UiCart | null = null;
+  private lastCartMsgId: string | null = null; // the cart id the conversation last told us about
   @state() private goal: GoalListMsg | null = null;
   @state() private addresses: UiAddress[] | null = null;
   @state() private readback: ReadbackMsg | null = null;
@@ -660,7 +661,7 @@ export class TalkToBuyAssistant extends LitElement {
 
   /** The shop changed the cart by tapping: ask the conversation to re-read it. False if not connected. */
   syncCart(): boolean {
-    return this.client?.send({ type: "cart_sync" }) ?? false;
+    return this.client?.send({ type: "cart_sync", cart_id: this.cartId }) ?? false;
   }
 
   /** Send a typed message (FR-003). */
@@ -697,6 +698,8 @@ export class TalkToBuyAssistant extends LitElement {
     if (changed.has("showTranslation") && changed.get("showTranslation") !== undefined) {
       this.client?.send({ type: "set_translation", on: this.showTranslation });
     }
+    // The shop started or changed its cart: make sure the conversation is working on that same cart.
+    if ((changed as Map<PropertyKey, unknown>).has("cartId") && this.cartId && this.cartId !== this.lastCartMsgId) this.syncCart();
     if (changed.has("avatarAudio")) this.avatar?.setAudioMode(this.avatarAudio);
     if ((changed as Map<PropertyKey, unknown>).has("muted") || (changed as Map<PropertyKey, unknown>).has("micOff")) this.applyMute();
     if ((changed as Map<PropertyKey, unknown>).has("phase")) this.emit<PhaseDetail>("ttb:phase", { phase: this.phase });
@@ -814,6 +817,7 @@ export class TalkToBuyAssistant extends LitElement {
       goal_list: (m) => (this.goal = m),
       cart: (m) => {
         this.cart = m.cart;
+        this.lastCartMsgId = m.cart_id ?? null;
         this.cartView?.setCart(m.cart);
         this.emit<CartChangedDetail>("ttb:cart-changed", { cart: m.cart, cart_id: m.cart_id ?? null });
         if (m.cart.item_count === 0 && !this.order) {

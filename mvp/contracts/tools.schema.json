@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://talktobuy.dev/contracts/tools.schema.json",
   "title": "TalkToBuy agent tools (provider-neutral)",
-  "description": "The ten tools the assistant may call. Defined once here; adapters convert them to each provider's function-declaration format. All tools execute on the session server, never in the browser. Server-side guards (x-guards) are enforced in code regardless of what the model asks for.",
+  "description": "The eleven tools the assistant may call. Defined once here; adapters convert them to each provider's function-declaration format. All tools execute on the session server, never in the browser. Server-side guards (x-guards) are enforced in code regardless of what the model asks for.",
   "version": "1.0.0",
   "tools": [
     {
@@ -79,6 +79,39 @@
       },
       "returns": { "type": "object", "properties": { "ok": { "type": "boolean" }, "goal_id": { "type": ["string", "null"], "description": "Set when a goal_list was shown; pass it to add_to_cart after the shopper says yes." } } },
       "x-guards": ["refused while session.safety_hold is true", "at most 3 products when called for a described problem (FR-034)"],
+      "x-blocking": false
+    },
+    {
+      "name": "plan_dish",
+      "description": "Plan any dish the shopper wants to cook. Call it FIRST with just the dish, EXACTLY as the shopper said it (no people): the list is prepared in the background. Then ask how many people, and call it again with the dish and people. The server works out every ingredient with a realistic total amount in kg, g, litre or ml, finds the right catalogue packs, and puts the list on the shopper's screen. Call it again with on_hand when the shopper says they already have some items. It does not add anything to the cart: after the shopper says yes, call add_to_cart with the returned goal_id.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "dish": { "type": "string", "minLength": 2, "maxLength": 80, "description": "The dish exactly as the shopper named it, e.g. 'matar paneer'. Never substitute another dish." },
+          "people": { "type": "integer", "minimum": 1, "maximum": 500, "description": "How many people it is for. A bare number the shopper says after you asked how many people is this." },
+          "notes": { "type": "string", "maxLength": 120, "description": "Diet or preference that changes the list, e.g. 'eggless', 'jain', 'less spicy'." },
+          "on_hand": { "type": "array", "maxItems": 30, "items": { "type": "string" }, "description": "Items the shopper said they already have at home." }
+        },
+        "required": ["dish"],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "ok": { "type": "boolean" },
+          "status": { "type": "string", "description": "'preparing' when only the dish was given." },
+          "dish": { "type": "string" },
+          "people": { "type": "integer" },
+          "goal_id": { "type": "string" },
+          "items": { "type": "array", "items": { "type": "object" } },
+          "not_in_catalogue": { "type": "array", "items": { "type": "string" } },
+          "ask_if_at_home": { "type": "array", "items": { "type": "string" } },
+          "assumption": { "type": "string", "description": "The version of the dish that was assumed (say it once so the shopper can correct it)." },
+          "estimated_total_rupees": { "type": "integer" },
+          "instruction": { "type": "string" }
+        },
+        "required": ["ok", "dish"]
+      },
       "x-blocking": false
     },
     {

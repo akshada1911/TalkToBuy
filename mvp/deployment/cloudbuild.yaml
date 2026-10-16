@@ -1,0 +1,18 @@
+# Builds both images in Cloud Build (no local Docker needed). Run from mvp/ by deploy.ps1:
+#   gcloud builds submit . --config deployment/cloudbuild.yaml --ignore-file deployment/.gcloudignore --substitutions _REGISTRY=...,_TAG=...
+steps:
+  - id: backend
+    name: gcr.io/cloud-builders/docker
+    args: ["build", "-f", "deployment/backend.Dockerfile", "-t", "${_REGISTRY}/backend:${_TAG}", "."]
+    waitFor: ["-"]
+  - id: ui
+    name: gcr.io/cloud-builders/docker
+    args: ["build", "-f", "deployment/ui.Dockerfile", "-t", "${_REGISTRY}/ui:${_TAG}", "."]
+    waitFor: ["-"]
+images:
+  - "${_REGISTRY}/backend:${_TAG}"
+  - "${_REGISTRY}/ui:${_TAG}"
+options:
+  machineType: E2_HIGHCPU_8
+  logging: CLOUD_LOGGING_ONLY
+timeout: 1500s

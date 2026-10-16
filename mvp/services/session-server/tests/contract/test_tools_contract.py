@@ -20,7 +20,7 @@ TOOLS_DOC = json.loads((MVP_ROOT / "contracts" / "tools.schema.json").read_text(
 DOMAIN_DOC = json.loads((MVP_ROOT / "contracts" / "domain.schema.json").read_text(encoding="utf-8"))
 SPECS = {s["name"]: s for s in TOOLS_DOC["tools"]}
 EXPECTED = {"search_catalog", "show_products", "add_to_cart", "update_cart", "get_usual_order",
-            "set_pace", "start_checkout", "confirm_checkout", "notify_family", "cancel_order"}
+            "set_pace", "start_checkout", "confirm_checkout", "notify_family", "cancel_order", "plan_dish"}
 
 
 def _returns_validator(name: str) -> Draft202012Validator:
@@ -33,7 +33,7 @@ def _domain_validator(defn: str) -> Draft202012Validator:
     return Draft202012Validator({"$ref": f"#/$defs/{defn}", "$defs": DOMAIN_DOC["$defs"]})
 
 
-def test_exactly_the_ten_tools() -> None:
+def test_exactly_the_eleven_tools() -> None:
     assert set(SPECS) == EXPECTED
     assert set(HANDLERS) == EXPECTED
 

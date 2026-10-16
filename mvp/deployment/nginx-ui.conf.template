@@ -1,0 +1,43 @@
+map $http_upgrade $connection_upgrade { default upgrade; '' close; }
+
+server {
+  listen 8080;
+  root /usr/share/nginx/html;
+  index index.html;
+
+  # Cloud Run gives every service two addresses. The fingerprint login is tied to one, so the other redirects to it.
+  if ($host != "${CANONICAL_HOST}") { return 301 https://${CANONICAL_HOST}$request_uri; }
+
+  resolver 8.8.8.8 ipv6=off valid=60s;
+  set $backend https://${BACKEND_HOST};
+
+  # The microphone and the fingerprint (passkey) must be allowed for this page.
+  add_header Permissions-Policy "camera=(self), microphone=(self), publickey-credentials-get=(self), publickey-credentials-create=(self)" always;
+
+  # API and the live voice socket: the backend service.
+  location ~ ^/(v1|demo|payment|static|ucp)/ {
+    proxy_pass $backend;
+    proxy_http_version 1.1;
+    proxy_ssl_server_name on;
+    proxy_set_header Host ${BACKEND_HOST};
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection $connection_upgrade;
+    proxy_set_header Origin $http_origin;
+    proxy_read_timeout 3600s;
+    proxy_send_timeout 3600s;
+    proxy_buffering off;
+  }
+
+  location /assets/ {
+    expires 1y;
+    add_header Cache-Control "public, immutable";
+    add_header Permissions-Policy "camera=(self), microphone=(self), publickey-credentials-get=(self), publickey-credentials-create=(self)" always;
+  }
+
+  # The shop app (single page).
+  location / {
+    try_files $uri /index.html;
+    add_header Cache-Control "no-cache";
+    add_header Permissions-Policy "camera=(self), microphone=(self), publickey-credentials-get=(self), publickey-credentials-create=(self)" always;
+  }
+}

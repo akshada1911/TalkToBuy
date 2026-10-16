@@ -4,6 +4,7 @@ The server arms a pending confirmation when it proposes inferred items; the next
 confirms or clears it; non-`named` adds require a confirmed, matching, unexpired confirmation.
 """
 
+import asyncio
 import re
 
 from session_server.core.runtime import Runtime
@@ -26,6 +27,21 @@ _AFFIRMATIVE = re.compile(
 _NEGATIVE = re.compile(
     r"(^|\s)(नहीं|नही|मत|रहने\s*दो|nahin|nahi|nahi\s*chahiye|mat|rehne\s*do|no|nope|don'?t|cancel)"
     r"(?=$|\s|[,.!?।])",
+    re.IGNORECASE,
+)
+
+
+# An explicit instruction to add: it counts as a yes even when a plain "no" is in the same sentence
+# ("No, I don't have any, please add everything").
+_ADD_NOW = re.compile(
+    r"(add\s*(it|them|all|everything|the\s*rest|these)|go\s*ahead|put\s*(it|them|everything)\s*in|"
+    r"kar\s*do|daal\s*do|dal\s*do|jod\s*do|dal\s*dijiye|daal\s*dijiye|कर\s*दो|डाल\s*दो|जोड़\s*दो|डाल\s*दीजिए)",
+    re.IGNORECASE,
+)
+# An explicit refusal or cancellation: the pending list is dropped.
+_STOP = re.compile(
+    r"(don'?t\s*add|do\s*not\s*add|never\s*mind|cancel|rehne\s*do|mat\s*(daal|dal|jod|add|kar)|nahi\s*chahiye|"
+    r"नहीं\s*चाहिए|रहने\s*दो|मत\s*(डाल|जोड़|कर)|remove\s*(it|them|all|everything))",
     re.IGNORECASE,
 )
 
@@ -56,15 +72,20 @@ def _expired(rt: Runtime, pc: PendingConfirmation) -> bool:
 
 
 def on_shopper_input(rt: Runtime, text: str) -> None:
-    """Confirm or clear the pending confirmation from the shopper's words."""
+    """Confirm, revoke or clear the pending confirmation from the shopper's words.
+
+    A plain "no" (often the answer to "do you have any at home?") only withdraws a yes; the list stays pending
+    so a later "yes, add it" works. Only an explicit refusal ("cancel", "don't add", "rehne do") drops it."""
     pc = rt.session.pending_confirmation
     if pc is None:
         return
-    if _expired(rt, pc) or is_negative(text):
+    if _expired(rt, pc) or _STOP.search(text):
         rt.session.pending_confirmation = None
-    elif is_affirmative(text):
+    elif _ADD_NOW.search(text) or is_affirmative(text):
         pc.confirmed = True
         pc.armed_at = rt.clock()  # the 60 s window restarts from the "yes"
+    elif is_negative(text):
+        pc.confirmed = False
 
 
 def allows(rt: Runtime, kind: str, product_ids: list[str]) -> bool:
@@ -88,6 +109,39 @@ def pending_unconfirmed_for(rt: Runtime, product_id: str) -> bool:
         and pc.kind in {"camera", "usual"}
         and product_id in pc.product_ids
     )
+
+
+GRACE_S = 4.0  # how long a tool call may wait for the transcript of a "yes" the shopper is still saying
+RECENT_SPEECH_S = 8.0
+
+
+async def grace(rt: Runtime) -> None:
+    """The model hears a spoken "yes" and may call add_to_cart before the transcript of that "yes" has reached
+    us (the transcript is a separate, slightly slower stream, slower still over the network). If the shopper
+    has just spoken and a confirmation is waiting, give the transcript a moment to arrive before judging."""
+    deadline = rt.clock() + GRACE_S
+    while rt.clock() < deadline:
+        pc = rt.session.pending_confirmation
+        if pc is None or pc.confirmed:
+            return
+        if rt.clock() - rt.last_shopper_signal > RECENT_SPEECH_S:
+            return  # the shopper has not said anything lately: nothing to wait for
+        await asyncio.sleep(0.15)
+
+
+def why_not(rt: Runtime, kind: str, product_ids: list[str]) -> str:
+    """For the log: why a confirmation was not found."""
+    pc = rt.session.pending_confirmation
+    if pc is None:
+        return "no confirmation is pending"
+    if pc.kind != kind:
+        return f"pending is for {pc.kind}, not {kind}"
+    if _expired(rt, pc):
+        return "the confirmation expired"
+    if not pc.confirmed:
+        return "the shopper has not said yes yet"
+    missing = [p for p in product_ids if p not in pc.product_ids]
+    return f"the list changed since the yes ({len(missing)} items not in the confirmed list)"
 
 
 def consume(rt: Runtime) -> None:

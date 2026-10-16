@@ -1548,3 +1548,602 @@ p {
   background: var(--green);
   color: #fff;
 }
+
+/* ---------------------------------------------------------------- phone frame (wide screens only) */
+/* On a real phone the frame pieces do not exist: the app fills the screen as before. */
+.device-stage,
+.device,
+.device-screen {
+  display: contents;
+}
+.status-bar,
+.nav-bar,
+.device-btn {
+  display: none;
+}
+@media (min-width: 700px) and (min-height: 600px) {
+  .device-stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    height: 100dvh;
+    background: radial-gradient(ellipse at 30% 15%, #f7f8f5 0%, #e3e9e4 55%, #d2dbd5 100%);
+  }
+  .device {
+    display: block;
+    position: relative;
+    padding: 12px;
+    border-radius: 48px;
+    background: linear-gradient(145deg, #34383a 0%, #0e1011 45%, #26292b 100%);
+    box-shadow: 0 0 0 1.5px #4a4f52, 0 0 0 4px #17191a, 0 32px 80px rgba(20, 32, 26, 0.38), 0 8px 24px rgba(20, 32, 26, 0.25);
+  }
+  .device-screen {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 390px;
+    height: min(844px, calc(100vh - 72px));
+    height: min(844px, calc(100dvh - 72px));
+    border-radius: 36px;
+    overflow: hidden;
+    background: var(--bg);
+  }
+  .device-btn {
+    display: block;
+    position: absolute;
+    right: -6px;
+    width: 4px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #2b2f31, #0e1011);
+  }
+  .device-btn-power {
+    top: 170px;
+    height: 58px;
+  }
+  .device-btn-volume {
+    top: 250px;
+    height: 96px;
+  }
+  .status-bar {
+    display: flex;
+    flex: none;
+    position: relative;
+    height: 32px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 22px 0 26px;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    z-index: 3;
+  }
+  .status-bar.dark {
+    background: var(--forest);
+    color: #fff;
+  }
+  .status-camera {
+    position: absolute;
+    left: 50%;
+    top: 10px;
+    width: 12px;
+    height: 12px;
+    margin-left: -6px;
+    border-radius: 50%;
+    background: #08090a;
+    box-shadow: 0 0 0 2.5px #1c1f21, inset 0 0 0 2px #14202a;
+  }
+  .status-icons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .phone {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    max-width: none;
+    height: auto;
+    margin: 0;
+    box-shadow: none;
+  }
+  .nav-bar {
+    display: flex;
+    flex: none;
+    height: 22px;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    z-index: 3;
+  }
+  .nav-bar span {
+    width: 112px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--ink);
+    opacity: 0.75;
+  }
+  .nav-bar.dark {
+    background: var(--forest);
+  }
+  .nav-bar.dark span {
+    background: #fff;
+    opacity: 0.7;
+  }
+}
+
+/* ---------------------------------------------------------------- payment moment: fingerprint scan, then a green tick */
+.payfx {
+  position: absolute;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.98);
+  animation: fadein 0.2s ease both;
+}
+.payfx-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 24px;
+  text-align: center;
+}
+.payfx-finger {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 150px;
+  margin-bottom: 8px;
+}
+.payfx-print {
+  position: relative;
+  z-index: 1;
+  width: 112px;
+  height: 112px;
+  stroke: var(--forest);
+}
+.payfx-ring {
+  position: absolute;
+  inset: 0;
+  border: 3px solid var(--green);
+  border-radius: 50%;
+  opacity: 0;
+  animation: payfx-pulse 1.4s ease-out infinite;
+}
+.payfx-ring.r2 {
+  animation-delay: 0.5s;
+}
+.payfx-scan {
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  z-index: 2;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--green);
+  box-shadow: 0 0 12px 2px rgba(11, 107, 69, 0.55);
+  animation: payfx-scan 1.1s ease-in-out infinite alternate;
+}
+.payfx-title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  color: var(--forest);
+}
+.payfx-sub {
+  font-size: 14px;
+  color: var(--muted);
+}
+.payfx-tick {
+  width: 132px;
+  height: 132px;
+  margin-bottom: 8px;
+}
+.payfx-tick-disc {
+  fill: var(--green);
+  transform-origin: 60px 60px;
+  animation: payfx-pop 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.25) both;
+}
+.payfx-tick-mark {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 80;
+  stroke-dashoffset: 80;
+  animation: payfx-draw 0.45s 0.3s ease forwards;
+}
+@keyframes payfx-pulse {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+}
+@keyframes payfx-scan {
+  from {
+    top: 24px;
+  }
+  to {
+    top: 124px;
+  }
+}
+@keyframes payfx-pop {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes payfx-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .payfx-tick-mark {
+    stroke-dashoffset: 0 !important;
+  }
+}
+
+/* ---------------------------------------------------------------- phone intro: lock screen -> home -> tap the Ecomm App -> app opens */
+.intro,
+.intro-replay {
+  display: none;
+}
+@media (min-width: 700px) and (min-height: 600px) {
+  .device-stage {
+    position: relative;
+  }
+  .intro-replay {
+    display: inline-flex;
+    position: absolute;
+    right: 24px;
+    bottom: 22px;
+    align-items: center;
+    gap: 6px;
+    height: 40px;
+    padding: 0 16px;
+    border: 1px solid var(--line-2);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.85);
+    color: var(--forest);
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .intro-replay:hover {
+    background: #fff;
+  }
+  .intro {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    overflow: hidden;
+    color: #fff;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  }
+  .intro.is-leaving {
+    opacity: 0;
+  }
+}
+.intro-wall {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(165deg, #0f3d2e 0%, #1c7a63 50%, #8fd0b3 100%);
+}
+.intro-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 6;
+  display: flex;
+  height: 32px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 22px 0 26px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.intro:not(.is-unlocked) .intro-clock {
+  visibility: hidden;
+}
+.intro-home {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  transform: scale(0.92);
+  transition: transform 0.6s ease;
+}
+.intro.is-unlocked .intro-home {
+  transform: none;
+}
+.intro-pages {
+  display: flex;
+  width: 200%;
+  height: 100%;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.intro.is-scrolled .intro-pages {
+  transform: translateX(-50%);
+}
+.intro-page {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 96px;
+  align-content: start;
+  width: 50%;
+  padding: 64px 24px 0;
+}
+.intro-app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  text-align: center;
+  line-height: 1.15;
+}
+.intro-ico {
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 17px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.22);
+}
+.intro-app.ecomm {
+  transition: transform 0.15s ease;
+}
+.intro.is-tapped .intro-app.ecomm {
+  transform: scale(0.9);
+}
+.intro-dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 128px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+.intro-dots span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+  transition: background 0.3s, transform 0.3s;
+}
+.intro-dots span.on {
+  background: #fff;
+}
+.intro.is-scrolled .intro-dots span:first-child {
+  background: rgba(255, 255, 255, 0.45);
+}
+.intro.is-scrolled .intro-dots span:last-child {
+  background: #fff;
+  transform: scale(1.15);
+}
+.intro.is-scrolled .intro-dots span.on:first-child {
+  background: rgba(255, 255, 255, 0.45);
+}
+.intro-dock {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 82px;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(10px);
+}
+.intro-lock {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 120px;
+  background: linear-gradient(165deg, #0b3326 0%, #17624d 55%, #5aa98a 100%);
+  transition: transform 0.6s cubic-bezier(0.5, 0, 0.8, 0.4);
+}
+.intro.is-unlocked .intro-lock {
+  transform: translateY(-105%);
+}
+.intro-time {
+  font-family: var(--font-display);
+  font-size: 84px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.intro-date {
+  margin-top: 10px;
+  font-size: 17px;
+  font-weight: 500;
+  opacity: 0.92;
+}
+.intro-hint {
+  position: absolute;
+  bottom: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.9;
+  animation: intro-hint 1.1s ease-in-out infinite;
+}
+.intro-launch {
+  position: absolute;
+  left: 122px;
+  top: 160px;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 17px;
+  background: #0f3d2e;
+  opacity: 0;
+  pointer-events: none;
+}
+.intro.is-opening .intro-launch {
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  opacity: 1;
+  transition: left 0.55s ease, top 0.55s ease, width 0.55s ease, height 0.55s ease, border-radius 0.55s ease, opacity 0.08s ease;
+}
+.intro-finger {
+  position: absolute;
+  z-index: 7;
+  width: 36px;
+  height: 36px;
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  pointer-events: none;
+}
+.intro.is-unlocked .intro-finger {
+  animation: intro-finger-unlock 0.6s ease both;
+}
+.intro.is-scrolled .intro-finger {
+  animation: intro-finger-scroll 0.7s ease both;
+}
+.intro.is-gliding .intro-finger {
+  animation: intro-finger-glide 0.65s ease both;
+}
+.intro.is-tapped .intro-finger {
+  animation: intro-finger-tap 0.38s ease both;
+}
+.intro.is-opening .intro-finger {
+  animation: none;
+  opacity: 0;
+}
+@keyframes intro-hint {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+@keyframes intro-finger-unlock {
+  0% {
+    opacity: 0;
+    left: 177px;
+    top: auto;
+    bottom: 30px;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    left: 177px;
+    top: auto;
+    bottom: 320px;
+  }
+}
+@keyframes intro-finger-scroll {
+  0% {
+    opacity: 0;
+    left: 300px;
+    top: 360px;
+    bottom: auto;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    left: 80px;
+    top: 360px;
+    bottom: auto;
+  }
+}
+@keyframes intro-finger-glide {
+  0% {
+    opacity: 1;
+    left: 80px;
+    top: 360px;
+    bottom: auto;
+  }
+  100% {
+    opacity: 1;
+    left: 134px;
+    top: 172px;
+    bottom: auto;
+  }
+}
+@keyframes intro-finger-tap {
+  0% {
+    opacity: 1;
+    left: 134px;
+    top: 172px;
+    bottom: auto;
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+  }
+  50% {
+    opacity: 1;
+    left: 134px;
+    top: 172px;
+    bottom: auto;
+    transform: scale(0.75);
+  }
+  100% {
+    opacity: 1;
+    left: 134px;
+    top: 172px;
+    bottom: auto;
+    transform: scale(1);
+    box-shadow: 0 0 0 26px rgba(255, 255, 255, 0);
+  }
+}
+.intro-skip {
+  position: absolute;
+  bottom: 18px;
+  padding: 6px 14px;
+  border: 0;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+.intro.is-unlocked .intro-skip {
+  visibility: hidden;
+}
+.intro-hint {
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.14);
+}

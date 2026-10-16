@@ -14,7 +14,7 @@ import re
 from typing import Any
 
 from session_server.core import confirm, pace
-from session_server.core.cart import sync_cart
+from session_server.core.cart import adopt_cart, sync_cart
 from session_server.core.cost import estimate_usd
 from session_server.core.runtime import Runtime
 from session_server.core.safety import detector, hold
@@ -30,6 +30,18 @@ from session_server.ports.translate import TranslatePort
 log = get_logger(__name__)
 
 FRAME_MIC, FRAME_JPEG, FRAME_PCM_OUT, FRAME_MP4_OUT = 0x01, 0x02, 0x11, 0x12
+# The live model sometimes drifts into a long, off-topic text answer (markdown, HTML, or paragraphs in another
+# script). Never show or play it: cut the turn off where it starts.
+def _script(first: int, last: int) -> str:
+    return f"[{chr(first)}-{chr(last)}]"
+
+
+# Markup, or runs of Thai/Arabic letters: never part of a shopping conversation.
+JUNK = re.compile(
+    rf"\*\*|</?[a-zA-Z][^>]*>|^\s*#{{1,3}}\s|(?:{_script(0x0E00, 0x0E7F)}|{_script(0x0600, 0x06FF)}){{6,}}",
+    re.MULTILINE,
+)
+DEVANAGARI_RUN = re.compile(f"{_script(0x0900, 0x097F)}{{25,}}")  # a long Hindi paragraph in an English session
 NO_SPEECH = re.compile(r"^\s*<\s*no[ _-]?speech", re.IGNORECASE)
 # Transcription markers the model emits for silence ("<no speech>{pause}"); never real speech.
 MARKERS = re.compile(r"<\s*no[ _-]?speech\s*>|\{\s*pause\s*\}", re.IGNORECASE)
@@ -68,6 +80,7 @@ class ConversationSession:
         self._last_shopper = rt.clock()
         self._last_assistant = rt.clock()
         self._idle_warned = False
+        self._muted = False  # the rest of this model turn was off-topic and is being dropped
 
     # ---------- lifecycle ----------
 
@@ -84,6 +97,16 @@ class ConversationSession:
             timer.cancel()
             idle.cancel()
             await self.end("live_closed")
+
+    async def play_greeting(self, text: str, pcm: bytes) -> None:
+        """Play the recorded opening line (24 kHz PCM) and show it as the assistant's first caption."""
+        rt = self.rt
+        self._last_assistant = rt.clock()
+        rt.session.usage.audio_out_s += len(pcm) / 48000
+        for start in range(0, len(pcm), 9600):  # 200 ms per frame, like the live model's audio
+            await rt.ui.send_bytes(bytes([FRAME_PCM_OUT]) + pcm[start:start + 9600])
+        self._text["assistant"] = text
+        await self._finish_turn("assistant")
 
     async def end(self, reason: str) -> None:
         if self._ended.is_set():
@@ -107,7 +130,7 @@ class ConversationSession:
                  usage=s.usage.model_dump())
 
     def _shopper_active(self) -> None:
-        self._last_shopper = self.rt.clock()
+        self._last_shopper = self.rt.last_shopper_signal = self.rt.clock()
         self._idle_warned = False
 
     def idle_for(self) -> float:
@@ -198,7 +221,12 @@ class ConversationSession:
             if fut is not None and not fut.done() and msg.get("checkout_id") == s.checkout_id:
                 fut.set_result({"approved": bool(msg.get("approved")), "mandate": msg.get("mandate")})
         elif kind == "cart_sync":
-            # The shop changed the cart by tapping: re-read it from the store and show it.
+            # The shop changed the cart by tapping. If it is showing a cart this conversation does not know
+            # (started in the shop after the conversation began), adopt it: voice and taps share ONE cart,
+            # so "clear the cart" always clears what the shopper sees. Then re-read it and show it.
+            shop_cart = msg.get("cart_id")
+            if shop_cart and shop_cart != self.rt.session.cart_ref:
+                await adopt_cart(self.rt, shop_cart)
             await sync_cart(self.rt, push=True)
         elif kind == "end":
             await self.end("shopper_closed")
@@ -212,8 +240,33 @@ class ConversationSession:
 
     # ---------- Live → widget ----------
 
+    def _off_topic_at(self, text: str) -> int | None:
+        """Where the model started to babble (markup, other scripts, a long Hindi paragraph in English), if it did."""
+        text = MARKERS.sub("", text)  # the silence markers look like tags but are not babble
+        hits = [m.start() for m in [JUNK.search(text)] if m]
+        if self.rt.session.language == "en":
+            hits += [m.start() for m in [DEVANAGARI_RUN.search(text)] if m]
+        return min(hits) if hits else None
+
+    async def _cut_off(self, start: int) -> None:
+        """Keep the clean sentences before the babble, drop the rest of the turn, and stop the audio."""
+        rt = self.rt
+        text = MARKERS.sub("", self._text["assistant"])
+        end = max(text.rfind(c, 0, start) for c in ".?!।") + 1 or start
+        log.warning("assistant_off_topic_cut", kept=end, dropped=len(text) - end)
+        self._text["assistant"] = text[:end]
+        self._muted = True
+        await rt.ui.send_json(InterruptedMsg(type="interrupted", turn_id=self._turn_id("assistant")))
+        await self._finish_turn("assistant")
+
     async def _on_live_event(self, ev: L.LiveEvent) -> None:
         rt = self.rt
+        if self._muted:
+            if isinstance(ev, L.TurnComplete | L.Interrupted):
+                self._muted = False
+                await self._finish_turn("shopper")
+            if isinstance(ev, L.AudioOut | L.VideoChunk | L.OutputTranscript | L.TurnComplete | L.Interrupted):
+                return
         if isinstance(ev, L.AudioOut | L.VideoChunk):
             self._last_assistant = rt.clock()
         if isinstance(ev, L.AudioOut):
@@ -227,6 +280,12 @@ class ConversationSession:
             if NO_SPEECH.match(ev.text):
                 return  # transcription markers like "<no speech>" are not captions
             await self._finish_turn("shopper")
+            self._text["assistant"] += ""  # (the running text of this turn)
+            start = self._off_topic_at(self._text["assistant"] + ev.text)
+            if start is not None:
+                self._text["assistant"] += ev.text
+                await self._cut_off(start)
+                return
             await self._assistant_text(ev.text, final=ev.final)
         elif isinstance(ev, L.ToolCall):
             await self._finish_turn("shopper")
@@ -288,6 +347,7 @@ class ConversationSession:
         rt = self.rt
         if who == "shopper":
             rt.shopper_turn_text = text
+            rt.shopper_history = [*rt.shopper_history, text][-4:]
             rt.turn_adds.clear()  # a new request: identical adds are allowed again ("one more milk")
             verdict = await detector.evaluate(text, self.classifier)
             await hold.apply(rt, verdict)
