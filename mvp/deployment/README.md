@@ -1,6 +1,6 @@
 # Deploying TalkToBuy on Google Cloud Run
 
-Two Cloud Run services in project `talktobuy`, region `us-central1`:
+Two Cloud Run services in the Google Cloud project set in `config.ps1`, region `us-central1`:
 
 | Service | What runs in it |
 |---|---|
@@ -8,10 +8,10 @@ Two Cloud Run services in project `talktobuy`, region `us-central1`:
 | **talktobuy-backend** | One container with the **session server** (Gemini Live, tools, dish planner) and the **demo store** (catalogue, cart, payment), behind a small nginx that sends `/v1/*` to the session server and everything else to the store. |
 
 Gemini (Live voice, Flash, Flash-Lite, embeddings, the recorded greeting) is called from the backend with the
-service account `talktobuy-backend@talktobuy.iam.gserviceaccount.com` (role `aiplatform.user`). No keys exist anywhere.
+service account `talktobuy-backend@<project-id>.iam.gserviceaccount.com` (role `aiplatform.user`). No keys exist anywhere.
 
-**Live address:** https://talktobuy-ui-949496778375.us-central1.run.app
-(the service's other address, `...-3o5mbytdmq-uc.a.run.app`, redirects to it)
+**Live address:** printed at the end of `deploy.ps1` (`https://talktobuy-ui-<project-number>.us-central1.run.app`).
+The service's other address redirects to it.
 
 ## Deploy (or redeploy after a code change)
 
@@ -47,7 +47,7 @@ Project, region, service names, and the limits for a public link: 5 concurrent v
   redeploy it registers again.
 - **Cost:** two always-on instances (about 2 vCPU + 2 GiB and 1 vCPU + 256 MiB) plus about $0.01 to $0.04 per
   voice session. To stop paying, run `teardown.ps1`.
-- **Logs:** `gcloud run services logs read talktobuy-backend --project talktobuy --region us-central1 --limit 100`
+- **Logs:** `gcloud run services logs read talktobuy-backend --project <project-id> --region us-central1 --limit 100`
 
 ## Files
 | File | Purpose |

@@ -46,6 +46,21 @@ _STOP = re.compile(
 )
 
 
+# An explicit instruction to add: it counts as a yes even when a plain "no" is in the same sentence
+# ("No, I don't have any, please add everything").
+_ADD_NOW = re.compile(
+    r"(add\s*(it|them|all|everything|the\s*rest|these)|go\s*ahead|put\s*(it|them|everything)\s*in|"
+    r"kar\s*do|daal\s*do|dal\s*do|jod\s*do|dal\s*dijiye|daal\s*dijiye|कर\s*दो|डाल\s*दो|जोड़\s*दो|डाल\s*दीजिए)",
+    re.IGNORECASE,
+)
+# An explicit refusal or cancellation: the pending list is dropped.
+_STOP = re.compile(
+    r"(don'?t\s*add|do\s*not\s*add|never\s*mind|cancel|rehne\s*do|mat\s*(daal|dal|jod|add|kar)|nahi\s*chahiye|"
+    r"नहीं\s*चाहिए|रहने\s*दो|मत\s*(डाल|जोड़|कर)|remove\s*(it|them|all|everything))",
+    re.IGNORECASE,
+)
+
+
 def is_affirmative(text: str) -> bool:
     return bool(_AFFIRMATIVE.search(text)) and not is_negative(text)
 

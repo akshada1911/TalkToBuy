@@ -48,6 +48,7 @@ function Describe-Url($name) {
 
 # ---------------------------------------------------------------- 1. preflight
 Step "1. Preflight (project $Project, region $Region)"
+Run { gcloud config set account $Account --quiet } "switch to $Account"
 Run { gcloud config set project $Project --quiet } "set project"
 $account = "$(gcloud config get-value account 2>$null)".Trim()
 Write-Host "gcloud account: $account"
