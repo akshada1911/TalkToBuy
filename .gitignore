@@ -239,3 +239,9 @@ mvp/services/demo-store/data/*.db
 Thumbs.db
 *.tmp
 *.swp
+
+# Test output and local-only dev files
+mvp/**/test-results/
+mvp/**/playwright-report/
+mvp/**/*.shots.config.ts
+mvp/deployment/.generated/
